@@ -1,0 +1,28 @@
+"ID","CHAVE","VALOR","DESCRICAO","TIPO","DATA_CRIACAO","DATA_ATUALIZACAO","USUARIO_CRIACAO_ID","USUARIO_ALTERACAO_ID","CATEGORIA","OBRIGATORIA","EDITAVEL","ORDEM_EXIBICAO","ATIVO"
+28,logo_header_url,"/assets/logo-sefaz-tocantins.png",URL do logo exibido no cabeçalho da aplicação,string,2025-09-22 08:49:55.000,2025-09-22 08:49:55.191,,,aparencia,N,S,1,S
+1,SISTEMA_NOME,"Sistema de Protocolo",Nome do sistema,STRING,2025-09-16 09:19:19.990,2025-09-16 09:19:19.990,,,geral,N,S,1,S
+2,PRAZO_PADRAO_DIAS,"30",Prazo padrão em dias para processos,NUMBER,2025-09-16 09:19:19.991,2025-09-16 09:19:19.991,,,sistema,N,S,2,S
+3,EMAIL_NOTIFICACAO,"admin@protocolo.com",Email para notificações do sistema,STRING,2025-09-16 09:19:19.991,2025-09-16 09:19:19.991,,,notificacoes,N,S,3,S
+4,cnpj,"12.345.678/0001-90",CNPJ da Instituição,string,2025-09-19 10:25:14.429,2025-09-19 10:25:14.429,1,,geral,N,S,2,S
+5,endereco,"Rua das Flores, 123 - Centro",Endereço da Instituição,string,2025-09-19 10:25:19.747,2025-09-19 10:25:19.747,1,,geral,N,S,3,S
+6,telefone,"(11) 3456-7890",Telefone da Instituição,string,2025-09-19 10:25:19.747,2025-09-19 10:25:19.747,1,,geral,N,S,4,S
+7,email,"contato@prefeitura.gov.br",E-mail Institucional,string,2025-09-19 10:25:19.747,2025-09-19 10:25:19.747,1,,geral,N,S,5,S
+8,descricao,[NULL],Descrição da Instituição,string,2025-09-19 10:25:19.747,2025-09-19 10:25:19.747,1,,geral,N,S,6,S
+9,autenticacaoDuasEtapas,"false",Autenticação em duas etapas,boolean,2025-09-19 10:25:28.604,2025-09-19 10:25:28.604,1,,seguranca,N,S,1,S
+10,senhaComplexidade,"media",Complexidade de senha,string,2025-09-19 10:25:28.604,2025-09-19 10:25:28.604,1,,seguranca,N,S,2,S
+11,tempoSessao,"30",Tempo de sessão (minutos),number,2025-09-19 10:25:28.604,2025-09-19 10:25:28.604,1,,seguranca,N,S,3,S
+12,tentativasLogin,"3",Máximo de tentativas de login,number,2025-09-19 10:25:28.604,2025-09-19 10:25:28.604,1,,seguranca,N,S,4,S
+13,bloqueioTempo,"15",Tempo de bloqueio (minutos),number,2025-09-19 10:25:28.604,2025-09-19 10:25:28.604,1,,seguranca,N,S,5,S
+14,logAuditoria,"true",Log de auditoria,boolean,2025-09-19 10:25:28.604,2025-09-19 10:25:28.604,1,,seguranca,N,S,6,S
+15,notificacoesEmail,"true",Notificações por e-mail,boolean,2025-09-19 10:25:37.220,2025-09-19 10:25:37.220,1,,notificacoes,N,S,1,S
+16,notificacoesPush,"false",Notificações push,boolean,2025-09-19 10:25:37.220,2025-09-19 10:25:37.220,1,,notificacoes,N,S,2,S
+17,emailProcessos,"true",E-mail para processos,boolean,2025-09-19 10:25:37.220,2025-09-19 10:25:37.220,1,,notificacoes,N,S,3,S
+18,emailPrazos,"true",E-mail para prazos,boolean,2025-09-19 10:25:37.220,2025-09-19 10:25:37.220,1,,notificacoes,N,S,4,S
+19,emailDocumentos,"false",E-mail para documentos,boolean,2025-09-19 10:25:37.220,2025-09-19 10:25:37.220,1,,notificacoes,N,S,5,S
+20,frequenciaResumo,"diario",Frequência de resumo,string,2025-09-19 10:25:37.220,2025-09-19 10:25:37.220,1,,notificacoes,N,S,6,S
+21,backupAutomatico,"true",Backup automático,boolean,2025-09-19 10:25:43.620,2025-09-19 10:25:43.620,1,,sistema,N,S,1,S
+22,frequenciaBackup,"diario",Frequência do backup,string,2025-09-19 10:25:43.620,2025-09-19 10:25:43.620,1,,sistema,N,S,2,S
+23,horarioBackup,"02:00",Horário do backup,string,2025-09-19 10:25:43.620,2025-09-19 10:25:43.620,1,,sistema,N,S,3,S
+24,retencaoBackup,"30",Retenção de backup (dias),number,2025-09-19 10:25:43.620,2025-09-19 10:25:43.620,1,,sistema,N,S,4,S
+25,manutencaoAutomatica,"true",Manutenção automática,boolean,2025-09-19 10:25:43.620,2025-09-19 10:25:43.620,1,,sistema,N,S,5,S
+26,logNivel,"info",Nível de log,string,2025-09-19 10:25:43.620,2025-09-19 10:25:43.620,1,,sistema,N,S,6,S

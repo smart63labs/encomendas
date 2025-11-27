@@ -1,0 +1,71 @@
+Dados de usuários  testes do Novo Sistema de Malote:
+
+Delegacia Regional de Fiscalização - Gurupi
+Usuário para Teste : DIVINO GONCALVES RIOS	
+	       CPF : 011.385.811-60
+             SENHA : User@123 - Login testado e funcionando
+
+Delegacia Regional de Fiscalização - Tocantinópolis
+Usuário para Teste : ABRAAO MADEIRA DE ALBUQUERQUE	
+	       CPF : 232.434.491-20
+             SENHA : User@123 - Login testado e funcionando
+ 
+Delegacia Regional de Fiscalização - Taguatinga
+Usuário para Teste : ADEMIR RIBEIRO DE SOUZA	
+	       CPF : 374.589.571-15
+             SENHA : User@123 - Login testado e funcionando
+
+Delegacia Regional de Fiscalização - Araguaína
+Usuário para Teste : RAILTON DA SILVA PINTO
+	       CPF : 974.410.231-49
+             SENHA : User@123 - Login testado e funcionando
+
+Delegacia Regional de Fiscalização - Colinas
+Usuário para Teste : WILLIAN SANTOS FERREIRA
+	       CPF : 009.243.551-31
+             SENHA : User@123 - Login testado e funcionando
+
+Protocolo Geral - Sefaz
+Usuário para Teste : EDER LUIZ DA SILVA	
+	       CPF : 902.761.400-87
+             SENHA : User@123 - Login testado e funcionando
+
+Fluxos recomendados para o teste:
+
+Teste 1   
+A Delegacia Regional de Fiscalização - Gurupi Envia "Documento A" via Malote para Delegacia Regional de Fiscalização - Taguatinga
+
+Trecho 1  
+Remetente    : Delegacia Regional de Fiscalização - Gurupi - Malotes Disponíveis : Malote #0005, Malote #0006, Malote #0007, Malote #0008 - Lacres Disponíveis  : LACRE00064 á LACRE00090
+Destinatario : Protocolo Geral - Sefaz
+
+Trecho 2 (Apos Protocolo Geral - Sefaz receber a encomenda no sistema)
+Remetente    : Protocolo Geral - Sefaz - Malotes Disponíveis : Malote #00037, Malote #00038, Malote #00039, Malote #00040 - Lacres Disponíveis  : LACRE000361 á LACRE000390
+Destinatario : Delegacia Regional de Fiscalização - Taguatinga
+
+Resultado : Teste 1 passou.
+
+
+Teste 2 
+A Delegacia Regional de Fiscalização - Gurupi Envia "Documento B" via Malote para Delegacia Regional de Fiscalização - Tocantinópolis
+Trecho 1   
+Remetente    : Delegacia Regional de Fiscalização - Gurupi  - Malotes Disponíveis : Malote #0005 (Ja usado - Indisponivel), Malote #0006, Malote #0007, Malote #0008 - - Lacres Disponíveis  : LACRE00065 á LACRE00090
+Destinatario : Protocolo Geral - Sefaz
+
+Trecho 2  
+Remetente    : Protocolo Geral - Sefaz - Malotes Disponíveis : Malote #00041, Malote #00042, Malote #00043, Malote #00044 - Lacres Disponíveis  : LACRE000361 á LACRE000390
+Destinatario : Delegacia Regional de Fiscalização - Tocantinópolis
+
+ 
+Teste 3
+A Delegacia Regional de Fiscalização - Colinas Envia "Documento C" via Malote para Delegacia Regional de Fiscalização - Araguaína 
+
+Trecho 1
+Remetente    : Delegacia Regional de Fiscalização - Colinas - Malotes Disponíveis : Malote #00013, Malote #00014, Malote #00015, Malote #00016 - Lacres Disponíveis  : LACRE000241 á LACRE000270
+Destinatario : Protocolo Geral - Sefaz
+Trecho 2  : 
+Remetente    : Protocolo Geral - Sefaz 
+Destinatario : Delegacia Regional de Fiscalização - Araguaína - Malotes Disponíveis : Malote #00029, Malote #00030, Malote #00031, Malote #00032 - Lacres Disponíveis  : LACRE000271 á LACRE000300
+
+O objetivo desses testes é validar as regras de uso do malote e do lacre. Ao cadastrar uma encomenda, o malote e lacre ja usados devem aparecer como indisponivels para o setor, ao cadastrar uma nova encomenda. E o malote que antes estava indisponivel, quando o setor do remetente receber a encomenda, esse malote deve voltar a ficar disponivel. Se isso for validado, o sistema esta pronto para homologação, se não precisamos ajudar as regras.
+

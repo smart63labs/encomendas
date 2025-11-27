@@ -1,0 +1,23 @@
+-- Corrigir propagação de status do MALOTE ao atualizar ENCOMENDAS.STATUS
+-- Regra:
+--   - Quando ENCOMENDAS.STATUS for 'em transito' (variações), MALOTE.STATUS = 'Em transito'
+--   - Quando ENCOMENDAS.STATUS for 'entregue', MALOTE.ENCOMENDA_ID = NULL e MALOTE.STATUS = 'Disponivel'
+--   - Demais estados: MALOTE.STATUS = 'Indisponivel'
+-- Observação: usar LOWER/TRIM para tolerar variações de grafia
+
+CREATE OR REPLACE EDITIONABLE TRIGGER "PROTOCOLO_USER"."TRG_ENCOMENDAS_PROPAGATE_MALOTE_STATUS"
+AFTER UPDATE OF STATUS ON ENCOMENDAS
+FOR EACH ROW
+BEGIN
+  IF LOWER(TRIM(:NEW.STATUS)) IN ('em transito','em_transito','em trânsito','em_trânsito','transito','trânsito') THEN
+    UPDATE MALOTE SET STATUS = 'Em transito', DATA_ATUALIZACAO = SYSDATE WHERE ENCOMENDA_ID = :NEW.ID;
+  ELSIF LOWER(TRIM(:NEW.STATUS)) = 'entregue' THEN
+    UPDATE MALOTE SET ENCOMENDA_ID = NULL, STATUS = 'Disponivel', DATA_ATUALIZACAO = SYSDATE WHERE ENCOMENDA_ID = :NEW.ID;
+  ELSE
+    UPDATE MALOTE SET STATUS = 'Indisponivel', DATA_ATUALIZACAO = SYSDATE WHERE ENCOMENDA_ID = :NEW.ID;
+  END IF;
+END;
+/
+
+ALTER TRIGGER "PROTOCOLO_USER"."TRG_ENCOMENDAS_PROPAGATE_MALOTE_STATUS" ENABLE;
+/

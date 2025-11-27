@@ -1,0 +1,31 @@
+-- Criação da tabela SETORES para estrutura organizacional
+-- Baseada nos dados do CSV dos servidores da SEFAZ
+-- Colunas: ORGAO, SETOR, LOTACAO, HIERARQUIA_SETOR
+
+CREATE TABLE IF NOT EXISTS SETORES (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    CODIGO_SETOR VARCHAR(50) UNIQUE NOT NULL, -- Código único do setor (ex: 013.DRFPAL)
+    ORGAO VARCHAR(100) NOT NULL, -- Ex: Secretaria da Fazenda
+    SETOR VARCHAR(200) NOT NULL, -- Ex: Delegacia Regional de Fiscalização de Palmas
+    LOTACAO VARCHAR(200), -- Ex: Agência de Atendimento de Palmas
+    HIERARQUIA_SETOR TEXT, -- Ex: SEFAZ/013.GABSEC/013.GASEGT/013.SUATRI/013.DIREC/013.DRFPAL
+    MUNICIPIO_LOTACAO VARCHAR(100), -- Município onde o setor está localizado
+    ATIVO BOOLEAN DEFAULT 1, -- Se o setor está ativo
+    CREATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices para otimizar consultas
+CREATE INDEX IF NOT EXISTS idx_setores_codigo ON SETORES(CODIGO_SETOR);
+CREATE INDEX IF NOT EXISTS idx_setores_orgao ON SETORES(ORGAO);
+CREATE INDEX IF NOT EXISTS idx_setores_setor ON SETORES(SETOR);
+CREATE INDEX IF NOT EXISTS idx_setores_municipio ON SETORES(MUNICIPIO_LOTACAO);
+CREATE INDEX IF NOT EXISTS idx_setores_ativo ON SETORES(ATIVO);
+
+-- Trigger para atualizar UPDATED_AT automaticamente
+CREATE TRIGGER IF NOT EXISTS update_setores_timestamp 
+    AFTER UPDATE ON SETORES
+    FOR EACH ROW
+BEGIN
+    UPDATE SETORES SET UPDATED_AT = CURRENT_TIMESTAMP WHERE ID = NEW.ID;
+END;

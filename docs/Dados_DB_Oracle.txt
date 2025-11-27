@@ -1,0 +1,107 @@
+2025/25009/084671
+searchUsersAndSectors
+
+Senha  : Anderline49
+banco de dados Container multitenant : localhost:1521
+banco de dados plugável : localhost:1521/XEPDB1
+URL do EM Express : https//localhost:5500/em
+Acesso via linha de comando : sqlplus protocolo_user/Anderline49@localhost:1521/FREEPDB1
+
+ARAGUAINA : (-7.1909, -48.2073)
+COLINAS DO TO : (-8.0520, -48.4780)
+TOCANTINOPOLIS : (-6.3243, -47.4273)
+
+-- Auto-generated SQL script #202509251019
+UPDATE PROTOCOLO_USER.SETORES x
+	SET x.LATITUDE=-7.1909
+	WHERE x.ID=26;
+
+
+Credenciais finais:
+
+- Usuário: protocolo_user
+- Senha: Anderline49
+- Banco: FREEPDB1
+- Host: localhost:1521
+
+Credenciais ADMIN para Login
+- Email: admin_protocolo@sefaz.to.gov.br
+- Senha: admin123
+## Senhas padrão implementadas:
+- Admin : Admin@123 $2b$12$E2U0prY7NScWRWaIxSLSaeP7oyI/Q0WUXQd72XAOg4CWtWIByso7y
+- Usuários : User@123 $2b$12$w2YcUMMqC2kidmmusfZRY.8m.Y7Uc4LIzAy76SFpheZq/z9KRfdEO
+
+usuario : admin_folhaponto@sefaz.to.gov.br senha : admin123,
+
+Acesso via linha de comando        : sqlplus protocolo_user/Protocolo@2025@localhost:1521/XEPDB1
+Acesso ao usuário sysdba           : sqlplus / as sysdba ou sqlplus sys/Anderline49 as sysdba
+Verifica se o serviço esta rodando : Get-Service -Name "OracleServiceXE"
+Para o serviço                     : Stop-Service -Name "OracleServiceXE"; Start-Service -Name 
+
+
+### Credenciais corretas aplicadas:
+- Usuário: protocolo_user
+- Senha: Anderline49
+- Banco: FREEPDB1
+- Host: localhost:1521
+- String de conexão: localhost:1521/FREEPDB1
+
+## 👤 Usuário administrador criado:
+- Email: admin_protocolo@sefaz.to.gov.br
+- Senha: admin123
+- Status: Ativo
+- Perfil: ADMIN
+
+## 🚀 Status dos serviços:
+### Backend:
+- ✅ Ativo - http://localhost:3001
+- ✅ Conexão com Oracle estabelecida
+- ✅ Pool de conexões configurado (Min=2, Max=10)
+- ✅ Usuário conectado: PROTOCOLO_USER
+- ✅ Database: FREEPDB1
+
+### Frontend:
+- ✅ Ativo - http://localhost:8080
+
+
+MCP Oracle
+
+{
+  "mcpServers": {
+    "sqlcl": {
+      "command": "C:/oracle/sqlcl/bin/sql",
+      "args": [
+        "-mcp"
+      ]
+    }
+  }
+}
+
+RODAR MCP ORACLE
+C:\oracle\sqlcl\bin\sql.exe -mcp protocolo_user/Anderline49@localhost:1521/FREEPDB1
+C:\oracle\sqlcl\bin\sql.exe -mcp folhaponto_user/Anderline49@localhost:1521/FREEPDB1
+C:\app\88417646191\sqlcl\bin\sql.exe -mcp folhaponto_user/Anderline49@localhost:1521/FREEPDB1
+C:\app\88417646191\sqlcl\bin\sql.exe -mcp folhaponto_user/folhaponto123@localhost:1521/FOLHAPONTO_PDB
+
+
+- RRR = ID do usuário remetente (3 dígitos com zeros à esquerda)
+- DDD = ID do usuário destinatário (3 dígitos com zeros à esquerda)
+- SS = ID do setor de origem (2 dígitos com zeros à esquerda)
+- TT = ID do setor de destino (2 dígitos com zeros à esquerda)
+
+
+
+• Servidor: admin.servidor@sefaz.to.gov.br
+• Chefia: admin.chefia@sefaz.to.gov.br
+• RH: admin.rh@sefaz.to.gov.br
+• Admin: admin.geral@sefaz.to.gov.br
+Senha para todos: 123456
+
+Criar endpoints CRUD completo para setores no backend - Feito
+Implementar componente GridList para visualização em tabela - Feito
+Implementar componente CardList para visualização em cards - Feito
+Substituir dados mockados por dados reais da API na página GestaoSetores - Feito
+Integrar tudo na página de gestão de setores e testar funcionamento - A fazer
+Criar formulários para criar/editar setores com dados reais - Não precisa, já existe os formulários, é só integrar eles.
+
+use sql plus para ver o bando de dados :  FOLHAPONTO_PDB, no schema : folhaponto_user na tabela setores. As credenciais são estas :  folhaponto_user/folhaponto123@localhost:1521/FOLHAPONTO_PDB. não use o mcp

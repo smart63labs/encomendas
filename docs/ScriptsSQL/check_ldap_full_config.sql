@@ -1,0 +1,13 @@
+-- Script para verificar configuração LDAP completa
+SET PAGESIZE 50
+SET LINESIZE 200
+
+SELECT 
+    ID,
+    TIPO_AUTH,
+    ATIVO,
+    CONFIGURACAO
+FROM CONFIGURACOES_AUTENTICACAO 
+WHERE TIPO_AUTH = 'LDAP';
+
+EXIT;

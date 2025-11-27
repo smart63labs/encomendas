@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sistema de Design - Portal do Governo do Tocantins
+   Baseado na identidade visual oficial
+   Todas as cores devem ser HSL
+*/
+
+@layer base {
+  :root {
+    /* Cores Principais */
+    --primary: 218 73% 35%; /* #1351a3 - Azul Principal Governamental */
+    --primary-foreground: 0 0% 100%; /* Branco */
+    --primary-hover: 216 73% 24%; /* #0c3260 - Azul Secundário */
+    
+    /* Cores de Destaque */
+    --accent-orange: 26 91% 54%; /* #f58220 - Laranja Interativo */
+    --accent-green: 80 41% 47%; /* #7dae40 - Verde Confirmação */
+    --accent-red: 4 81% 56%; /* #e53935 - Vermelho Alerta */
+    
+    /* Cores de Interface */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%; /* #333333 - Texto Principal */
+    --foreground-secondary: 0 0% 40%; /* #666666 - Texto Secundário */
+    --foreground-muted: 0 0% 60%; /* #999999 - Texto de Apoio */
+    
+    /* Cards e Containers */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+    --card-border: 0 0% 88%; /* #e0e0e0 */
+    
+    /* Formulários */
+    --input: 218 73% 97%; /* #f0f4ff - Fundo azul muito claro governamental */
+    --input-border: 218 73% 80%; /* #a3c4f3 - Borda azul clara */
+    --input-border-focus: 218 73% 35%; /* Mesma cor do primary */
+    
+    /* Estados */
+    --muted: 210 17% 96%; /* #f5f5f5 */
+    --muted-foreground: 0 0% 40%;
+    
+    /* Popover e Dropdown */
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+    
+    /* Elementos Secundários */
+    --secondary: 210 17% 96%;
+    --secondary-foreground: 0 0% 20%;
+    
+    /* Bordas e Anéis */
+    --border: 0 0% 88%;
+    --ring: 218 73% 35%;
+    --radius: 8px;
+    
+    /* Gradient Header Governamental */
+    --gradient-header: linear-gradient(135deg, hsl(218 73% 35%), hsl(216 73% 24%));
+    
+    /* Sombras */
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-header: 0 4px 12px rgba(19, 81, 163, 0.15);
+    
+    /* Transições */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Sidebar específica */
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Roboto', 'Arial', sans-serif;
+  }
+  
+  /* Tipografia Governamental */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', 'Arial', sans-serif;
+    font-weight: 600;
+  }
+  
+  h1 {
+    @apply text-4xl text-primary;
+    font-weight: 700;
+  }
+  
+  h2 {
+    @apply text-3xl text-primary;
+  }
+  
+  h3 {
+    @apply text-xl text-primary;
+  }
+  
+  .text-protocolo-blue {
+    color: #2e3092 !important;
+  }
+  
+  /* Classes utilitárias governamentais */
+  .gradient-header {
+    background: var(--gradient-header);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .shadow-header {
+    box-shadow: var(--shadow-header);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+}
+
+@layer components {
+  /* Componentes personalizados do sistema */
+  .btn-govto-primary {
+    @apply bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium;
+    @apply hover:bg-primary/90 transition-smooth shadow-sm;
+  }
+  
+  .btn-govto-orange {
+    @apply px-6 py-3 rounded-lg font-medium transition-smooth;
+    background-color: hsl(var(--accent-orange));
+    color: white;
+  }
+  
+  .btn-govto-orange:hover {
+    background-color: hsl(var(--accent-orange) / 0.9);
+  }
+  
+  .btn-govto-secondary {
+    @apply bg-transparent border-2 border-primary text-primary px-6 py-3 rounded-lg font-medium;
+    @apply hover:bg-primary hover:text-primary-foreground transition-smooth;
+  }
+  
+  .card-govto {
+    @apply bg-card border border-card-border rounded-lg p-6;
+    box-shadow: var(--shadow-card);
+  }
+  
+  .input-govto {
+    @apply w-full px-4 py-3 rounded-lg border transition-smooth;
+    border-color: hsl(var(--input-border));
+    background-color: hsl(var(--input));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .input-govto:focus {
+    outline: none;
+    border-color: hsl(var(--input-border-focus));
+    border-width: 2px;
+    box-shadow: 0 0 0 3px hsl(var(--input-border-focus) / 0.1);
+  }
+  
+  .header-govto {
+    @apply bg-white text-gray-800 shadow-lg;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    z-index: 40;
+  }
+  
+  .header-govto:first-child {
+    @apply border-b-2 border-blue-200;
+  }
+  
+  .header-govto:last-child {
+    @apply border-t-2 border-blue-200;
+    border-top: 2px solid #dbeafe;
+    position: relative;
+  }
+  
+  .header-govto:last-child::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #3b82f6 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .header-govto:last-child:hover::before {
+    opacity: 1;
+  }
+  
+  .footer-govto {
+    @apply bg-white text-gray-800 shadow-lg;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    z-index: 30;
+    border-top: 2px solid #dbeafe;
+  }
+  
+  /* Animações e hover effects */
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+  
+  .story-link {
+    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+  }
+  
+  .pulse {
+    @apply animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite];
+  }
+  
+  /* Loading skeleton */
+  .skeleton {
+    @apply bg-muted animate-pulse rounded-md;
+  }
+  
+  /* Micro-interactions */
+  .micro-bounce {
+    @apply transition-transform duration-150 active:scale-95;
+  }
+}
+
+/* Media Query para Impressão - Etiqueta de Encomenda */
+@media print {
+  .etiqueta-container {
+    transform: none !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Garantir que a etiqueta ocupe a página inteira na impressão */
+  @page {
+    margin: 0;
+    size: A4;
+  }
+  
+  /* Ocultar elementos desnecessários na impressão */
+  .no-print {
+    display: none !important;
+  }
+}

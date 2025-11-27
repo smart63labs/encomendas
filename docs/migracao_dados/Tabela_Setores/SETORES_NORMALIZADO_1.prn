@@ -1,0 +1,584 @@
+ID CODIGO_SETOR  NOME_SETOR                                           ORGAO              ATIVOCREATED_AT UPDATED_AT  LOGRADOURO       NUMERO  COMPLEMENTO             BAIRRO CIDADE                      ESTADO CEP      TELEFONE
+1  013.DICREFIS  Diretoria da Cobrança e Recup de Créditos Fiscais    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77062048 63 - 1234-567
+2  013.DRREAT    Delegacia Regional de Fiscalização - Alvorada        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ALVORADA                    TO     75084220 63 - 1234-567
+3  013.POSFISBAL Posto Fiscal - Balsa                                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TOCANTINOPOLIS              TO     77900000 63 - 1234-567
+4  013.AGEATBAT  Agência de Atendimento Bandeirantes do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BANDEIRANTES DO TOCANTINS   TO     77783000 63 - 1234-567
+5  013.GEDIAT    Gerência da Dívida Ativa                             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006399 63 - 1234-567
+6  013.DRFARA    Delegacia Regional de Fiscalização - Araguaína       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUAINA                   TO     77800000 63 - 1234-567
+7  013.AGEATABR  Agência de Atendimento de Abreulândia                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ABREULANDIA                 TO     77693000 63 - 1234-567
+8  013.CRAALV    Coordenadoria Regional de Arrecadação - Alvorada     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ALVORADA                    TO     77365000 68 - 1234-567
+9  013.DRFAGI    Delegacia Regional de Fiscalização - Araguatins      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUATINS                  TO     77800000 63 - 1234-567
+10 013.DRRECT    Delegacia Regional de Fiscalização - Colinas do TocanSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COLINAS DO TOCANTINS        TO     77760000 63 - 1234-567
+11 013.AGEATAGU  Agência de Atendimento de Aguiarnópolis              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO AGUIARNOPOLIS               TO     77908000 63 - 1234-567
+12 013.AGEATALT  Agência de Atendimento de Aliança do Tocantins       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ALIANCA DO TOCANTINS        TO     77455000 63 - 1234-567
+13 013.DRREG     Delegacia Regional de Fiscalização - Gurupi          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GURUPI                      TO     77400000 63 - 1234-567
+14 013.DRFMIT    Delegacia Regional de Fiscalização - Miracema        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MIRACEMA DO TOCANTINS       TO     77650000 63 - 1234-567
+15 013.AGEATALM  Agência de Atendimento de Almas                      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ALMAS                       TO     77310000 63 - 1234-567
+16 013.AGECON    Agente de Contratação                                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77021681 63 - 1234-567
+17 013.CEFIS     Central de Execuções Fiscais                         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+18 013.DRFPAL    Delegacia Regional de Fiscalização - Palmas          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001250 63 - 1234-567
+19 013.AGEATALV  Agência de Atendimento de Alvorada                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ALVORADA                    TO     77480000 63 - 1234-567
+20 013.AGEATANN  Agência de Atendimento de Ananás                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ANANAS                      TO     77890000 63 - 1234-567
+21 013.POFIBEVI  Posto Fiscal - Bela Vista                            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SAO MIGUEL DO TOCANTINS     TO     77925000 63 - 1234-567
+22 013.AGEATANG  Agência de Atendimento de Angico                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ANGICO                      TO     77895000 63 - 1234-567
+23 013.CEFIS2    Central de Execuções Fiscais - Gurupi                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GURUPI                      TO     77440490 63 - 1234-567
+24 013.AGEATARN  Agência de Atendimento de Aparecida do Rio Negro     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO APARECIDA DO RIO NEGRO      TO     77620000 63 - 1234-567
+25 013.AGEATARG  Agência de Atendimento de Aragominas                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGOMINAS                  TO     77845000 63 - 1234-567
+26 013.CRAARA    Coordenadoria Regional de Arrecadação - Araguaína    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUAINA                   TO     77807080 63 - 1234-567
+27 013.GESICAP   Gerência de Acomp  do SICAP Contábil                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015642 63 - 1234-567
+28 013.CHASCOM   Chefia da Assessoria de Comunicação                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77018502 63 - 1234-567
+29 013.SUTES     Superintendência do Tesouro Estadual                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015318 63 - 1234-567
+30 013.GEACONT   Gerência de Acomp Contábil das Unidades Setoriais    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015704 63 - 1234-567
+31 013.GEASC     Gerência de Acomp do Sist Contábil Financeiro        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022372 63 - 1234-567
+32 013.GEALOG    Gerência de Administração e Logística                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77024120 63 - 1234-567
+33 013.AGEATARC  Agência de Atendimento de Araguacema                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUACEMA                  TO     77690000 63 - 1234-567
+34 013.AGEATARU  Agência de Atendimento de Araguaçu                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUACU                    TO     77475000 63 - 1234-567
+35 013.AGEATARA  Agência de Atendimento de Araguaína                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUAINA                   TO     77803140 68 - 1234-567
+36 013.AGEATAGN  Agência de Atendimento de Araguanã                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUANÃ                    TO     77855000 63 - 1234-567
+37 013.AGEATAGI  Agência de Atendimento de Araguatins                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUATINS                  TO     77950000 63 - 1234-567
+38 013.AGEATARP  Agência de Atendimento de Arapoema                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAPOEMA                    TO     77780000 63 - 1234-567
+39 013.CRAAGUAT  Coordenadoria Regional de Arrecadação - Araguatins   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUATINS                  TO     77950000 63 - 1234-567
+40 013.DRFPTO    Delegacia Regional de Fiscalização - Paraiso         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PARAISO DO TOCANTINS        TO     77500000 63 - 1234-567
+41 013.GIRC      Gerência de Implementação de Rotinas Contábeis       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006638 63 - 1234-567
+42 013.AGEATARR  Agência de Atendimento de Arraias                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARRAIAS                     TO     77330000 63 - 1234-567
+43 013.AGEATAUG  Agência de Atendimento de Augustinópolis             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO AUGUSTINOPOLIS              TO     77980000 63 - 1234-567
+44 013.CHASCOM   Chefia da Assessoria de Comunicação                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016660 63 - 1234-567
+45 013.AGEATAUT  Agência de Atendimento de Aurora do Tocantins        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO AURORA DO TOCANTINS         TO     77325000 63 - 1234-567
+46 013.AGEATAXT  Agência de Atendimento de Axixá do Tocantins         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO AXIXA DO TOCANTINS          TO     77930000 63 - 1234-567
+47 013.AGEATBBL  Agência de Atendimento de Babaçulândia               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BABACULANDIA                TO     77870000 63 - 1234-567
+48 013.CATF      Chefia da Assessoria Técnica Fazendária              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77270000 63 - 1234-567
+49 013.GEALMO    Gerência de Almoxarifado                             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77500000 63 - 1234-567
+50 013.AGEATBAR  Agência de Atendimento de Barrolândia                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BARROLANDIA                 TO     77665000 63 - 1234-567
+51 013.AGEATBES  Agência de Atendimento de Bernardo Sayão             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BERNARDO SAYAO              TO     77755000 63 - 1234-567
+52 013.AGEATBJT  Agência de Atendimento de Bom Jesus do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BOM JESUS DO TOCANTINS      TO     77714000 63 - 1234-567
+53 013.CRACOL    Coordenadoria Regional de Arrecadação - Colinas      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COLINAS DO TOCANTINS        TO     77760000 63 - 1234-567
+54 013.CHECOM    Chefia de Assessoria de Comunicação                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016352 63 - 1234-567
+55 013.DIEFAZ    Diretoria da Escola Fazendária                       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77024690 63 - 1234-567
+56 013.GEAPRO    Gerência de Análise Processual                       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006086 63 - 1234-567
+57 013.AGEATBRT  Agência de Atendimento de Brasilândia do Tocantins   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BRASILANDIA DO TOCANTINS    TO     77735000 63 - 1234-567
+58 013.GEAPO     Gerência de Apoio                                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77019427 63 - 1234-567
+59 013.GEAR      Gerência de Arrecadação                              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022012 63 - 1234-567
+60 013.AGEATBRN  Agência de Atendimento de Brejinho de Nazaré         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BREJINHO DE NAZARE          TO     77560000 63 - 1234-567
+61 013.DRREPA    Delegacia Regional de Fiscalização - Pedro Afonso    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PEDRO AFONSO                TO     77710000 63 - 1234-567
+62 013.GEAUFIS   Gerência de Automação Fiscal                         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015710 68 - 1234-567
+63 013.AGEATBUT  Agência de Atendimento de Buriti do Tocantins        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO BURITI DO TOCANTINS         TO     77995000 63 - 1234-567
+64 013.AGEATCAL  Agência de Atendimento de Campos Lindos              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO CAMPOS LINDOS               TO     77777000 63 - 1234-567
+65 013.AGEATCRR  Agência de Atendimento de Cariri do Tocantins        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO CARIRI DO TOCANTINS         TO     77453000 63 - 1234-567
+66 013.ASAP      Assessoria de Análises e Pesquisas                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77021681 63 - 1234-567
+67 013.AGEATCAR  Agência de Atendimento de Carmolândia                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO CARMOLANDIA                 TO     77840000 63 - 1234-567
+68 013.AGEATCAS  Agência de Atendimento de Caseara                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO CASEARA                     TO     77680000 63 - 1234-567
+69 013.AGEATCOL  Agência de Atendimento de Colinas do Tocantins       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COLINAS DO TOCANTINS        TO     77760000 63 - 1234-567
+70 013.SUPEFE    Superintendência de Enfret a Frau Fis Estruturadas   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015288 63 - 1234-567
+71 013.DIREC     Diretoria da Receita                                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77023384 63 - 1234-567
+72 013.ASGAB     Assessoria de Gabinete II - Gab do Secretário        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020570 63 - 1234-567
+73 013.GEBAD     Gerência de Banco de Dados                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006500 63 - 1234-567
+74 013.AGEATCML  Agência de Atendimento de Colméia                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COLMEIA                     TO     77725000 63 - 1234-567
+75 013.GEBEFI    Gerência de Benefícios Fiscais                       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022392 63 - 1234-567
+76 013.AGEATCBN  Agência de Atendimento de Combinado                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COMBINADO                   TO     77350000 63 - 1234-567
+77 013.AGEATCOT  Agência de Atendimento de Conceição do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO CONCEICAO DO TOCANTINS      TO     77305000 63 - 1234-567
+78 013.GECAD     Gerência de Cadastro                                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006070 63 - 1234-567
+79 013.SAF       Superintendência de Administração e Finanças         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020556 63 - 1234-567
+80 013.AGEATCOM  Agência de Atendimento de Couto Magalhães            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COUTO MAGALHAES             TO     77750000 63 - 1234-567
+81 013.AGEATCRI  Agência de Atendimento de Cristalãndia               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO CRISTALÂNDIA                TO     77490000 63 - 1234-567
+82 013.CRAMIRAC  Coordenadoria Regional de Administração - Miracema   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MIRACEMA DO TOCANTINS       TO     77650000 63 - 1234-567
+83 013.AGEATDAR  Agência de Atendimento de Darcinópolis               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO DARCINOPOLIS                TO     77910000 63 - 1234-567
+84 013.AGEATDIA  Agência de Atendimento de Dianópolis                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO DIANOPOLIS                  TO     77300000 63 - 1234-567
+85 013.AGEATDIV  Agência de Atendimento de Divinópolis do Tocantins   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO DIVINOPOLIS DO TOCANTINS    TO     77670000 63 - 1234-567
+86 013.ASGAB III Assessoria de Gabinete III - Gab do Sec Ex Tesouro   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006066 63 - 1234-567
+87 013.GERCOBR   Gerência de Cobrança                                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77380000 63 - 1234-567
+88 013.AGEATDOI  Agência de Atendimento de Dois irmãos do Tocantins   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO DOIS IRMÃOS DO TOCANTINS    TO     77685000 63 - 1234-567
+89 013.AGEATDUE  Agência de Atendimento de Dueré                      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO DUERE                       TO     77400000 68 - 1234-567
+90 013.GECOM     Gerência de Compras                                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020086 63 - 1234-567
+91 013.AGEATFAT  Agência de Atendimento de Fátima                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO FATIMA                      TO     77555000 63 - 1234-567
+92 013.AGEATFIG  Agência de Atendimento de Figueirópolis              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO FIGUEIROPOLIS               TO     77465000 63 - 1234-567
+93 013.AGEATFID  Agência de Atendimento de Filadélfia                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO FILADELFIA                  TO     77795000 63 - 1234-567
+94 013.POFICOMA  Posto Fiscal - Couto Magalhaes                       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COUTO MAGALHAES             TO     77750000 63 - 1234-567
+95 013.AGEATFOA  Agência de Atendimento de Formoso do Araguaia        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO FORMOSO DO ARAGUAIA         TO     77470000 63 - 1234-567
+96 013.CRAPEDRA  Coordenadoria Regional de Administração - Pedro AfonsSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PEDRO AFONSO                TO     77710000 63 - 1234-567
+97 013.CAGEF     Chefia de Assessoria de Gestão dos Fundos            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020494 63 - 1234-567
+98 013.AGEATGOI  Agência de Atendimento de Goianorte                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GOIANORTE                   TO     77695000 63 - 1234-567
+99 013.AGEATGOT  Agência de Atendimento de Goiatins                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GOIATINS                    TO     77770000 63 - 1234-567
+100013.AGEATGUA  Agência de Atendimento de Guaraí                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GUARAI                      TO     77700000 63 - 1234-567
+101013.AGEATGUR  Agência de Atendimento de Gurupi                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GURUPI                      TO     77410070 63 - 1234-567
+102013.AGEATITA  Agência de Atendimento de Itacajá                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ITACAJA                     TO     77720000 63 - 1234-567
+103013.AGEATITG  Agência de Atendimento de Itaguatins                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ITAGUATINS                  TO     77920000 63 - 1234-567
+104013.AGEATITP  Agência de Atendimento de Itapiratins                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ITAPIRATINS                 TO     77718000 63 - 1234-567
+105013.GECAS     Gerência de Controle de Acesso ao Siafe              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006508 63 - 1234-567
+106013.GEARPRO   Gerência de Controle e Acomp de Processos            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77502000 63 - 1234-567
+107013.DRFPNA    Delegacia Regional de Fiscalização - Porto Nacional  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PORTO NACIONAL              TO     77500000 63 - 1234-567
+108013.DIANP     Diretoria de Acomp, Normas e Procedimentos           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006450 63 - 1234-567
+109013.AGEATITT  Agência de Atendimento de Itaporã do Tocantins       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ITAPORA DO TOCANTINS        TO     77740000 63 - 1234-567
+110013.COFAZ     Corregedoria Fazendária                              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016418 63 - 1234-567
+111013.AGEATJAT  Agência de Atendimento de Jaú do Tocantins           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO JAU DO TOCANTINS            TO     77390000 63 - 1234-567
+112013.AGEATLAC  Agência de Atendimento de Lagoa da Confusão          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO LAGOA DA CONFUSAO           TO     77483000 63 - 1234-567
+113013.GECEC-TO  Gerência de Cotação Eletrônica - Compras-TO          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022048 63 - 1234-567
+114013.AGEATLAT  Agência de Atendimento de Lagoa do Tocantins         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO LAGOA DO TOCANTINS          TO     77613000 63 - 1234-567
+115013.GEDENT    Gerência de Débitos não Tributários                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+116013.AGEATLAG  Agência de Atendimento de Lajeado                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO LAJEADO                     TO     77645000 68 - 1234-567
+117013.AGEATMAE  Agência de Atendimento de Mateiros                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MATEIROS                    TO     77593000 63 - 1234-567
+118013.AGEATMIT  Agência de Atendimento de Miracema do Tocantins      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MIRACEMA DO TOCANTINS       TO     77650000 63 - 1234-567
+119013.DAJUC     Diretoria de Acompanhamento Judicial-Criminal        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     75096300 63 - 1234-567
+120013.CRADAGI   Coordenadoria Regional de Administração - Araguatins Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUATINS                  TO     77950000 63 - 1234-567
+121013.AGEATMIR  Agência de Atendimento de Miranorte                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MIRANORTE                   TO     77660000 63 - 1234-567
+122013.AGEATMTC  Agência de Atendimento de Monte do Carmo             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MONTE DO CARMO              TO     77585000 63 - 1234-567
+123013.DAF       Diretoria de Administração e Finanças                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77021070 63 - 1234-567
+124013.ASGEST    Assessoria de Gestão Estratégica (PROFISCO)          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77023366 63 - 1234-567
+125013.AGEATMOT  Agência de Atendimento de Monte Santo do Tocantins   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MONTE SANTO                 TO     77600000 63 - 1234-567
+126013.GEDEC     Gerência de Demonstrações Contábeis                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77019020 63 - 1234-567
+127013.GEDEC     Gerência de Demonstrações Contábeis                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015636 63 - 1234-567
+128013.AGEATMUR  Agência de Atendimento de Muricilãndia               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MURICILANDIA                TO     77850000 63 - 1234-567
+129013.POSFISEST Posto Fiscal - Estreito                              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO AGUIARNOPOLIS               TO     77908000 63 - 1234-567
+130013.GEFOR     Gerência de e-Fornecedores                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77023032 63 - 1234-567
+131013.AGEATNAT  Agência de Atendimento de Natividade                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO NATIVIDADE                  TO     77370000 63 - 1234-567
+132013.GIRC      Gerência de Implementação de Rotinas Contábeis       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006652 63 - 1234-567
+133013.GELDFIS   Gerência de Elaboração de Demons Fiscais             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+134013.GABSEC    Gabinete do Secretário                               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77023594 63 - 1234-567
+135013.AGEATNAZ  Agência de Atendimento de Nazaré                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO NAZARE                      TO     77895000 63 - 1234-567
+136013.GELED     Gerência de Elaboração de Editais                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015630 63 - 1234-567
+137013.AGEATNOO  Agência de Atendimento de Nova Olinda                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO NOVA OLINDA                 TO     77790000 63 - 1234-567
+138013.AGEATNRO  Agência de Atendimento de Nova Rosalândia            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO NOVA ROSALANDIA             TO     77495000 63 - 1234-567
+139013.GEORF     Gerência de Execução Orçamentária e Financeira       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77023526 63 - 1234-567
+140013.SUTIF     Superintendência de Tecnol e Inov Fazendária         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006798 63 - 1234-567
+141013.AGEATNAC  Agência de Atendimento de Novo Acordo                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO NOVO ACORDO                 TO     77001566 63 - 1234-567
+142013.AGEATNAL  Agência de Atendimento de Novo Alegre                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO NOVO ALEGRE                 TO     77353000 63 - 1234-567
+143013.CRADALV   Coordenadoria Regional de Administração - Alvorada   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ALVORADA                    TO     77480000 68 - 1234-567
+144013.DAMIJU    Diretoria de Aval e Mitig de Impa de Dema Judicial   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006356 63 - 1234-567
+145013.AGEATNJA  Agência de Atendimento de Novo Jardim                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO DIANOPOLIS                  TO     77300000 63 - 1234-567
+146013.AGEATPAL  Agência de Atendimento de Palmas                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77019098 63 - 1234-567
+147013.AGEATPAT  Agência de Atendimento de Palmeiras do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMEIRAS DO TOCANTINS      TO     77908000 63 - 1234-567
+148013.POFIPADA  Posto Fiscal - Pau Darco                             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PAU DARCO                   TO     77785000 63 - 1234-567
+149013.GEFISTRA  Gerência de Fisc de Trânsito e Postos Fiscais        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+150013.DICOM     Diretoria de Compras                                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+151013.CRADARA   Coordenadoria Regional de Administração - Araguaína  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUAINA                   TO     77820220 63 - 1234-567
+152013.AGEATPME  Agência de Atendimento de Palmeirópolis              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMEIROPOLIS               TO     77365000 63 - 1234-567
+153013.AGEATPTO  Agência de Atendimento de Paraiso do Tocantins       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PARAISO DO TOCANTINS        TO     77600000 63 - 1234-567
+154013.AGEATPAR  Agência de Atendimento de Paranã                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PARANA                      TO     77360000 63 - 1234-567
+155013.CRADCOL   Coordenadoria Regional de Administração - Colinas    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COLINAS DO TOCANTINS        TO     77760000 63 - 1234-567
+156013.AGEATPDR  Agência de Atendimento de Pau D´arco                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PAU DARCO                   TO     77785000 63 - 1234-567
+157013.SUATRI    Superintendência de Administração Tributária         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     70000000 63 - 1234-567
+158013.AGEATPEF  Agência de Atendimento de Pedro Afonso               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PEDRO AFONSO                TO     77700000 63 - 1234-567
+159013.POFISEGE  Posto Fiscal - Serra Geral                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77260000 63 - 1234-567
+160013.GEFISEST  Gerência de Fiscalização de Estabelecimentos         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77021681 63 - 1234-567
+161013.DICONTS   Diretoria de Contabilidade Setorial                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77059032 63 - 1234-567
+162013.AGEATPEI  Agência de Atendimento de Peixe                      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PEIXE                       TO     77460000 63 - 1234-567
+163013.GEIMC     Gerência de Implantação de Custos                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+164013.GEINFEC   Gerência de Informações Econômico-Fiscais            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015625 63 - 1234-567
+165013.DICUS     Diretoria de Custos                                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015471 63 - 1234-567
+166013.CRADPAL   Coordenadoria Regional de Administração - Palmas     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77270000 63 - 1234-567
+167013.AGEATPEQ  Agência de Atendimento de Pequizeiro                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PEQUIZEIRO                  TO     77730000 63 - 1234-567
+168013.POSFISTAL Posto Fiscal - Talisma                               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TALISMA                     TO     77483000 63 - 1234-567
+169013.DIDEC     Diretoria de Demonstrações Contábeis                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015585 63 - 1234-567
+170013.CRADPNA   Coordenadoria Regional de Administração - Porto NacioSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PORTO NACIONAL              TO     77500000 68 - 1234-567
+171013.ASIP      Assessoria de Integração e Pesquisa                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006586 63 - 1234-567
+172013.DIREXEFIN Diretoria de Execução Financeira                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001877 63 - 1234-567
+173013.AGEATPIN  Agência de Atendimento de Pindorama do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PINDORAMA DO TOCANTINS      TO     77380000 63 - 1234-567
+174013.AGEATPJB  Agência de Atendimento de Ponte Alta do Bom Jesus    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PONTE ALTA DO BOM JESUS     TO     77315000 63 - 1234-567
+175013.AGEATPOT  Agência de Atendimento de Ponte Alta do Tocantins    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PONTE ALTA DO TOCANTINS     TO     77590000 63 - 1234-567
+176013.GEIPLE    Gerência de IPVA e Leilões                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022076 63 - 1234-567
+177013.ASLAF     Assessoria de Laboratório Forense                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+178013.DIGEP     Diretoria de Gestão de Pessoas                       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015426 63 - 1234-567
+179013.ASPLA     Assessoria de Planejamento                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015314 63 - 1234-567
+180013.GASEGT    Gabinete do Secretário Exec de Gestão Tributária     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+181013.GITCMD    Gerência de ITCMD                                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001724 63 - 1234-567
+182013.CRADPTO   Coordenadoria Regional de Administração - Paraiso    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PARAÍSO DO TOCANTINS        TO     77600000 63 - 1234-567
+183013.CRADTAG   Coordenadoria Regional de Administração - Taguatinga Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77320000 63 - 1234-567
+184013.POSFISTRA Posto Fiscal - Transamazonica                        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO AUGUSTINOPOLIS              TO     77960000 63 - 1234-567
+185013.AGEATPNA  Agência de Atendimento de Porto Nacional             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PORTO NACIONAL              TO     77500000 63 - 1234-567
+186013.GEINFAZ   Gerência de Monitoramento e Insp Adm Fazendária      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016352 63 - 1234-567
+187013.CRADTOC   Coordenadoria Regional de Administração - TocantinópoSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TOCANTINÓPOLIS              TO     77900000 63 - 1234-567
+188013.CRAGUR    Coordenadoria Regional de Arrecadação - Gurupi       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GURUPI                      TO     77400000 63 - 1234-567
+189013.GENAC     Gerência de Normas para a apuração de Custos         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77002026 63 - 1234-567
+190013.GENOR     Gerência de Normatização                             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020116 63 - 1234-567
+191013.GENOCON   Gerência de Normatização Contábil                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006070 63 - 1234-567
+192013.GEPFI     Gerência de Planejamento Financeiro                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77064544 63 - 1234-567
+193013.GEPROC    Gerência de Processos e Procedimentos                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015278 63 - 1234-567
+194013.GECAED    Gerência de Programação, Capacit e Educação          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77024506 63 - 1234-567
+195013.POFIBEI   Posto Fiscal - Bezerra I                             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARRAIAS                     TO     77330000 63 - 1234-567
+196013.POSFISCAS Posto Fiscal - Caseara                               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO CASEARA                     TO     77680000 63 - 1234-567
+197013.CRAMIT    Coordenadoria Regional de Arrecadação - Miracema     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MIRACEMA DO TOCANTINS       TO     77650000 68 - 1234-567
+198013.POFICOMA  Posto Fiscal - Couto Magalhaes                       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COUTO MAGALHAES             TO     77750000 63 - 1234-567
+199013.CRAPAL    Coordenadoria Regional de Arrecadação - Palmas       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77249899 63 - 1234-567
+200013.GERCOM    Gerência de Redes e Comunicação                      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006794 63 - 1234-567
+201013.GESDI     Gerência de Segurança Digital                        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016746 63 - 1234-567
+202013.GESDAT    Gerência de Servidores e Data Center                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001564 63 - 1234-567
+203013.CRAPEF    Coordenadoria Regional de Arrecadação - Pedro Afonso Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PEDRO AFONSO                TO     77710000 63 - 1234-567
+204013.GESFIN    Gerência de Sistemas Financeiros                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022372 63 - 1234-567
+205013.CRAPEF    Coordenadoria Regional de Arrecadação - Porto NacionaSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PORTO NACIONAL              TO     77500000 63 - 1234-567
+206013.CRAPTO    Coordenadoria Regional de Arrecadação - Paraiso      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PARAISO DO TOCANTINS        TO     77600000 63 - 1234-567
+207013.CRATAG    Coordenadoria Regional de Arrecadação - Taguatinga   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77320000 63 - 1234-567
+208013.CRATOC    Coordenadoria Regional de Arrecadação - TocantinópoliSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TOCANTINOPOLIS              TO     77900000 63 - 1234-567
+209013.POFIDUPO  Posto Fiscal - Duas Pontes                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77320000 63 - 1234-567
+210013.GESITRI   Gerência de Sistemas Tributários                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006268 63 - 1234-567
+211013.AGEATPRK  Agência de Atendimento de Presidente Kennedy         Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PRESIDENTE KENNEDY          TO     77745000 63 - 1234-567
+212013.AGEATPUG  Agência de Atendimento de Pugmil                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PUGMIL                      TO     77600000 63 - 1234-567
+213013.GESUT     Gerência de Substituição Tributária                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77021600 63 - 1234-567
+214013.DRRET     Delegacia Regional de Fiscalização - Taguatinga      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77320000 63 - 1234-567
+215013.AGEATRIC  Agência de Atendimento de Riachinho                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO RIACHINHO                   TO     77893000 63 - 1234-567
+216013.AGEATRBO  Agência de Atendimento de Rio dos Bois               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO RIO DOS BOIS                TO     77655000 63 - 1234-567
+217013.AGEATRSO  Agência de Atendimento de Rio Sono                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO RIO SONO                    TO     77635000 63 - 1234-567
+218013.DRRET2    Delegacia Regional de Fiscalização - Tocantinopolis  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUAINA                   TO     77823015 63 - 1234-567
+219013.GESOP     Gerência de Suporte e Operações                      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006427 63 - 1234-567
+220013.ASPOT     Assessoria de Política Tributária                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015223 63 - 1234-567
+221013.AGEATSAN  Agência de Atendimento de Sandolândia                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SANDOLANDIA                 TO     77478000 63 - 1234-567
+222013.GETHO     Gerência de Testes e Homologação                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77060034 63 - 1234-567
+223013.AGEATSFE  Agência de Atendimento de Santa Fé do Araguaia       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SANTA FE                    TO     77823120 63 - 1234-567
+224013.CRF       Coordenadoria Regional de Administração - Gurupi     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GURUPI                      TO     77405160 68 - 1234-567
+225013.AGEATSMA  Agência de Atendimento de Santa Maria do Tocantins   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SANTA MARIA DO TOCANTINS    TO     77716000 63 - 1234-567
+226013.GETRANS   Gerência de Transporte                               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006742 63 - 1234-567
+227013.SUASJUR   Superintendência de Assuntos Jurídicos               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77018522 63 - 1234-567
+228013.AGEATSRI  Agência de Atendimento de Santa Rita do Tocantins    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SANTA RITA DO TOCANTINS     TO     77565000 63 - 1234-567
+229013.AGEATSRO  Agência de Atendimento de Santa Rosa do Tocantins    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SANTA ROSA DO TOCANTINS     TO     77375000 63 - 1234-567
+230013.ASMED     Assessoria de Social Media e Design                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     7727000  63 - 1234-567
+231013.AGEATSBT  Agência de Atendimento de São Bento do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SAO BENTO DO TOCANTINS      TO     77958000 63 - 1234-567
+232013.ASCOM     Assessoria Econômica                                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77003310 63 - 1234-567
+233013.GETEC     Gerência de Tribut de Energia e Comunicação          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020558 63 - 1234-567
+234013.AGEATSMT  Agência de Atendimento de São Miguel do Tocantins    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SAO MIGUEL                  TO     77925000 63 - 1234-567
+235013.CRFAGI    Coordenadoria Regional de Fiscalização - Araguatins  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUATINS                  TO     77950000 63 - 1234-567
+236013.AGEATSIL  Agência de Atendimento de Silvanópolis               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SILVANOPOLIS                TO     77580000 63 - 1234-567
+237013.GETC      Gerência de Tributação de Combustível                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015318 63 - 1234-567
+238013.POSFISFIL Posto Fiscal - Filadelfia                            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO FILADELFIA                  TO     77795000 63 - 1234-567
+239013.GETACE    Gerência de Tributação do Agron e Com Exterior       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77023407 63 - 1234-567
+240013.AGEATSNT  Agência de Atendimento de Sitio Novo do Tocantins    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SITIO NOVO                  TO     77940000 63 - 1234-567
+241013.ASJUR     Assessoria Jurídica                                  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016072 63 - 1234-567
+242013.DIGECE    Diretoria de Gestão do Caixa Estadual                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77019516 63 - 1234-567
+243013.POFIJATO  Posto Fiscal - Jau do Tocantins                      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO JAU DO TOCANTINS            TO     77450000 63 - 1234-567
+244013.GIRC      Gerência de Implementação de Rotinas Contábeis       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022388 63 - 1234-567
+245013.POSFISLEV Posto Fiscal - Levantado                             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77320000 63 - 1234-567
+246013.CRFALV    Coordenadoria Regional de Fiscalização - Alvorada    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ALVORADA                    TO     77480000 63 - 1234-567
+247013.AGEATTAB  Agência de Atendimento de Tabocão                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO FORTALEZA DO TABOCAO        TO     77708000 63 - 1234-567
+248013.CRFARA    Coordenadoria Regional de Fiscalização - Araguaína   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO ARAGUAINA                   TO     77818180 63 - 1234-567
+249013.POFINOAL  Posto Fiscal - Novo Alegre                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO NOVO ALEGRE                 TO     77353000 63 - 1234-567
+250013.GEGADM    Gerência Geral de Administração                      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77249899 63 - 1234-567
+251013.DIGCON    Diretoria de Grandes Contribuintes                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77060158 68 - 1234-567
+252013.SUCOLI    Superintendência de Compras e Central de Licitação   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77025464 63 - 1234-567
+253013.GABSEXT   Gabinete do Secretario Executivo do Tesouro          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015468 63 - 1234-567
+254013.AGEATTAG  Agência de Atendimento de Taguatinga                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77300000 63 - 1234-567
+255013.POFISEGE  Posto Fiscal - Serra Geral                           Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77320000 63 - 1234-567
+256013.DINFIS    Diretoria de Informações Econômicas e Fiscais        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77021600 63 - 1234-567
+257013.GIRC      Gerência de Implementação de Rotinas Contábeis       Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77019427 63 - 1234-567
+258013.AGEATTAL  Agência de Atendimento de Talismã                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TALISMA                     TO     77483000 63 - 1234-567
+259013.CRFCOL    Coordenadoria Regional de Fiscalização - Colinas     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO COLINAS DO TOCANTINS        TO     77760000 63 - 1234-567
+260013.GABSEXT   Gabinete do Secretario Executivo do Tesouro          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77023567 63 - 1234-567
+261013.CRFGUR    Coordenadoria Regional de Fiscalização - Gurupi      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO GURUPI                      TO     77400000 63 - 1234-567
+262013.CRFMIT    Coordenadoria Regional de Fiscalização - Miracema    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MIRACEMA DO TOCANTINS       TO     77660000 63 - 1234-567
+263013.DINFRA    Diretoria de Infraestrutura                          Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+264013.AGEATTAQ  Agência de Atendimento de Taquaralto                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77001000 63 - 1234-567
+265013.DIN       Diretoria de Inovação                                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77760000 63 - 1234-567
+266013.DIF       Diretoria de Inteligência Fiscal                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020072 63 - 1234-567
+267013.MCPPDS    Membro Com P Proc Disc Sindicâncias e Revisão        Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77020502 63 - 1234-567
+268013.DILIC     Diretoria de Licitação                               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77002011 63 - 1234-567
+269013.DIRESF    Diretoria de Responsabilidade Fiscal                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77066024 63 - 1234-567
+270013.DICORP    Diretoria de Sistemas Corporativos                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006572 63 - 1234-567
+271013.DITRIB    Diretoria de Tributação                              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016424 63 - 1234-567
+272013.OUVFA     Ouvidoria Fazendária                                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77006128 63 - 1234-567
+273013.AGEATTCN  Agência de Atendimento de Tocantínia                 Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TOCANTINIA                  TO     77640000 63 - 1234-567
+274013.AGEATTOC  Agência de Atendimento de Tocantinópolis             Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TOCANTINOPOLIS              TO     77900000 63 - 1234-567
+275013.PRESCONT  Presidência do Contencioso Adm Tributário            Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022392 63 - 1234-567
+276013.CRFPAL    Coordenadoria Regional de Fiscalização - Palmas      Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77021686 63 - 1234-567
+277013.CRFPEF    Coordenadoria Regional de Fiscalização - Pedro AfonsoSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77000001 63 - 1234-567
+278013.AGEATTUP  Agência de Atendimento de Tupirama                   Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TUPIRAMA                    TO     77704000 68 - 1234-567
+279013.AGEATWND  Agência de Atendimento de Wanderlândia               Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO WANDERLANDIA                TO     77860000 63 - 1234-567
+280013.CRFPNA    Coordenadoria Regional de Fiscalização - Porto NacionSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PORTO NACIONAL              TO     77500000 63 - 1234-567
+281013.CRFPTO    Coordenadoria Regional de Fiscalização - Paraiso     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PEDRO AFONSO                TO     77600000 63 - 1234-567
+282013.CRFTAG    Coordenadoria Regional de Fiscalização - Taguatinga  Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TAGUATINGA                  TO     77320000 63 - 1234-567
+283013.PCPPDS    Presidente Com P Proc Disc Sindicâncias e Revisão    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015433 63 - 1234-567
+284013.SUCOG     Superintendência de Contabilidade Geral              Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77016638 63 - 1234-567
+285013.CRFTOC    Coordenadoria Regional de Fiscalização - TocantinópolSecretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO TOCANTINÓPOLIS              TO     77900000 63 - 1234-567
+286013.DIGET     Diretoria Geral de Gestão Tecnológica                Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77015264 63 - 1234-567
+287013.AGEATXMB  Agência de Atendimento de Xambioá                    Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO XAMBIOA                     TO     77880000 63 - 1234-567
+288013.SEGER2    Secretaria-Geral                                     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO PALMAS                      TO     77022432 63 - 1234-567
+289013.AGEATMRT  Agência de Atendimento Marianópolis do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO MARIANOPOLIS DO TOCANTINS   TO     77675000 63 - 1234-567
+290013.AGEATSTT  Agência de Atendimento Santa Tereza do Tocantins     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SANTA TEREZA DO TOCANTINS   TO     77615000 63 - 1234-567
+291013.AGEATSAV  Agência de Atendimento São Valério da Natividade     Secretaria da Fazen1                           atualizar endereç0       complemento do endereço CENTRO SAO VALERIO                 TO     77390000 63 - 1234-567
+EMAIL                                                        LATITUDELONGITUDE
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br
+atualizar_email@sefaz.to.gov.br

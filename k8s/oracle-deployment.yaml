@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oracle-deployment
+  namespace: novoprotocolo
+  labels:
+    app: novoprotocolo
+    component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: novoprotocolo
+      component: database
+  template:
+    metadata:
+      labels:
+        app: novoprotocolo
+        component: database
+    spec:
+      containers:
+      - name: oracle-db
+        image: container-registry.oracle.com/database/free:latest
+        ports:
+        - containerPort: 1521
+          name: oracle
+        - containerPort: 5500
+          name: oracle-em
+        env:
+        - name: ORACLE_PWD
+          valueFrom:
+            secretKeyRef:
+              name: oracle-secrets
+              key: ORACLE_PWD
+        - name: ORACLE_CHARACTERSET
+          value: "AL32UTF8"
+        volumeMounts:
+        - name: oracle-data
+          mountPath: /opt/oracle/oradata
+        - name: oracle-scripts
+          mountPath: /docker-entrypoint-initdb.d/startup
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "sqlplus -L sys/${ORACLE_PWD}@//localhost:1521/FREE as sysdba @/dev/null"
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "sqlplus -L sys/${ORACLE_PWD}@//localhost:1521/FREE as sysdba @/dev/null"
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      volumes:
+      - name: oracle-data
+        persistentVolumeClaim:
+          claimName: oracle-pvc
+      - name: oracle-scripts
+        configMap:
+          name: oracle-init-scripts
+          optional: true
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oracle-service
+  namespace: novoprotocolo
+  labels:
+    app: novoprotocolo
+    component: database
+spec:
+  selector:
+    app: novoprotocolo
+    component: database
+  ports:
+  - name: oracle
+    port: 1521
+    targetPort: 1521
+    protocol: TCP
+  - name: oracle-em
+    port: 5500
+    targetPort: 5500
+    protocol: TCP
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: oracle-pvc
+  namespace: novoprotocolo
+  labels:
+    app: novoprotocolo
+    component: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: standard

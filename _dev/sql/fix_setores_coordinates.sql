@@ -1,0 +1,30 @@
+-- Script para corrigir coordenadas faltantes dos setores
+-- Palmas, Araguaína, Gurupi e Paraíso do Tocantins
+
+-- Atualizar coordenadas para setores em Palmas
+UPDATE SETORES 
+SET LATITUDE = -10.249091, LONGITUDE = -48.324218
+WHERE UPPER(CIDADE) = 'PALMAS' AND (LATITUDE IS NULL OR LONGITUDE IS NULL);
+
+-- Atualizar coordenadas para setores em Araguaína
+UPDATE SETORES 
+SET LATITUDE = -7.191181, LONGITUDE = -48.207222
+WHERE UPPER(CIDADE) = 'ARAGUAINA' AND (LATITUDE IS NULL OR LONGITUDE IS NULL);
+
+-- Atualizar coordenadas para setores em Gurupi
+UPDATE SETORES 
+SET LATITUDE = -11.728716, LONGITUDE = -49.068466
+WHERE UPPER(CIDADE) = 'GURUPI' AND (LATITUDE IS NULL OR LONGITUDE IS NULL);
+
+-- Atualizar coordenadas para setores em Paraíso do Tocantins
+UPDATE SETORES 
+SET LATITUDE = -10.175556, LONGITUDE = -48.881944
+WHERE UPPER(CIDADE) = 'PARAISO DO TOCANTINS' AND (LATITUDE IS NULL OR LONGITUDE IS NULL);
+
+-- Verificar se as atualizações foram aplicadas
+SELECT NOME_SETOR, CIDADE, LATITUDE, LONGITUDE 
+FROM SETORES 
+WHERE UPPER(CIDADE) IN ('PALMAS', 'ARAGUAINA', 'GURUPI', 'PARAISO DO TOCANTINS')
+ORDER BY CIDADE, NOME_SETOR;
+
+COMMIT;

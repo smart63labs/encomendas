@@ -1,0 +1,143 @@
+{
+  "name": "novoprotocolo-backend",
+  "version": "1.0.0",
+  "description": "Backend API do NovoProtocolo com Oracle 19c",
+  "main": "dist/app.js",
+  "scripts": {
+    "dev": "nodemon --exec \"ts-node --transpile-only src/server.ts\"",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "migrate": "node dist/scripts/migrate.js",
+    "migrate:dev": "ts-node src/scripts/migrate.ts",
+    "seed": "node dist/scripts/seed.js",
+    "seed:dev": "ts-node src/scripts/seed.ts",
+    "test:db": "ts-node src/scripts/test-connection.ts",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "postinstall": "echo 'Dependencies installed'"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "express",
+    "oracle",
+    "rest-api",
+    "novoprotocolo"
+  ],
+  "author": "NovoProtocolo Team",
+  "license": "MIT",
+  "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/ldapjs": "^3.0.6",
+    "@types/oracledb": "^6.9.1",
+    "axios": "^1.11.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.2.1",
+    "helmet": "^7.2.0",
+    "http-status-codes": "^2.3.0",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "ldapjs": "^3.0.7",
+    "lodash": "^4.17.21",
+    "mime-types": "^2.1.35",
+    "moment": "^2.29.4",
+    "morgan": "^1.10.1",
+    "multer": "^1.4.5-lts.1",
+    "oracledb": "^6.9.0",
+    "rate-limiter-flexible": "^7.3.0",
+    "sharp": "^0.32.6",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.8",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/lodash": "^4.14.202",
+    "@types/mime-types": "^2.1.4",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20.19.13",
+    "@types/supertest": "^2.0.16",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/novoprotocolo/backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/novoprotocolo/backend/issues"
+  },
+  "homepage": "https://github.com/novoprotocolo/backend#readme",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.ts",
+      "**/?(*.)+(spec|test).ts"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/*.d.ts",
+      "!src/scripts/**",
+      "!src/**/__tests__/**"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ]
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts,json",
+    "ignore": [
+      "src/**/*.test.ts",
+      "src/**/*.spec.ts"
+    ],
+    "exec": "ts-node src/app.ts"
+  }
+}

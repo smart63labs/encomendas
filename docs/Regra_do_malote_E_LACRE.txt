@@ -1,0 +1,79 @@
+Regra do malote: 
+
+Quando o Malote estará indisponível para mim, que estou cadastrando a encomenda ? Quando na tabela encomendas_eventos a coluna SETOR_ID for IGUAL a SETOR_ORIGEM_ID da tabela encomendas e também na tabela encomendas_eventos STATUS_ENTREGA = "EmTransito" e STATUS_ENTREGUE = "Não".
+Quando o Malote estará disponível para mim, que estou cadastrando a encomenda ? Quando na tabela encomendas_eventos a coluna SETOR_ID for IGUAL a SETOR_ORIGEM_ID da tabela encomendas e tambem na tabela encomendas_eventos STATUS_ENTREGA = "Entregue" e STATUS_ENTREGUE = "Sim".
+Para ambos os casos o Malote DEVE aparecer no modal, mas quando estiver "Indisponível" bloqueado para seleção para seleção pelo usuário, quando "Disponível", livre para seleção pelo usuário.
+
+
+
+Regra do Lacre:
+
+Quando o lacre estará indisponível para mim, que estou cadastrando a encomenda ? Quando na tabela lacre a coluna SETOR_ID for IGUAL a SETOR_ORIGEM_ID da tabela encomendas e também quando na tabela lacre a coluna STATUS = "utilizado".
+Quando o lacre estará disponível para mim, que estou cadastrando a encomenda ? NÃO EXISTE REGRA PARA TORNAR LACRES COM STATUS STATUS = "utilizado" DISPONIVEIS, MAS PARA ambos os casos o LACRE DEVE aparecer no modal, mas quando estiver "Indisponível" bloqueado para seleção para seleção pelo usuário, quando "Disponível", livre para seleção pelo usuário.
+
+DESENHO DO FLUXO VERIFICAÇÃO DO MALOTE E DO LACRE:
+
+MALOTE
+
+
+SE na tabela encomendas_eventos a coluna SETOR_ID = a coluna SETOR_ORIGEM_ID da tabela tabela encomendas{ "Significa que o setor TEM ENCOMENDA VINCULADA A ALGUM MALOTE"
+	SE encomendas_eventos STATUS_ENTREGA = "EmTransito" e STATUS_ENTREGUE = "Não"
+		STATUS DO MALOTE = "Em transito / Indisponível" (formate com badge cor laranja)
+		APARECE EM TELA, FICA INDISPONIVEL PARA SELEÇÃO PELO USUAIRO.
+}SE NÃO{
+	SE encomendas_eventos STATUS_ENTREGA = "Entregue" e STATUS_ENTREGUE = "Sim".
+	STATUS DO MALOTE = "Disponível" (formate com badge cor verde)
+	APARECE EM TELA, FICA DISPONIVEL PARA SELEÇÃO PELO USUAIRO.
+}
+
+Teste Hipotetico
+Eu estou na tela de cadastro de nova encomenda, e logado com o setor id : 172, e portanto, preciso usar os malotes e lacres disponíveis ao meu setor.
+Como verifico se algum malote e lacre estão disponíveis ? na tabela encomendas_eventos eu comparo a coluna SETOR_ID = a coluna SETOR_ORIGEM_ID da tabela tabela encomendas, se eu encontrar algum registro (ou vários registros) significa que existem encomendas + malotes + lacres relacionados ao meu setor que estou logado. Próximo passo é verificar se existem malotes e lacres indisponivels. Como faço isso ? SE na tabela encomendas_eventos o STATUS_ENTREGA = "EmTransito" e o STATUS_ENTREGUE = "Não", eu filtro as colunas : 
+
+
+
+LACRE
+SE na tabela encomendas_eventos a coluna SETOR_ORIGEM_ID  = SETOR_ID for da tabela encomendas{
+	SE na tabela lacre a coluna STATUS = "utilizado"
+	STATUS DO LACRE = "Já usado / Indisponível" (formate com badge cor laranja)
+	APARECE EM TELA, FICA INDISPONIVEL PARA SELEÇÃO PELO USUAIRO.
+}SE NÃO{
+	SE na tabela lacre a coluna STATUS = "utilizado"
+	STATUS DO LACRE = "Disponível" (formate com badge cor verde)
+	APARECE EM TELA, FICA DISPONIVEL PARA SELEÇÃO PELO USUAIRO.
+}
+
+
+QUERO QUE DOCUMENTE ESSA REGRA, PARA QUE POSSAMOS CONSULTAR ELA QUANDO FOR NESCESSARIO.
+
+Estados Utilizados
+
+- disponivel : recém-criado, sem distribuição.
+- atribuido : distribuído a um setor e/ou vinculado a uma encomenda/malote em trânsito.
+- utilizado : após a entrega da encomenda, lacre consumido.
+- destruido : lacre invalidado por ação administrativa em lote.
+
+
+Malote e Lacre será validado os seus status usando os campos da tabela encomendas, que são : STATUS, SETOR_ORIGEM_ID, LACRE_ID, MALOTE_ID.
+
+Ao cadastrar uma nova encomenda, o que vai determinar se o malote esta disponível é, no fluxo de cadastro da encomenda, no modal que se escolhe o malote e lacre, o sistema ira filtrar :
+
+Na tabela encomendas, para o mesmo SETOR_ORIGEM_ID do usuário logado, e da escolha do remetente no modal "nova encomenda", se existir valore no campo "MALOTE_ID", e SATUS = em_transito, significa que o malote esta com Status : "Em trânsito / Indisponível". Caso o SATUS = entregue, o malote fica com Status : "Disponível" e com opção de ser selecionado pelo usuário. Fazer os "joins" entre tabelas necessários no campo MALOTE_ID da tabela encomendas pra descobrir e bloquear a seleção do malote corretamente ao setor correto em que o usuário selecionou como remetente e do qual ele esta logado. O malote bloqueado deve aparecer no modal, mas com a opção de seleção indisponível e com o status : "Em trânsito / Indisponível".
+
+Na tabela encomendas, para o mesmo SETOR_ORIGEM_ID do usuário logado, e da escolha do remetente no modal "nova encomenda", se existir valor no campo "LACRE_ID", significa que a encomenda tem lacre e o lacre DEVE ficar com Status : "Já usado / Indisponível". Em caso contrario fica com Status : "Disponível". Fazer os "joins" entre tabelas necessários no campo LACRE_ID da tabela encomendas pra descobrir e bloquear a seleção do lacre corretamente ao setor correto em que o usuário selecionou como remetente e do qual ele esta logado. O lacre bloqueado deve aparecer no modal, mas com a opção de seleção indisponível e com o status : "Já usado / Indisponível".
+
+
+- Para o malote, em caso de múltiplas encomendas no mesmo setor, devo considerar “indisponível” se existir qualquer registro com STATUS = 'em_transito' (independente de entregues anteriores), correto? Em não havendo “em_transito”, tratamos como “Disponível”.
+
+Resposta: Cada setor só pode usar 1 malote por vez e por encomenda, então não existe múltiplas encomendas no mesmo setor, não com o mesmo malote ou mesmo id de encomenda. Então o malote vai ser usado somente 1 POR REGISTRO DE ENCOMENDA (ID), e enquanto o setor destinatário não receber ele no sistema, ele fica indisponível para uso por estar em transito, e SOMENTE volta a ficar disponível pra ser usado pelo setor DESTINATARIO, se setor DESTINATARIO receber a encomenda no sistema, e o status mudar para "Entregue".
+
+- Para o lacre, a regra é “uso único”: se apareceu em qualquer ENCOMENDAS.LACRE_ID daquele setor, fica “Já usado / Indisponível” permanentemente (independe de STATUS ), certo?
+
+Resposta: Para o lacre, a regra é “uso único”: se apareceu em qualquer ENCOMENDAS.LACRE_ID daquele setor, fica “Já usado / Indisponível” permanentemente (independe de STATUS ), certo? SIM, é EXATAMENTE esse o conceito do lacre. só se usa uma vez por encomenda e por malote. Não existe o tipo de encomenda com malote sem o lacre, usou, vai pra lista de utilizados e não pode mais ser selecionado pelo usuário.
+
+- O “remetente” no modal corresponde ao setor de origem que será usado para filtrar ( SETOR_ORIGEM_ID ) e deve coincidir com o setor do usuário logado, ou posso filtrar apenas pelo setor selecionado como remetente?
+
+Resposta: No sistema inteiro, somente na tabela malote que o "remetente" do modal é o mesmo do campo : SETOR_DESTINO_ID. No restante do sistema, o remetente é composto por usuário + setor do usuário (que agora aparece todos os usuários do mesmo setor em que o usuário esta logado e tem o mesmo vinculo que ele).
+
+Apos a implementação, exclua a tabela encomendas_eventos.
+

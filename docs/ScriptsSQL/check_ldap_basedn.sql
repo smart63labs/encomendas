@@ -1,0 +1,12 @@
+-- Script para verificar o BaseDN exato da configuração LDAP
+SET PAGESIZE 0
+SET FEEDBACK OFF
+SET HEADING OFF
+SET LINESIZE 1000
+
+SELECT 
+    'BaseDN atual: ' || JSON_VALUE(CONFIGURACAO, '$.baseDN') as basedn_info
+FROM CONFIGURACOES_AUTENTICACAO 
+WHERE TIPO_AUTH = 'LDAP';
+
+EXIT;

@@ -1,0 +1,4 @@
+CREATE USER C##protocolo_user IDENTIFIED BY "Protocolo@2025";
+GRANT CONNECT, RESOURCE, DBA TO C##protocolo_user;
+ALTER USER C##protocolo_user QUOTA UNLIMITED ON USERS;
+EXIT;

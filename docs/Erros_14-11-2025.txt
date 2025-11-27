@@ -1,0 +1,8 @@
+na tabela lacre, temos as colunas : Encomenda_ID e Malote_ID que veriam ter sido preenchidas quando uma encomenda é cadstrada, junto com a alteração do status do lacre. Faça uma verificação profunda do por que disso, e corrija
+
+Se for um problema de codigo ou de trigger do banco de dados, corrija para que no cadastro de uma nova encomenda essas duas colunas tenham um valor adicionado e não fiquem em branco.
+
+Use o MCP SQLCL pra verificar, os ids com status : utilizado para as colunas citadas dveriam ter um valor e não null.
+
+
+Verificar também as colunas : Status, Encomenda_ID e ROWID da tabela malote

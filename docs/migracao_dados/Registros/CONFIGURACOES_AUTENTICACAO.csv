@@ -1,0 +1,4 @@
+"ID","TIPO_AUTH","ATIVO","CONFIGURACAO","DATA_CRIACAO","DATA_ATUALIZACAO","USUARIO_CRIACAO","USUARIO_ATUALIZACAO"
+1,MOCK,1,"{""enabled"": true, ""description"": ""Autenticação com dados mockados""}",2025-10-03 09:44:52.873,2025-10-03 09:44:52.873,1,
+2,LDAP,1,"{""enabled"":true,""server"":""10.9.7.106"",""port"":389,""baseDN"":""OU=CONTAS,dc=sefaz,dc=to,dc=gov,dc=br"",""userFilter"":""(&(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))"",""useBind"":true,""loginField"":""sAMAccountName"",""serverName"":""srv-acdc"",""defaultServer"":true,""rootDN"":""sefaz\\glpi"",""senhaRootDN"":""senha_glpi_aqui_temporaria""}",2025-10-03 09:44:52.873,2025-10-13 09:33:28.000,1,1
+3,GMAIL,0,"{""enabled"": false, ""clientId"": """", ""clientSecret"": """", ""redirectUri"": """"}",2025-10-03 09:44:52.873,2025-10-03 09:44:52.873,1,

@@ -1,0 +1,87 @@
+-- Script SQL para adicionar campos obrigatórios na tabela USUARIOS
+-- Sistema de Protocolo - Novos campos obrigatórios para cadastro de usuários
+-- Data: 2024
+-- Banco: Oracle - FREEPDB1
+-- Schema: protocolo_user
+
+-- Conectar ao banco de dados
+-- CONNECT protocolo_user/Anderline49@localhost:1521/FREEPDB1;
+
+-- Verificar se a tabela USUARIOS existe
+SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'USUARIOS';
+
+-- Adicionar novos campos obrigatórios na tabela USUARIOS
+-- Campos de identificação pessoal
+ALTER TABLE USUARIOS ADD (
+    PAI VARCHAR2(100),
+    MAE VARCHAR2(100),
+    RG VARCHAR2(20),
+    TIPO_RG VARCHAR2(50),
+    ORGAO_EXPEDITOR VARCHAR2(100),
+    UF_RG VARCHAR2(2),
+    EXPEDICAO_RG DATE,
+    CIDADE_NASCIMENTO VARCHAR2(100),
+    UF_NASCIMENTO VARCHAR2(2),
+    TIPO_SANGUINEO VARCHAR2(5),
+    RACA_COR VARCHAR2(50),
+    PNE NUMBER(1) DEFAULT 0 -- 0 = Não, 1 = Sim
+);
+
+-- Campos funcionais
+ALTER TABLE USUARIOS ADD (
+    TIPO_VINCULO VARCHAR2(100),
+    CATEGORIA VARCHAR2(100),
+    REGIME_JURIDICO VARCHAR2(100),
+    REGIME_PREVIDENCIARIO VARCHAR2(100),
+    EVENTO_TIPO VARCHAR2(100),
+    ESCOLARIDADE_CARGO VARCHAR2(100),
+    ESCOLARIDADE_SERVIDOR VARCHAR2(100),
+    FORMACAO_PROFISSIONAL_1 VARCHAR2(200),
+    FORMACAO_PROFISSIONAL_2 VARCHAR2(200),
+    JORNADA VARCHAR2(50),
+    NIVEL_REFERENCIA VARCHAR2(50)
+);
+
+-- Verificar se os campos foram adicionados com sucesso
+SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, NULLABLE 
+FROM USER_TAB_COLUMNS 
+WHERE TABLE_NAME = 'USUARIOS' 
+AND COLUMN_NAME IN (
+    'PAI', 'MAE', 'RG', 'TIPO_RG', 'ORGAO_EXPEDITOR', 'UF_RG', 'EXPEDICAO_RG',
+    'CIDADE_NASCIMENTO', 'UF_NASCIMENTO', 'TIPO_SANGUINEO', 'RACA_COR', 'PNE',
+    'TIPO_VINCULO', 'CATEGORIA', 'REGIME_JURIDICO', 'REGIME_PREVIDENCIARIO',
+    'EVENTO_TIPO', 'ESCOLARIDADE_CARGO', 'ESCOLARIDADE_SERVIDOR',
+    'FORMACAO_PROFISSIONAL_1', 'FORMACAO_PROFISSIONAL_2', 'JORNADA', 'NIVEL_REFERENCIA'
+)
+ORDER BY COLUMN_NAME;
+
+-- Adicionar comentários aos campos para documentação
+COMMENT ON COLUMN USUARIOS.PAI IS 'Nome do pai do usuário';
+COMMENT ON COLUMN USUARIOS.MAE IS 'Nome da mãe do usuário';
+COMMENT ON COLUMN USUARIOS.RG IS 'Número do RG do usuário';
+COMMENT ON COLUMN USUARIOS.TIPO_RG IS 'Tipo do documento de identidade';
+COMMENT ON COLUMN USUARIOS.ORGAO_EXPEDITOR IS 'Órgão expedidor do RG';
+COMMENT ON COLUMN USUARIOS.UF_RG IS 'UF de expedição do RG';
+COMMENT ON COLUMN USUARIOS.EXPEDICAO_RG IS 'Data de expedição do RG';
+COMMENT ON COLUMN USUARIOS.CIDADE_NASCIMENTO IS 'Cidade de nascimento do usuário';
+COMMENT ON COLUMN USUARIOS.UF_NASCIMENTO IS 'UF de nascimento do usuário';
+COMMENT ON COLUMN USUARIOS.TIPO_SANGUINEO IS 'Tipo sanguíneo do usuário';
+COMMENT ON COLUMN USUARIOS.RACA_COR IS 'Raça/cor do usuário';
+COMMENT ON COLUMN USUARIOS.PNE IS 'Pessoa com Necessidades Especiais (0=Não, 1=Sim)';
+COMMENT ON COLUMN USUARIOS.TIPO_VINCULO IS 'Tipo de vínculo funcional';
+COMMENT ON COLUMN USUARIOS.CATEGORIA IS 'Categoria funcional do servidor';
+COMMENT ON COLUMN USUARIOS.REGIME_JURIDICO IS 'Regime jurídico do servidor';
+COMMENT ON COLUMN USUARIOS.REGIME_PREVIDENCIARIO IS 'Regime previdenciário do servidor';
+COMMENT ON COLUMN USUARIOS.EVENTO_TIPO IS 'Tipo de evento funcional';
+COMMENT ON COLUMN USUARIOS.ESCOLARIDADE_CARGO IS 'Escolaridade exigida para o cargo';
+COMMENT ON COLUMN USUARIOS.ESCOLARIDADE_SERVIDOR IS 'Escolaridade do servidor';
+COMMENT ON COLUMN USUARIOS.FORMACAO_PROFISSIONAL_1 IS 'Primeira formação profissional';
+COMMENT ON COLUMN USUARIOS.FORMACAO_PROFISSIONAL_2 IS 'Segunda formação profissional';
+COMMENT ON COLUMN USUARIOS.JORNADA IS 'Jornada de trabalho';
+COMMENT ON COLUMN USUARIOS.NIVEL_REFERENCIA IS 'Nível de referência do cargo';
+
+-- Commit das alterações
+COMMIT;
+
+-- Exibir mensagem de sucesso
+SELECT 'Script executado com sucesso! Novos campos adicionados à tabela USUARIOS.' AS RESULTADO FROM DUAL;

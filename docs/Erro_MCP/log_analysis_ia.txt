@@ -1,0 +1,6 @@
+Não foi possível usar o MCP SQLcl para listar as tabelas da conexão protocolo_user/Anderline49@localhost:1521/FREEPDB1 . O MCP apresentou dois problemas principais:
+
+1. 1. Erro de conexão Java : Ao tentar conectar diretamente, o MCP retornou o erro "Cannot invoke 'java.sql.Connection.isClosed()' because the return value of 'oracle.dbtools.raptor.newscriptrunner.ScriptRunnerContext.getCurrentConnection()' is null"
+2. 2. Conexão não estabelecida : Ao tentar executar consultas SQL, o MCP respondeu com "Connection not established"
+O MCP SQLcl parece estar com problemas de configuração ou inicialização, não conseguindo estabelecer conexões com o banco Oracle usando as credenciais fornecidas. Como solicitado, não foram utilizadas alternativas além do MCP.
+

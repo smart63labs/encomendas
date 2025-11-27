@@ -1,0 +1,59 @@
+Nova Aba Malote, na tela Configurações.
+
+/ -------------------------------------------------------------------------------------------------------/
+/ (Endereço do Setor de uso do Malote) > Vinculado a tabela SETORES, os dados virão da tabela SETORES.   /
+/ -------------------------------------------------------------------------------------------------------/
+
+/ Dados do Contrato /
+Nº Contrato: 9912565780
+Percurso: 10433588
+Código de Emissão: VG275SIGMA
+Data de Emissão: 24/02/2022
+Validade: 24/02/2027
+
+/ Dados do Malote /
+CEP Origem: 77001-908
+CEP Destino: 77804-180
+Ida: 1
+Nº Malote: 00029
+Tamanho: G
+Dias de Serviço: SEG A SEX
+Estação: A
+Distritos: 307
+
+
+/*******************************************************
+* TABELA MALOTE
+* Armazena todos os dados da etiqueta e vincula-se
+* à tabela existente 'Setores' para o destino.
+********************************************************/
+CREATE TABLE MALOTE (
+    ID INT PRIMARY KEY IDENTITY(1,1), -- Chave primária do malote
+
+    /* --- Dados do Contrato --- */
+    NUMERO_CONTRATO VARCHAR(50),             -- (Ex: '9912565780')
+    NUMERO_PERCURSO VARCHAR(50),             -- (Ex: '10433588')
+    CODIGO_EMISSAO VARCHAR(50),              -- (Ex: 'VG275SIGMA')
+    DATA_EMISSAO DATE,                       -- (Ex: '2022-02-24')
+    DATA_VALIDADE DATE,                      -- (Ex: '2027-02-24')
+
+    /* --- Dados do Malote --- */
+    NUMERO_MALOTE VARCHAR(20),                -- (Ex: '00029')
+    CEP_ORIGEN VARCHAR(10),                   -- (Ex: '77001-908')
+    Cep_DESTINO VARCHAR(10),                  -- (Ex: '77804-180', o CEP do destino)
+    IDA INT,                                  -- (Ex: 1)
+    TAMANHO CHAR(1),                          -- (Ex: 'G')
+    DIAS_SERVICO VARCHAR(20),                 -- (Ex: 'SEG A SEX')
+    ESTACAO VARCHAR(10),                      -- (Ex: 'A')
+    DISTRITOS VARCHAR(10),                    -- (Ex: '307')
+    CODIGO_LATERAL VARCHAR(10),               -- (Ex: 'GIN')
+    ATIVO CHAR(1)			      -- (Ex: recebe 1 para ativo e 0 para desativado)
+    DATA_CRIACAO DATE,                        -- (Ex: '2022-02-24')
+    DATA_ATUALIZACAO DATE,                    -- (Ex: '2022-02-24')	
+
+    /* --- Chave Estrangeira (Relacionamento) --- */
+    
+    -- Vincula este malote ao setor de destino (da tabela Setores que já existe)
+    SETOR_ID INT FOREIGN KEY REFERENCES Setores(SetorID) 
+    -- (Assumindo que a chave primária da tabela Setores se chama 'SetorID')
+);

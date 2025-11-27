@@ -1,0 +1,31 @@
+-- Script: 005_purge_encomendas_testes.sql
+-- Objetivo: limpar dados de teste relacionados a ENCOMENDAS respeitando FKs.
+-- Ordem: filhos -> pai, para evitar ORA-02292.
+-- Ajuste os filtros conforme necessário.
+
+-- Exemplo de filtro opcional (descomente e adapte):
+-- DEFINE F_DATA_INICIO = '2025-01-01'
+-- DEFINE F_DATA_FIM    = '2025-12-31'
+-- AND e.DATA_CRIACAO BETWEEN TO_DATE('&F_DATA_INICIO','YYYY-MM-DD') AND TO_DATE('&F_DATA_FIM','YYYY-MM-DD')
+
+-- 1) ENCOMENDAS_EVENTOS (filho de ENCOMENDAS)
+DELETE FROM ENCOMENDAS_EVENTOS ee
+ WHERE ee.ENCOMENDA_ID IN (SELECT e.ID FROM ENCOMENDAS e);
+
+-- 2) Quebrar referências circulares: ENCOMENDAS -> MALOTE/LACRE
+--    Evita ORA-02292 ao excluir LACRE/MALOTE.
+UPDATE ENCOMENDAS SET MALOTE_ID = NULL, LACRE_ID = NULL;
+
+-- 3) LACRE (filho de ENCOMENDAS e de MALOTE)
+DELETE FROM LACRE l
+ WHERE l.ENCOMENDA_ID IN (SELECT e.ID FROM ENCOMENDAS e)
+    OR l.MALOTE_ID IN (SELECT m.ID FROM MALOTE m WHERE m.ENCOMENDA_ID IN (SELECT e.ID FROM ENCOMENDAS e));
+
+-- 4) MALOTE (filho de ENCOMENDAS)
+DELETE FROM MALOTE m
+ WHERE m.ENCOMENDA_ID IN (SELECT e.ID FROM ENCOMENDAS e);
+
+-- 5) ENCOMENDAS (pai)
+DELETE FROM ENCOMENDAS;
+
+COMMIT;

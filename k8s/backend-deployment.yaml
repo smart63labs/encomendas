@@ -1,0 +1,168 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: novoprotocolo
+  labels:
+    app: novoprotocolo
+    component: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: novoprotocolo
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: novoprotocolo
+        component: backend
+    spec:
+      containers:
+      - name: backend
+        image: novoprotocolo/backend:latest
+        ports:
+        - containerPort: 3001
+          name: http
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: novoprotocolo-config
+              key: NODE_ENV
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: novoprotocolo-config
+              key: PORT
+        - name: BYPASS_RATE_LIMIT
+          valueFrom:
+            configMapKeyRef:
+              name: novoprotocolo-config
+              key: BYPASS_RATE_LIMIT
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: novoprotocolo-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: novoprotocolo-config
+              key: DB_PORT
+        - name: DB_SERVICE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: novoprotocolo-config
+              key: DB_SERVICE_NAME
+        - name: DB_SID
+          valueFrom:
+            configMapKeyRef:
+              name: novoprotocolo-config
+              key: DB_SID
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: novoprotocolo-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: novoprotocolo-secrets
+              key: DB_PASSWORD
+        - name: DB_CONNECT_STRING
+          valueFrom:
+            secretKeyRef:
+              name: novoprotocolo-secrets
+              key: DB_CONNECT_STRING
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: backend-logs
+          mountPath: /app/logs
+      volumes:
+      - name: backend-logs
+        emptyDir: {}
+      initContainers:
+      - name: wait-for-oracle
+        image: busybox:1.35
+        command: ['sh', '-c']
+        args:
+        - |
+          echo "Waiting for Oracle database to be ready..."
+          until nc -z oracle-service 1521; do
+            echo "Oracle is not ready yet. Waiting..."
+            sleep 5
+          done
+          echo "Oracle is ready!"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: novoprotocolo
+  labels:
+    app: novoprotocolo
+    component: backend
+spec:
+  selector:
+    app: novoprotocolo
+    component: backend
+  ports:
+  - name: http
+    port: 3001
+    targetPort: 3001
+    protocol: TCP
+  type: ClusterIP
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend-hpa
+  namespace: novoprotocolo
+  labels:
+    app: novoprotocolo
+    component: backend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

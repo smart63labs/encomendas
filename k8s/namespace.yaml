@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: novoprotocolo
+  labels:
+    name: novoprotocolo
+    app: novoprotocolo
+    environment: production
+  annotations:
+    description: "Namespace para o sistema NovoProtocolo"

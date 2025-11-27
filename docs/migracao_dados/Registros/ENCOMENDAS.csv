@@ -1,0 +1,121 @@
+"ID","NUMERO_ENCOMENDA","DESCRICAO","STATUS","DATA_CRIACAO","DATA_ATUALIZACAO","CODIGO_LACRE_MALOTE","QR_CODE","CODIGO_BARRAS","SETOR_ORIGEM_ID","SETOR_DESTINO_ID","USUARIO_ORIGEM_ID","USUARIO_DESTINO_ID","URGENTE","DATA_ENTREGA"
+141,EN-20251015-131168233251-130906,"Tipo: malote_interno
+Remetente: 218872-1 - ANISIO FERREIRA DAMACENA
+Destinatário: 920384-3 - CARLOS SERGIO VOLTOLINI
+Setor Origem: Delegacia Regional de Fiscalização - Alvorada
+Setor Destino: Gerência de Suporte e Operações
+Descrição: Computador de Mesa Completo. Patrimonio xxxx
+Prioridade: alta
+Urgente: Sim
+Peso: 20kg
+Dimensões: 30x30x30
+Valor Declarado: R$ 100
+Observações: Novo, Lacrado.",postado,2025-10-15 08:20:54.000,2025-10-16 09:31:24.000,"123456789","{""codigo"":""EN-20251015-131168233251-130906"",""remetente"":""218872-1 - ANISIO FERREIRA DAMACENA"",""destinatario"":""920384-3 - CARLOS SERGIO VOLTOLINI"",""setorOrigem"":""Delegacia Regional de Fiscalização - Alvorada"",""setorDestino"":""Delegacia Regional de Fiscalização - Alvorada"",""descricao"":""Computador de Mesa Completo. Patrimonio xxxx"",""dataPostagem"":""2025-10-15T11:20:54.345Z"",""codigoLacre"":""123456789"",""remetenteMatricula"":""218872"",""remetenteVinculo"":1,""destinatarioMatricula"":""920384"",""destinatarioVinculo"":3,""enderecoSetorOrigem"":""Rua 15 de novembro, s/n, S/N - CENTRO, ALVORADA/TO - CEP: 77480000"",""enderecoSetorDestino"":""Rua 15 de novembro, s/n, S/N - CENTRO, ALVORADA/TO - CEP: 77480000"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251015-131168233251-130906,168,251,131,233,1,
+164,EN-20251017-032170114197-441807,"Tipo: malote_interno
+Remetente: AFRANIO DE ALBUQUERQUE UCHOA FILHO
+Destinatário: ANDERSON SILVA DORNELES
+Setor Origem: Delegacia Regional de Fiscalização - Araguatins
+Setor Destino: Diretoria de Inovação
+Descrição: Descrição do Conteúdo CCC
+Prioridade: alta
+Urgente: Sim
+Peso: 150kg
+Dimensões: 20x20x10
+Valor Declarado: R$ 52156
+Observações: Descrição do Conteúdo CCC",postado,2025-10-17 11:42:05.000,2025-10-17 11:42:05.000,"125165465","{""codigo"":""EN-20251017-032170114197-441807"",""remetente"":""AFRANIO DE ALBUQUERQUE UCHOA FILHO"",""destinatario"":""ANDERSON SILVA DORNELES"",""setorOrigem"":""Delegacia Regional de Fiscalização - Araguatins"",""setorDestino"":""Delegacia Regional de Fiscalização - Araguatins"",""descricao"":""Descrição do Conteúdo CCC"",""dataPostagem"":""2025-10-17T14:42:05.183Z"",""codigoLacre"":""125165465"",""remetenteMatricula"":""416682"",""remetenteVinculo"":1,""destinatarioMatricula"":""11125608"",""destinatarioVinculo"":4,""enderecoSetorOrigem"":""Rua Floriano Peixoto, 558 - CENTRO, ARAGUATINS/TO - CEP: 77950000"",""enderecoSetorDestino"":""Rua Floriano Peixoto, 558 - CENTRO, ARAGUATINS/TO - CEP: 77950000"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251017-032170114197-441807,170,197,32,114,1,
+142,EN-20251016-11419761863-145035,"Tipo: malote_interno
+Remetente: 11125608-4 - ANDERSON SILVA DORNELES
+Destinatário: 342730-1 - FRANCISQUINHA BARBOZA MARTINS
+Setor Origem: Diretoria de Inovação
+Setor Destino: Agência de Atendimento de Monte Santo do Tocantins
+Descrição: Conteudo de teste AAAA
+Prioridade: alta
+Urgente: Sim
+Peso: 150kg
+Dimensões: 10x10x10
+Valor Declarado: R$ 156
+Observações: Observação de teste AAAA",postado,2025-10-16 15:29:37.000,2025-10-16 15:29:37.000,"564847987","{""codigo"":""EN-20251016-11419761863-145035"",""remetente"":""11125608-4 - ANDERSON SILVA DORNELES"",""destinatario"":""342730-1 - FRANCISQUINHA BARBOZA MARTINS"",""setorOrigem"":""Diretoria de Inovação"",""setorDestino"":""Diretoria de Inovação"",""descricao"":""Conteudo de teste AAAA"",""dataPostagem"":""2025-10-16T18:29:37.755Z"",""codigoLacre"":""564847987"",""remetenteMatricula"":""11125608"",""remetenteVinculo"":4,""destinatarioMatricula"":""342730"",""destinatarioVinculo"":1,""enderecoSetorOrigem"":""Q. 104 Norte Rua NE 5, 3 - Plano Diretor Norte, Palmas/TO - CEP: 77006-020"",""enderecoSetorDestino"":""Q. 104 Norte Rua NE 5, 3 - Plano Diretor Norte, Palmas/TO - CEP: 77006-020"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251016-11419761863-145035,197,63,114,618,1,
+143,EN-20251016-11419761863-019957,"Tipo: malote_interno
+Remetente: 11125608-4 - ANDERSON SILVA DORNELES
+Destinatário: 342730-1 - FRANCISQUINHA BARBOZA MARTINS
+Setor Origem: Diretoria de Inovação
+Setor Destino: Agência de Atendimento de Monte Santo do Tocantins
+Descrição: Conteudo de teste AAAA
+Prioridade: alta
+Urgente: Sim
+Peso: 150kg
+Dimensões: 10x10x10
+Valor Declarado: R$ 156
+Observações: Observação de teste AAAA",postado,2025-10-16 15:55:58.000,2025-10-16 15:55:58.000,"564847987","{""codigo"":""EN-20251016-11419761863-019957"",""remetente"":""11125608-4 - ANDERSON SILVA DORNELES"",""destinatario"":""342730-1 - FRANCISQUINHA BARBOZA MARTINS"",""setorOrigem"":""Diretoria de Inovação"",""setorDestino"":""Diretoria de Inovação"",""descricao"":""Conteudo de teste AAAA"",""dataPostagem"":""2025-10-16T18:55:58.743Z"",""codigoLacre"":""564847987"",""remetenteMatricula"":""11125608"",""remetenteVinculo"":4,""destinatarioMatricula"":""342730"",""destinatarioVinculo"":1,""enderecoSetorOrigem"":""Q. 104 Norte Rua NE 5, 3 - Plano Diretor Norte, Palmas/TO - CEP: 77006-020"",""enderecoSetorDestino"":""Q. 104 Norte Rua NE 5, 3 - Plano Diretor Norte, Palmas/TO - CEP: 77006-020"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251016-11419761863-019957,197,63,114,618,1,
+162,EN-20251017-149168114197-336227,"Tipo: malote_interno
+Remetente: ANTONIO FRANCISCO DE LELES
+Destinatário: ANDERSON SILVA DORNELES
+Setor Origem: Delegacia Regional de Fiscalização - Alvorada
+Setor Destino: Diretoria de Inovação
+Descrição: Descrição do Conteúdo CCC
+Prioridade: alta
+Urgente: Sim
+Peso: 156kg
+Dimensões: 30x30x30
+Valor Declarado: R$ 155
+Observações: Descrição do Conteúdo CCC",postado,2025-10-17 11:31:41.000,2025-10-17 11:31:41.000,"45165146","{""codigo"":""EN-20251017-149168114197-336227"",""remetente"":""ANTONIO FRANCISCO DE LELES"",""destinatario"":""ANDERSON SILVA DORNELES"",""setorOrigem"":""Delegacia Regional de Fiscalização - Alvorada"",""setorDestino"":""Delegacia Regional de Fiscalização - Alvorada"",""descricao"":""Descrição do Conteúdo CCC"",""dataPostagem"":""2025-10-17T14:31:41.772Z"",""codigoLacre"":""45165146"",""remetenteMatricula"":""576223"",""remetenteVinculo"":1,""destinatarioMatricula"":""11125608"",""destinatarioVinculo"":4,""enderecoSetorOrigem"":""Rua 15 de novembro, s/n, S/N - CENTRO, ALVORADA/TO - CEP: 77480000"",""enderecoSetorDestino"":""Rua 15 de novembro, s/n, S/N - CENTRO, ALVORADA/TO - CEP: 77480000"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251017-149168114197-336227,168,197,149,114,1,
+145,EN-20251016-07528114197-497734,"Tipo: malote_interno
+Remetente: AMANDA BORBA TAVARES
+Destinatário: ANDERSON SILVA DORNELES
+Setor Origem: Agência de Atendimento de Campos Lindos
+Setor Destino: Diretoria de Inovação
+Descrição: Teste de Conteudo BBB
+Prioridade: alta
+Urgente: Sim
+Peso: 160kg
+Dimensões: 20x20x10
+Valor Declarado: R$ 159
+Observações: Teste de Conteudo BBB",postado,2025-10-16 16:22:07.000,2025-10-16 16:22:07.000,"987798469","{""codigo"":""EN-20251016-07528114197-497734"",""remetente"":""AMANDA BORBA TAVARES"",""destinatario"":""ANDERSON SILVA DORNELES"",""setorOrigem"":""Agência de Atendimento de Campos Lindos"",""setorDestino"":""Agência de Atendimento de Campos Lindos"",""descricao"":""Teste de Conteudo BBB"",""dataPostagem"":""2025-10-16T19:22:07.625Z"",""codigoLacre"":""987798469"",""remetenteMatricula"":""11180382"",""remetenteVinculo"":1,""destinatarioMatricula"":""11125608"",""destinatarioVinculo"":4,""enderecoSetorOrigem"":""atualizar endereço, 0 - CENTRO, CAMPOS LINDOS/TO - CEP: 77777000"",""enderecoSetorDestino"":""atualizar endereço, 0 - CENTRO, CAMPOS LINDOS/TO - CEP: 77777000"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251016-07528114197-497734,28,197,75,114,1,
+121,EN-20251001-026101028102-246877,"Tipo: malote_interno
+Remetente: 56789012-02 - Carlos Ferreira Lima
+Destinatário: 78901234-04 - Pedro Martins Souza
+Setor Origem: Delegacia Regional de Fiscalização - Gurupi
+Setor Destino: Delegacia Regional de Fiscalização - Araguaína
+Descrição: Teste 2 
+Prioridade: alta
+Urgente: Sim
+Peso: 50kg
+Dimensões: 20x20x10
+Valor Declarado: R$ 1500
+Observações: Teste 2.2",postado,2025-10-01 12:32:11.000,2025-10-01 12:32:11.000,"5456489798","{""codigo"":""EN-20251001-026101028102-246877"",""remetente"":""56789012-02 - Carlos Ferreira Lima"",""destinatario"":""78901234-04 - Pedro Martins Souza"",""setorOrigem"":""Delegacia Regional de Fiscalização - Gurupi"",""setorDestino"":""Delegacia Regional de Fiscalização - Gurupi"",""descricao"":""Teste 2 "",""dataPostagem"":""2025-10-01T15:32:11.500Z"",""codigoLacre"":""5456489798"",""remetenteMatricula"":""56789012"",""remetenteVinculo"":""02"",""destinatarioMatricula"":""78901234"",""destinatarioVinculo"":""04"",""enderecoSetorOrigem"":""Avenida Espírito Santo, sem número - Setor Central, Gurupi/TO - CEP: 77403-100"",""enderecoSetorDestino"":""Avenida Espírito Santo, sem número - Setor Central, Gurupi/TO - CEP: 77403-100"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251001-026101028102-246877,166,177,26,28,1,
+144,EN-20251016-11419761863-673387,"Tipo: malote_interno
+Remetente: 11125608-4 - ANDERSON SILVA DORNELES
+Destinatário: 342730-1 - FRANCISQUINHA BARBOZA MARTINS
+Setor Origem: Diretoria de Inovação
+Setor Destino: Agência de Atendimento de Monte Santo do Tocantins
+Descrição: Conteudo de teste AAAA
+Prioridade: alta
+Urgente: Sim
+Peso: 150kg
+Dimensões: 10x10x10
+Valor Declarado: R$ 156
+Observações: Observação de teste AAAA",postado,2025-10-16 16:05:52.000,2025-10-16 16:05:52.000,"564847987","{""codigo"":""EN-20251016-11419761863-673387"",""remetente"":""11125608-4 - ANDERSON SILVA DORNELES"",""destinatario"":""342730-1 - FRANCISQUINHA BARBOZA MARTINS"",""setorOrigem"":""Diretoria de Inovação"",""setorDestino"":""Diretoria de Inovação"",""descricao"":""Conteudo de teste AAAA"",""dataPostagem"":""2025-10-16T19:05:52.166Z"",""codigoLacre"":""564847987"",""remetenteMatricula"":""11125608"",""remetenteVinculo"":4,""destinatarioMatricula"":""342730"",""destinatarioVinculo"":1,""enderecoSetorOrigem"":""Q. 104 Norte Rua NE 5, 3 - Plano Diretor Norte, Palmas/TO - CEP: 77006-020"",""enderecoSetorDestino"":""Q. 104 Norte Rua NE 5, 3 - Plano Diretor Norte, Palmas/TO - CEP: 77006-020"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251016-11419761863-673387,197,63,114,618,1,
+163,EN-20251017-032170114197-294863,"Tipo: malote_interno
+Remetente: AFRANIO DE ALBUQUERQUE UCHOA FILHO
+Destinatário: ANDERSON SILVA DORNELES
+Setor Origem: Delegacia Regional de Fiscalização - Araguatins
+Setor Destino: Diretoria de Inovação
+Descrição: Descrição do Conteúdo CCC
+Prioridade: alta
+Urgente: Sim
+Peso: 150kg
+Dimensões: 20x20x10
+Valor Declarado: R$ 52156
+Observações: Descrição do Conteúdo CCC",postado,2025-10-17 11:41:48.000,2025-10-17 11:41:48.000,"125165465","{""codigo"":""EN-20251017-032170114197-294863"",""remetente"":""AFRANIO DE ALBUQUERQUE UCHOA FILHO"",""destinatario"":""ANDERSON SILVA DORNELES"",""setorOrigem"":""Delegacia Regional de Fiscalização - Araguatins"",""setorDestino"":""Delegacia Regional de Fiscalização - Araguatins"",""descricao"":""Descrição do Conteúdo CCC"",""dataPostagem"":""2025-10-17T14:41:48.838Z"",""codigoLacre"":""125165465"",""remetenteMatricula"":""416682"",""remetenteVinculo"":1,""destinatarioMatricula"":""11125608"",""destinatarioVinculo"":4,""enderecoSetorOrigem"":""Rua Floriano Peixoto, 558 - CENTRO, ARAGUATINS/TO - CEP: 77950000"",""enderecoSetorDestino"":""Rua Floriano Peixoto, 558 - CENTRO, ARAGUATINS/TO - CEP: 77950000"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20251017-032170114197-294863,170,197,32,114,1,
+101,EN-20250930-0258103084-419915,"Tipo: malote_interno
+Remetente: 45678901-03 - Ana Santos Pereira
+Destinatário: 90123456-03 - Ricardo Almeida Nunes
+Setor Origem: Diretoria da Cobrança e Recup de Créditos Fiscais
+Setor Destino: Delegacia Regional de Fiscalização - Alvorada
+Descrição: Teste 1
+Prioridade: alta
+Urgente: Sim
+Peso: 10kg
+Dimensões: 30x30x30
+Valor Declarado: R$ 150
+Observações: Observações 1",entregue,2025-09-30 08:25:45.000,2025-09-30 08:25:45.000,"222255","{""codigo"":""EN-20250930-0258103084-419915"",""remetente"":""45678901-03 - Ana Santos Pereira"",""destinatario"":""90123456-03 - Ricardo Almeida Nunes"",""setorOrigem"":""Diretoria da Cobrança e Recup de Créditos Fiscais"",""setorDestino"":""Diretoria da Cobrança e Recup de Créditos Fiscais"",""descricao"":""Teste 1"",""dataPostagem"":""2025-09-30T11:25:45.901Z"",""codigoLacre"":""222255"",""remetenteMatricula"":""45678901"",""remetenteVinculo"":""03"",""destinatarioMatricula"":""90123456"",""destinatarioVinculo"":""03"",""enderecoSetorOrigem"":""Quadra ACNO 11 Rua NO 11, sem número - Plano Diretor Norte, Palmas/TO - CEP: 77001-036"",""enderecoSetorDestino"":""Quadra ACNO 11 Rua NO 11, sem número - Plano Diretor Norte, Palmas/TO - CEP: 77001-036"",""urgente"":true,""tipo"":""malote_interno"",""prioridade"":""urgente""}",EN-20250930-0258103084-419915,171,169,25,30,1,2025-10-01 11:50:36.000

@@ -1,0 +1,9 @@
+- Quando o codigo contiver erros, nunca altere o layout/desing na correção desses erros.
+- Quando for rodar o comando npm run dev, verificar antes se o frontend e backend estão rodando, se etiver, não rodar npm run dev, se for rodar npm run dev, a porta padrao do frontend é 8080 e do backend é 3001.
+- Ao terminar a correção, NÃO EXECUTAR O COMANDO npm run dev, e NÃO ABRA O PREVIEW, ESTA PROIBIDO.
+- Ao fazer qualquer manipulação, pesquisa no banco de dados, sempre usar o MCP SQLCL, não use o sql plus.
+- Se não conseguir se conectar ao SQLCL, use as crendenciais ja existentes no proprio sistema.
+- SOMENTE USE O mcp Chrome-Devtools QUANDO EU PEDIR PRA USAR, NÃO USE POR CONTRA PROPRIA, e sempre use o schema, para entrar na aplicação, digite para o login : 884.176.461-91 e senha : Anderline49@. Somente com essas credenciais você terá acesso a todas as funcionalidades da aplicação.
+- NUNCA USAR O SQLPLUS PARA ACESSAR O BANCO DE DADOS, nunca CRIE SCRIPTS .SQL.
+- SEMPRE use o MCP SqlCL e use essas credenciais para conexão :  protocolo_user/Anderline49@localhost:1521/FREEPDB1. 
+- NUNCA USE ESSE COMANDO : npm run lint a não ser que seja solicitado a usar.

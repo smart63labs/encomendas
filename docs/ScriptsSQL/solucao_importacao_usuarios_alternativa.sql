@@ -1,0 +1,219 @@
+-- =====================================================
+-- SOLUÇÃO ALTERNATIVA PARA IMPORTAÇÃO DE USUARIOS
+-- Resolve o problema sem modificar a tabela principal
+-- =====================================================
+
+-- PROBLEMA: A tabela USUARIOS está bloqueada por outra sessão
+-- SOLUÇÃO: Usar tabela temporária para importação e depois transferir dados
+
+-- =====================================================
+-- PASSO 1: CRIAR TABELA TEMPORÁRIA PARA IMPORTAÇÃO
+-- =====================================================
+
+-- Remover tabela temporária se existir
+DROP TABLE USUARIOS_IMPORT_TEMP;
+
+-- Criar tabela temporária com estrutura compatível com o CSV
+CREATE TABLE USUARIOS_IMPORT_TEMP (
+    ID VARCHAR2(20),
+    SETOR_ID VARCHAR2(20),
+    ROLE VARCHAR2(50),
+    SENHA VARCHAR2(255),
+    USUARIO_ATIVO VARCHAR2(10),  -- Para aceitar "1", "0", "S", "N"
+    ULTIMO_LOGIN VARCHAR2(50),   -- Para aceitar formato DD/MM/YYYY
+    TENTATIVAS_LOGIN VARCHAR2(10),
+    DATA_CRIACAO VARCHAR2(50),
+    DATA_ATUALIZACAO VARCHAR2(50),
+    BLOQUEADO_ATE VARCHAR2(50),
+    NOME VARCHAR2(300),
+    MATRICULA VARCHAR2(20),
+    VINCULO_FUNCIONAL VARCHAR2(200),
+    CPF VARCHAR2(20),
+    "PIS/PASEP" VARCHAR2(50),
+    SEXO VARCHAR2(10),
+    ESTADO_CIVIL VARCHAR2(50),
+    DATA_NASCIMENTO VARCHAR2(20),  -- Para aceitar DD/MM/YYYY
+    PAI VARCHAR2(300),
+    MAE VARCHAR2(300),
+    RG VARCHAR2(30),
+    TIPO_RG VARCHAR2(50),
+    ORGAO_EXPEDITOR VARCHAR2(50),
+    UF_RG VARCHAR2(5),
+    EXPEDICAO_RG VARCHAR2(20),     -- Para aceitar DD/MM/YYYY
+    CIDADE_NASCIMENTO VARCHAR2(100),
+    UF_NASCIMENTO VARCHAR2(5),
+    TIPO_SANGUINEO VARCHAR2(10),
+    RACA_COR VARCHAR2(50),
+    PNE VARCHAR2(10),              -- Para aceitar "SIM", "NAO", "NÃO"
+    TIPO_VINCULO VARCHAR2(100),
+    CATEGORIA VARCHAR2(100),
+    REGIME_JURIDICO VARCHAR2(100),
+    REGIME_PREVIDENCIARIO VARCHAR2(100),
+    EVENTO_TIPO VARCHAR2(100),
+    FORMA_PROVIMENTO VARCHAR2(100),
+    CODIGO_CARGO VARCHAR2(20),
+    CARGO VARCHAR2(300),
+    ESCOLARIDADE_CARGO VARCHAR2(100),
+    ESCOLARIDADE_SERVIDOR VARCHAR2(100),
+    FORMACAO_PROFISSIONAL_1 VARCHAR2(300),
+    FORMACAO_PROFISSIONAL_2 VARCHAR2(300),
+    JORNADA VARCHAR2(50),
+    NIVEL_REFERENCIA VARCHAR2(20),
+    "COMISSAO_FUNÇAO" VARCHAR2(500),
+    DATA_INI_COMISSAO VARCHAR2(20), -- Para aceitar DD/MM/YYYY
+    TELEFONE VARCHAR2(30),
+    ENDERECO VARCHAR2(500),
+    NUMERO_ENDERECO VARCHAR2(10),
+    COMPLEMENTO_ENDERECO VARCHAR2(100),
+    BAIRRO_ENDERECO VARCHAR2(100),
+    CIDADE_ENDERECO VARCHAR2(100),
+    UF_ENDERECO VARCHAR2(5),
+    CEP_ENDERECO VARCHAR2(15),
+    E_MAIL VARCHAR2(200),
+    -- Campos adicionais que podem estar no CSV
+    EMAIL VARCHAR2(200),
+    CELULAR VARCHAR2(30)
+);
+
+COMMIT;
+
+PROMPT 'Tabela temporária USUARIOS_IMPORT_TEMP criada com sucesso!';
+PROMPT 'Agora importe o CSV para esta tabela temporária.';
+
+-- =====================================================
+-- PASSO 2: SCRIPT PARA TRANSFERIR DADOS (EXECUTE APÓS IMPORTAÇÃO)
+-- =====================================================
+
+/*
+-- EXECUTE ESTE BLOCO APÓS IMPORTAR O CSV NA TABELA TEMPORÁRIA
+
+-- Inserir dados da tabela temporária na tabela principal
+INSERT INTO USUARIOS (
+    ID, SETOR_ID, ROLE, SENHA, USUARIO_ATIVO, ULTIMO_LOGIN,
+    TENTATIVAS_LOGIN, DATA_CRIACAO, DATA_ATUALIZACAO, BLOQUEADO_ATE,
+    NOME, MATRICULA, VINCULO_FUNCIONAL, CPF, "PIS/PASEP", SEXO,
+    ESTADO_CIVIL, DATA_NASCIMENTO, PAI, MAE, RG, TIPO_RG,
+    ORGAO_EXPEDITOR, UF_RG, EXPEDICAO_RG, CIDADE_NASCIMENTO,
+    UF_NASCIMENTO, TIPO_SANGUINEO, RACA_COR, PNE, TIPO_VINCULO,
+    CATEGORIA, REGIME_JURIDICO, REGIME_PREVIDENCIARIO, EVENTO_TIPO,
+    FORMA_PROVIMENTO, CODIGO_CARGO, CARGO, ESCOLARIDADE_CARGO,
+    ESCOLARIDADE_SERVIDOR, FORMACAO_PROFISSIONAL_1, FORMACAO_PROFISSIONAL_2,
+    JORNADA, NIVEL_REFERENCIA, "COMISSAO_FUNÇAO", DATA_INI_COMISSAO,
+    TELEFONE, ENDERECO, NUMERO_ENDERECO, COMPLEMENTO_ENDERECO,
+    BAIRRO_ENDERECO, CIDADE_ENDERECO, UF_ENDERECO, CEP_ENDERECO, E_MAIL
+)
+SELECT 
+    TO_NUMBER(ID),
+    TO_NUMBER(SETOR_ID),
+    ROLE,
+    SENHA,
+    -- Converter USUARIO_ATIVO
+    CASE 
+        WHEN USUARIO_ATIVO = '1' THEN 'S'
+        WHEN USUARIO_ATIVO = '0' THEN 'N'
+        ELSE SUBSTR(USUARIO_ATIVO, 1, 1)
+    END,
+    -- Converter ULTIMO_LOGIN
+    CASE 
+        WHEN ULTIMO_LOGIN IS NOT NULL AND LENGTH(ULTIMO_LOGIN) = 10 AND ULTIMO_LOGIN LIKE '__/__/____'
+        THEN TO_TIMESTAMP(ULTIMO_LOGIN, 'DD/MM/YYYY')
+        ELSE NULL
+    END,
+    TO_NUMBER(TENTATIVAS_LOGIN),
+    CASE 
+        WHEN DATA_CRIACAO IS NOT NULL AND LENGTH(DATA_CRIACAO) > 10
+        THEN TO_TIMESTAMP(DATA_CRIACAO, 'DD/MM/YYYY HH24:MI:SS')
+        ELSE SYSDATE
+    END,
+    CASE 
+        WHEN DATA_ATUALIZACAO IS NOT NULL AND LENGTH(DATA_ATUALIZACAO) > 10
+        THEN TO_TIMESTAMP(DATA_ATUALIZACAO, 'DD/MM/YYYY HH24:MI:SS')
+        ELSE SYSDATE
+    END,
+    CASE 
+        WHEN BLOQUEADO_ATE IS NOT NULL AND LENGTH(BLOQUEADO_ATE) > 10
+        THEN TO_TIMESTAMP(BLOQUEADO_ATE, 'DD/MM/YYYY HH24:MI:SS')
+        ELSE NULL
+    END,
+    NOME, MATRICULA, VINCULO_FUNCIONAL, CPF, "PIS/PASEP", SEXO,
+    ESTADO_CIVIL,
+    -- Converter DATA_NASCIMENTO
+    CASE 
+        WHEN DATA_NASCIMENTO IS NOT NULL AND LENGTH(DATA_NASCIMENTO) = 10 AND DATA_NASCIMENTO LIKE '__/__/____'
+        THEN TO_DATE(DATA_NASCIMENTO, 'DD/MM/YYYY')
+        ELSE NULL
+    END,
+    PAI, MAE, RG, TIPO_RG, ORGAO_EXPEDITOR, UF_RG,
+    -- Converter EXPEDICAO_RG
+    CASE 
+        WHEN EXPEDICAO_RG IS NOT NULL AND LENGTH(EXPEDICAO_RG) = 10 AND EXPEDICAO_RG LIKE '__/__/____'
+        THEN TO_DATE(EXPEDICAO_RG, 'DD/MM/YYYY')
+        ELSE NULL
+    END,
+    CIDADE_NASCIMENTO, UF_NASCIMENTO, TIPO_SANGUINEO, RACA_COR,
+    -- Converter PNE
+    CASE 
+        WHEN UPPER(PNE) IN ('SIM', 'S') THEN 'S'
+        WHEN UPPER(PNE) IN ('NAO', 'NÃO', 'N') THEN 'N'
+        ELSE 'N'
+    END,
+    TIPO_VINCULO, CATEGORIA, REGIME_JURIDICO, REGIME_PREVIDENCIARIO,
+    EVENTO_TIPO, FORMA_PROVIMENTO, CODIGO_CARGO, CARGO,
+    ESCOLARIDADE_CARGO, ESCOLARIDADE_SERVIDOR, FORMACAO_PROFISSIONAL_1,
+    FORMACAO_PROFISSIONAL_2, JORNADA, NIVEL_REFERENCIA, "COMISSAO_FUNÇAO",
+    -- Converter DATA_INI_COMISSAO
+    CASE 
+        WHEN DATA_INI_COMISSAO IS NOT NULL AND LENGTH(DATA_INI_COMISSAO) = 10 AND DATA_INI_COMISSAO LIKE '__/__/____'
+        THEN TO_DATE(DATA_INI_COMISSAO, 'DD/MM/YYYY')
+        ELSE NULL
+    END,
+    TELEFONE, ENDERECO, NUMERO_ENDERECO, COMPLEMENTO_ENDERECO,
+    BAIRRO_ENDERECO, CIDADE_ENDERECO, UF_ENDERECO, CEP_ENDERECO,
+    -- Usar EMAIL se E_MAIL estiver vazio
+    CASE 
+        WHEN E_MAIL IS NOT NULL AND E_MAIL != '' THEN E_MAIL
+        WHEN EMAIL IS NOT NULL AND EMAIL != '' THEN EMAIL
+        ELSE NULL
+    END
+FROM USUARIOS_IMPORT_TEMP
+WHERE ID IS NOT NULL;
+
+COMMIT;
+
+-- Verificar quantos registros foram inseridos
+SELECT COUNT(*) AS REGISTROS_INSERIDOS FROM USUARIOS;
+
+-- Limpar tabela temporária
+DROP TABLE USUARIOS_IMPORT_TEMP;
+
+PROMPT 'Importação concluída com sucesso!';
+*/
+
+-- =====================================================
+-- INSTRUÇÕES DE USO
+-- =====================================================
+
+/*
+PASSOS PARA IMPORTAR O CSV:
+
+1. Execute a primeira parte deste script (até COMMIT)
+2. Importe o arquivo USUARIOS_NORMALIZADO1.csv na tabela USUARIOS_IMPORT_TEMP
+3. Execute o bloco comentado acima para transferir os dados
+4. Verifique se os dados foram importados corretamente
+
+VANTAGENS DESTA SOLUÇÃO:
+✓ Não modifica a estrutura da tabela principal
+✓ Resolve todos os problemas de tipo de dados
+✓ Converte automaticamente os formatos
+✓ Não depende de locks na tabela principal
+✓ Permite validação antes da inserção final
+
+OBSERVAÇÕES:
+- A tabela temporária aceita todos os formatos do CSV
+- A conversão é feita durante a inserção na tabela principal
+- Se houver erros, você pode corrigir na tabela temporária antes de transferir
+*/
+
+-- =====================================================
+-- FIM DO SCRIPT
+-- =====================================================

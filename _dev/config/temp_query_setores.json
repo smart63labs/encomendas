@@ -1,0 +1,1 @@
+{"sql":"SELECT column_name, data_type, data_length, nullable, data_default FROM user_tab_columns WHERE table_name = 'SETORES' ORDER BY column_id"}
