@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from './base.controller';
 import { BaseController, AuthenticatedRequest } from './base.controller';
 import { PrazoModel, IPrazo } from '../models/prazo.model';
 import { DatabaseService } from '../config/database';

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Package, Plus, Search, MapPin, Calendar, User, Truck, QrCode, Grid3X3, List, X, Info, AlertCircle, ChevronLeft, ChevronRight, Check, Route } from "lucide-react";
 import { useModuleTheme } from "@/lib/theme-config";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,9 +26,17 @@ import { useAuth } from "@/contexts/AuthContext";
   const Encomendas = () => {
   const classes = useModuleTheme('encomendas');
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("todos");
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(isMobile ? 'grid' : 'list');
+  
+  useEffect(() => {
+    if (isMobile) {
+      setViewMode('grid');
+    }
+  }, [isMobile]);
+
   const [showNovaEncomenda, setShowNovaEncomenda] = useState(false);
   const [showRastreamento, setShowRastreamento] = useState(false);
   const [codigoRastreamentoInicial, setCodigoRastreamentoInicial] = useState('');
@@ -307,7 +316,7 @@ import { useAuth } from "@/contexts/AuthContext";
                 Gestão completa de encomendas, malotes e rastreamento
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               <Button 
                 className={`${classes.buttonSecondary} text-white gap-2`}
                 onClick={() => setShowRastreamento(true)}
@@ -362,9 +371,9 @@ import { useAuth } from "@/contexts/AuthContext";
                     />
                   </div>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-48">
+                    <SelectTrigger className="w-full sm:w-48">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -378,7 +387,7 @@ import { useAuth } from "@/contexts/AuthContext";
                     variant="outline"
                     size="sm"
                     onClick={() => setShowMapaModal(true)}
-                    className="gap-2"
+                    className="gap-2 w-full sm:w-auto"
                   >
                     <MapPin className="w-4 h-4" />
                     Ver Mapa Geral
@@ -387,7 +396,7 @@ import { useAuth } from "@/contexts/AuthContext";
                     variant="outline"
                     size="sm"
                     onClick={() => setShowMapaMalotes(true)}
-                    className="gap-2"
+                    className="gap-2 w-full sm:w-auto"
                   >
                     <MapPin className="w-4 h-4" />
                     Mapa de Malotes
@@ -397,13 +406,13 @@ import { useAuth } from "@/contexts/AuthContext";
                       variant="outline"
                       size="sm"
                       onClick={() => setShowRotaOtima(true)}
-                      className="gap-2"
+                      className="gap-2 w-full sm:w-auto"
                     >
                       <Route className="w-4 h-4" />
                       Rota Otimizada
                     </Button>
                   )}
-                  <div className="flex border rounded-md">
+                  <div className="flex border rounded-md w-full sm:w-auto">
                     <Button
                       variant={viewMode === 'grid' ? 'default' : 'ghost'}
                       size="sm"

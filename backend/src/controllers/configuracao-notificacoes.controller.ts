@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { DatabaseService } from '../config/database';
+import { AuthenticatedRequest } from './base.controller';
 
 export interface ConfiguracaoNotificacoes {
   id?: number;
@@ -97,7 +98,7 @@ export class ConfiguracaoNotificacoesController {
   /**
    * Cria ou atualiza configurações de notificações
    */
-  async salvar(req: Request, res: Response): Promise<void> {
+  async salvar(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const { configuracaoId } = req.params;
       const {

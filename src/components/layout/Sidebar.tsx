@@ -19,7 +19,7 @@ interface SidebarProps {
   onModuleChange?: (module: string) => void;
 }
 
-const menuItems = [
+export const menuItems = [
   {
     id: "dashboard",
     label: "Dashboard",
@@ -103,7 +103,7 @@ const Sidebar = ({ activeModule = "dashboard", onModuleChange }: SidebarProps) =
 
   return (
     <aside className={cn(
-      "bg-white shadow-card transition-all duration-300 ease-in-out",
+      "hidden md:block bg-white shadow-card transition-all duration-300 ease-in-out",
       isCollapsed ? "w-20" : "w-64"
     )}>
       <div className="p-4">

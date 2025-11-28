@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from './base.controller';
 import { BaseController, AuthenticatedRequest } from './base.controller';
 import { DatabaseService } from '../config/database';
 import TramitacaoModel, { ITramitacao } from '../models/tramitacao.model';

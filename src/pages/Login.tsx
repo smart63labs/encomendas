@@ -128,10 +128,10 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Painel esquerdo - Boas-vindas */}
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Painel esquerdo - Boas-vindas (Escondido em mobile) */}
       <div
-        className="flex-1 flex flex-col justify-center items-center text-white p-12 relative overflow-hidden"
+        className="hidden md:flex flex-1 flex-col justify-center items-center text-white p-12 relative overflow-hidden"
         style={{
           background: `
               linear-gradient(to bottom, 
@@ -174,15 +174,15 @@ const Login: React.FC = () => {
         </div>
       </div>
 
-      {/* Efeito de sombreamento na intersecção */}
-      <div className="absolute left-1/2 top-0 h-full w-32 -translate-x-1/2 z-10 pointer-events-none"
+      {/* Efeito de sombreamento na intersecção (Apenas Desktop) */}
+      <div className="hidden md:block absolute left-1/2 top-0 h-full w-32 -translate-x-1/2 z-10 pointer-events-none"
         style={{
           background: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) 50%, transparent 100%)'
         }}>
       </div>
 
       {/* Lado Direito - Formulário de Login */}
-      <div className="flex-1 flex flex-col justify-center items-center p-8 relative"
+      <div className="flex-1 flex flex-col justify-center items-center p-4 md:p-8 relative w-full"
         style={{
           background: `
                linear-gradient(135deg, 
@@ -198,6 +198,15 @@ const Login: React.FC = () => {
         <div className="w-full max-w-md bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/50 p-8">
           {/* Logo e Cabeçalho */}
           <div className="text-center mb-8">
+            {/* Logo do Governo (Mobile Only) */}
+            <div className="flex md:hidden justify-center mb-6">
+              <img 
+                src={logoGoverno} 
+                alt="Logo Governo" 
+                className="h-16 object-contain drop-shadow-md" 
+              />
+            </div>
+
             <div className="flex justify-center items-center mb-6">
               <img
                 src={logoSefaz}

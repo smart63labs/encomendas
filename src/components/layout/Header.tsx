@@ -10,9 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { menuItems } from "./Sidebar";
+import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useConfiguracoes } from "@/hooks/use-configuracoes";
 import { useNotifications, type Notification } from "@/hooks/useNotifications";
 import { ConfirmReceiptModal } from "@/components/encomendas/ConfirmReceiptModal";
@@ -31,6 +34,8 @@ import { getEnderecoSetor } from "@/services/setores.service";
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { getConfiguracao } = useConfiguracoes();
   const { getNotificationCount, notifications = [], confirmAllReceipts } = useNotifications();
   const { notification: appNotification, isOpen: isNotifOpen, showSuccess, showError, showWarning, hideNotification } = useNotification();
@@ -206,6 +211,64 @@ const Header = () => {
     <header className="header-govto">
       <div className="w-full px-6">
         <div className="flex items-center justify-between h-16">
+          {/* Menu Mobile */}
+          <div className="md:hidden mr-2">
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[85%] sm:w-[350px] p-0 overflow-y-auto bg-white">
+                <div className="p-4">
+                  <nav className="space-y-2 mt-4">
+                    {menuItems.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = item.id === 'dashboard' 
+                        ? location.pathname === '/' 
+                        : location.pathname.startsWith(`/${item.id}`);
+                      
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            navigate(item.id === 'dashboard' ? '/' : `/${item.id}`);
+                            setIsSheetOpen(false);
+                          }}
+                          className={cn(
+                            "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-smooth",
+                            isActive 
+                              ? `${item.activeBgColor} text-white shadow-sm` 
+                              : `${item.bgColor} transition-colors`
+                          )}
+                        >
+                          <Icon className={cn(
+                            "w-12 h-12 flex-shrink-0",
+                            isActive ? "text-white" : item.color
+                          )} />
+                          <div className="flex-1 min-w-0">
+                            <p className={cn(
+                              "text-sm font-medium truncate",
+                              isActive ? "text-white" : "text-gray-900"
+                            )}>
+                              {item.label}
+                            </p>
+                            <p className={cn(
+                              "text-xs truncate",
+                              isActive ? "text-white/80" : "text-gray-600"
+                            )}>
+                              {item.description}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
           {/* Logo */}
           <div className="flex items-center">
             <img 

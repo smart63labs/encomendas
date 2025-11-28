@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { DatabaseService } from '../config/database';
+import { AuthenticatedRequest } from './base.controller';
 
 export interface ConfiguracaoAparencia {
   id?: number;
@@ -100,7 +101,7 @@ export class ConfiguracaoAparenciaController {
   /**
    * Cria ou atualiza configurações de aparência
    */
-  async salvar(req: Request, res: Response): Promise<void> {
+  async salvar(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const { configuracaoId } = req.params;
       const {

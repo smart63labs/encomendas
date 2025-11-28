@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from './base.controller';
 import oracledb from 'oracledb';
 import { BaseController, AuthenticatedRequest } from './base.controller';
 import { DocumentoModel, IDocumento } from '../models/documento.model';
