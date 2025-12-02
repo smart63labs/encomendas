@@ -1,318 +1,372 @@
 import { Router } from 'express';
 import { UserModel } from '../models/user.model';
+import { SetorModel } from '../models/setor.model';
+import { AuthenticatedRequest, authMiddleware } from '../middleware/auth.middleware';
+import { DatabaseService } from '../config/database';
 import { UserController } from '../controllers/user.controller';
-import { authMiddleware } from '../middleware/auth.middleware';
-import { validateRequest } from '../middleware/validation.middleware';
-import { rateLimitMiddleware, developmentBypass } from '../middleware/rateLimit.middleware';
-import { body, param, query } from 'express-validator';
 
 const router = Router();
 const userController = new UserController();
 
-/**
- * Validações para criação de usuário
- */
-const createUserValidation = [
-  body('nome')
-    .notEmpty()
-    .withMessage('Nome é obrigatório')
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Nome deve ter entre 2 e 100 caracteres'),
-  body('email')
-    .isEmail()
-    .withMessage('Email deve ser válido')
-    .normalizeEmail(),
-  body('senha')
-    .isLength({ min: 6 })
-    .withMessage('Senha deve ter pelo menos 6 caracteres')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Senha deve conter pelo menos uma letra minúscula, uma maiúscula e um número'),
-  body('cargo')
-    .notEmpty()
-    .withMessage('Cargo é obrigatório')
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Cargo deve ter entre 2 e 50 caracteres'),
-  body('departamento')
-    .optional()
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Departamento deve ter entre 2 e 50 caracteres'),
-  body('setor_id')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Setor ID deve ser um número inteiro positivo'),
-  body('telefone')
-    .optional()
-    .matches(/^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/)
-    .withMessage('Telefone deve estar no formato válido'),
-  body('ativo')
-    .optional()
-    .isBoolean()
-    .withMessage('Ativo deve ser verdadeiro ou falso')
-];
+// Rota de login
+router.post('/login', (req, res, next) => userController.login(req, res, next));
 
-/**
- * Validações para atualização de usuário
- */
-const updateUserValidation = [
-  param('id')
-    .isInt({ min: 1 })
-    .withMessage('ID deve ser um número inteiro positivo'),
-  body('nome')
-    .optional()
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Nome deve ter entre 2 e 100 caracteres'),
-  body('email')
-    .optional()
-    .isEmail()
-    .withMessage('Email deve ser válido')
-    .normalizeEmail(),
-  body('cargo')
-    .optional()
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Cargo deve ter entre 2 e 50 caracteres'),
-  body('departamento')
-    .optional()
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Departamento deve ter entre 2 e 50 caracteres'),
-  body('setor_id')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Setor ID deve ser um número inteiro positivo'),
-  body('telefone')
-    .optional()
-    .matches(/^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/)
-    .withMessage('Telefone deve estar no formato válido'),
-  body('ativo')
-    .optional()
-    .isBoolean()
-    .withMessage('Ativo deve ser verdadeiro ou falso')
-];
+// Rota para listar usuários com dados organizacionais (setores)
+router.get('/with-org-data', async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 100;
+    const search = req.query.search as string;
+    const setorId = req.query.setorId ? parseInt(req.query.setorId as string) : undefined;
+    const ativo = req.query.ativo === 'true' ? true : req.query.ativo === 'false' ? false : undefined;
 
-/**
- * Validações para login
- */
-const loginValidation = [
-  body('cpf')
-    .notEmpty()
-    .withMessage('CPF é obrigatório')
-    .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{11}$/)
-    .withMessage('CPF deve estar no formato válido (XXX.XXX.XXX-XX ou apenas números)'),
-  body('senha')
-    .notEmpty()
-    .withMessage('Senha é obrigatória')
-];
+    // Separar filtros de paginação
+    const filters: any = {};
+    if (search) filters.searchTerm = search;
+    if (setorId) filters.setorId = setorId;
+    if (ativo !== undefined) filters.ativo = ativo;
 
-/**
- * Validações para alteração de senha
- */
-const changePasswordValidation = [
-  body('senhaAtual')
-    .notEmpty()
-    .withMessage('Senha atual é obrigatória'),
-  body('novaSenha')
-    .isLength({ min: 6 })
-    .withMessage('Nova senha deve ter pelo menos 6 caracteres')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Nova senha deve conter pelo menos uma letra minúscula, uma maiúscula e um número'),
-  body('confirmarSenha')
-    .custom((value, { req }) => {
-      if (value !== req.body.novaSenha) {
-        throw new Error('Confirmação de senha não confere');
+    const pagination = {
+      page,
+      limit
+    };
+
+    const result = await UserModel.findAll(filters, pagination);
+
+    res.json({
+      success: true,
+      data: result.data,
+      pagination: result.pagination
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/search-users-and-sectors', async (req, res, next) => {
+  try {
+    const q = String(req.query.q || '').trim();
+    const limitRaw = req.query.limit as any;
+    const limit = Number(limitRaw) && !Number.isNaN(Number(limitRaw)) ? Number(limitRaw) : 50;
+
+    if (!q || q.length < 2) {
+      res.json({ success: true, data: [] });
+      return;
+    }
+
+    // 1. Realizar ambas as buscas em paralelo
+    const [usersResult, setoresResult] = await Promise.all([
+      UserModel.searchByName(q, { page: 1, limit }),
+      SetorModel.searchByName(q, { page: 1, limit })
+    ]);
+
+    // Normalizar resultados de usuários
+    const foundUsers = (usersResult.data || []).map((u: any) => ({
+      tipo: 'user',
+      id: u.ID ?? u.id,
+      nome: u.NOME ?? u.nome ?? u.NAME,
+      numero_funcional: u.NUMERO_FUNCIONAL ?? u.matricula ?? u.MATRICULA,
+      vinculo_funcional: u.VINCULO_FUNCIONAL ?? u.vinculo_funcional,
+      setor_id: u.SETOR_ID ?? u.setor_id ?? u.setorId,
+      setor: u.SETOR ?? u.setor ?? u.NOME_SETOR,
+      orgao: u.ORGAO ?? u.orgao
+    }));
+
+    // Normalizar resultados de setores
+    const foundSectors = (setoresResult.data || []).map((s: any) => {
+      // Oracle retorna colunas em MAIÚSCULAS, mas precisamos garantir todos os casos
+      const id = s.ID ?? s.id;
+      const nomeSetor = s.NOME_SETOR ?? s.nome_setor ?? s.nomeSetor ?? '';
+      const codigoSetor = s.CODIGO_SETOR ?? s.codigo_setor ?? s.codigoSetor ?? '';
+      const orgao = s.ORGAO ?? s.orgao ?? '';
+      const ativo = s.ATIVO ?? s.ativo ?? '1';
+
+      return {
+        tipo: 'sector',
+        id,
+        NOME_SETOR: nomeSetor,
+        CODIGO_SETOR: codigoSetor,
+        ORGAO: orgao,
+        ATIVO: ativo
+      };
+    });
+
+    // 2. Criar Map para agrupar por setor
+    const sectorMap = new Map<string | number, {
+      sectorInfo: any;
+      matchedUsers: any[]; // Usuários encontrados pela busca
+      showAllUsers: boolean; // true = setor encontrado, mostrar todos; false = apenas usuários encontrados
+    }>();
+
+    // 3. Processar setores encontrados (Critério 2)
+    for (const s of foundSectors) {
+      const sectorId = s.id;
+      sectorMap.set(sectorId, {
+        sectorInfo: s,
+        matchedUsers: [],
+        showAllUsers: true // Setor encontrado: mostrar TODOS os usuários
+      });
+    }
+
+    // 4. Processar usuários encontrados (Critério 3)
+    for (const u of foundUsers) {
+      const sectorId = u.setor_id;
+
+      // Ignorar usuários sem setor_id
+      if (!sectorId) continue;
+
+      if (sectorMap.has(sectorId)) {
+        // Setor já existe no Map
+        const entry = sectorMap.get(sectorId)!;
+
+        // Se showAllUsers = false, acumular usuários encontrados
+        // Se showAllUsers = true, não precisa acumular (vamos buscar todos depois)
+        if (!entry.showAllUsers) {
+          if (!entry.matchedUsers.some(existing => existing.id === u.id)) {
+            entry.matchedUsers.push(u);
+          }
+        }
+      } else {
+        // Setor não existe no Map: criar entrada com showAllUsers = false
+        // Precisamos buscar dados completos do setor
+        try {
+          const setorResponse = await SetorModel.findById(sectorId);
+          const setorData = setorResponse;
+
+          sectorMap.set(sectorId, {
+            sectorInfo: {
+              tipo: 'sector',
+              id: setorData.ID ?? setorData.id ?? sectorId,
+              NOME_SETOR: setorData.NOME_SETOR ?? setorData.nome_setor ?? u.setor ?? 'Setor não informado',
+              CODIGO_SETOR: setorData.CODIGO_SETOR ?? setorData.codigo_setor,
+              ORGAO: setorData.ORGAO ?? setorData.orgao ?? u.orgao,
+              ATIVO: setorData.ATIVO ?? setorData.ativo
+            },
+            matchedUsers: [u],
+            showAllUsers: false // Apenas usuários encontrados
+          });
+        } catch (err) {
+          // Se não conseguir buscar o setor, usar dados do usuário
+          sectorMap.set(sectorId, {
+            sectorInfo: {
+              tipo: 'sector',
+              id: sectorId,
+              NOME_SETOR: u.setor || 'Setor não informado',
+              ORGAO: u.orgao || ''
+            },
+            matchedUsers: [u],
+            showAllUsers: false
+          });
+        }
       }
-      return true;
-    })
-];
+    }
 
-/**
- * Validações para parâmetros de ID
- */
-const idValidation = [
-  param('id')
-    .isInt({ min: 1 })
-    .withMessage('ID deve ser um número inteiro positivo')
-];
+    // 5. Construir resposta final
+    const finalData: any[] = [];
+    const sectorsWithoutUsers: any[] = [];
 
-/**
- * Validações para busca por departamento
- */
-const departmentValidation = [
-  param('departamento')
-    .notEmpty()
-    .withMessage('Departamento é obrigatório')
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Departamento deve ter entre 2 e 50 caracteres')
-];
+    for (const [sectorId, entry] of sectorMap.entries()) {
+      const { sectorInfo, matchedUsers, showAllUsers } = entry;
 
-/**
- * Validações para busca por cargo
- */
-const cargoValidation = [
-  param('cargo')
-    .notEmpty()
-    .withMessage('Cargo é obrigatório')
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Cargo deve ter entre 2 e 50 caracteres')
-];
+      // Adicionar cabeçalho do setor (não clicável)
+      finalData.push({
+        ...sectorInfo,
+        isGroup: true
+      });
 
-/**
- * Validações para query parameters de listagem
- */
-const listValidation = [
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Página deve ser um número inteiro positivo'),
-  query('limit')
-    .optional()
-    .isInt({ min: 1, max: 100 })
-    .withMessage('Limite deve ser um número entre 1 e 100'),
-  query('search')
-    .optional()
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Busca deve ter entre 2 e 100 caracteres'),
-  query('departamento')
-    .optional()
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Departamento deve ter entre 2 e 50 caracteres'),
-  query('cargo')
-    .optional()
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Cargo deve ter entre 2 e 50 caracteres'),
-  query('ativo')
-    .optional()
-    .isBoolean()
-    .withMessage('Ativo deve ser verdadeiro ou falso')
-];
+      let usersToDisplay: any[] = [];
 
-// ==================== ROTAS PÚBLICAS ====================
+      if (showAllUsers) {
+        // Critério 2: Setor encontrado - buscar TODOS os usuários ativos
+        try {
+          // Garantir que sectorId é number
+          const numericSectorId = typeof sectorId === 'string' ? parseInt(sectorId, 10) : sectorId;
 
-/**
- * @route POST /api/users/login
- * @desc Autenticar usuário
- * @access Public
- */
-router.post(
-  '/login',
-  developmentBypass, // Bypass em desenvolvimento
-  loginValidation,
-  validateRequest,
-  userController.login.bind(userController)
-);
+          const allUsersResult = await UserModel.findUsersWithSetor(
+            { setor_id: numericSectorId },
+            { page: 1, limit: 0 }
+          );
 
-/**
- * @route POST /api/users/refresh
- * @desc Renovar token de acesso
- * @access Public
- */
-router.post(
-  '/refresh',
-  developmentBypass, // Bypass em desenvolvimento
-  userController.refreshToken.bind(userController)
-);
+          usersToDisplay = (allUsersResult.data || []).map((u: any) => ({
+            tipo: 'user',
+            isChildOfGroup: true,
+            id: u.ID ?? u.id,
+            nome: u.NOME ?? u.nome ?? u.NAME,
+            numero_funcional: u.NUMERO_FUNCIONAL ?? u.matricula ?? u.MATRICULA,
+            vinculo_funcional: u.VINCULO_FUNCIONAL ?? u.vinculo_funcional,
+            setor_id: u.SETOR_ID ?? u.setor_id ?? u.setorId,
+            setor: u.SETOR ?? u.setor ?? u.NOME_SETOR,
+            orgao: u.ORGAO ?? u.orgao
+          }));
+        } catch (err) {
+          console.error(`Erro ao buscar usuários do setor ${sectorId}:`, err);
+        }
+      } else {
+        // Critério 3: Apenas usuários encontrados
+        usersToDisplay = matchedUsers.map(u => ({
+          ...u,
+          isChildOfGroup: true
+        }));
+      }
 
-/**
- * @route POST /api/users
- * @desc Criar novo usuário (registro público)
- * @access Public
- */
-router.post(
-  '/',
-  developmentBypass, // Bypass em desenvolvimento
-  createUserValidation,
-  validateRequest,
-  userController.store.bind(userController)
-);
+      if (usersToDisplay.length === 0) {
+        sectorsWithoutUsers.push({
+          id: sectorInfo.id,
+          nome_setor: sectorInfo.NOME_SETOR
+        });
+      }
 
-// ==================== ROTAS PROTEGIDAS ====================
+      finalData.push(...usersToDisplay);
+    }
 
-// Rota de teste sem autenticação
-router.get('/test-search', userController.search.bind(userController));
-
-/**
- * @route GET /api/users/search-by-name
- * @desc Buscar usuários por nome (para encomendas) - Rota pública
- * @access Public
- */
-router.get(
-  '/search-by-name',
-  [
-    query('q')
-      .notEmpty()
-      .withMessage('Termo de busca é obrigatório')
-      .isLength({ min: 2, max: 100 })
-      .withMessage('Termo de busca deve ter entre 2 e 100 caracteres'),
-    query('page')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Página deve ser um número inteiro positivo'),
-    query('limit')
-      .optional()
-      .isInt({ min: 1, max: 100 })
-      .withMessage('Limite deve ser um número entre 1 e 100')
-  ],
-  validateRequest,
-  userController.searchByName.bind(userController)
-);
-
-// Removido daqui - movido para antes da rota /:id
-
-// Rota temporária para atualizar senha
-router.post('/update-password', async (req, res) => {
-  try {
-    const bcrypt = require('bcrypt');
-    const oracledb = require('oracledb');
-    const { email, newPassword } = req.body;
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    
-    const connection = await oracledb.getConnection({
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      connectString: process.env.DB_CONNECT_STRING
-    });
-    
-    const result = await connection.execute(
-      'UPDATE USUARIOS SET SENHA = :senha WHERE EMAIL = :email',
-      { senha: hashedPassword, email: email },
-      { autoCommit: true }
-    );
-    await connection.close();
-    
-    res.json({ success: true, message: 'Senha atualizada com sucesso', rowsAffected: result.rowsAffected });
+    res.json({ success: true, data: finalData, sectorsWithoutUsers });
   } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
+    next(error);
   }
 });
 
-// Rota de debug para verificar dados do usuário
-router.get('/debug-user/:email', async (req, res) => {
+/**
+ * Rota temporária para corrigir status de usuários
+ * Ativa todos os usuários vinculados a setores ativos
+ */
+router.post('/fix-active-status', async (req, res) => {
   try {
-    const oracledb = require('oracledb');
-    const { email } = req.params;
-    
-    const connection = await oracledb.getConnection({
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      connectString: process.env.DB_CONNECT_STRING
-    });
-    
-    const result = await connection.execute(
-      'SELECT ID, NOME, EMAIL, SENHA, LENGTH(SENHA) AS SENHA_LENGTH FROM USUARIOS WHERE EMAIL = :email',
-      { email: email }
-    );
-    await connection.close();
-    
-    res.json({ success: true, data: result.rows, columns: result.metaData });
+    const sql = `
+      UPDATE USUARIOS u 
+      SET u.USUARIO_ATIVO = 1 
+      WHERE EXISTS (
+        SELECT 1 FROM SETORES s 
+        WHERE s.ID = u.SETOR_ID 
+        AND (s.ATIVO = 1 OR s.ATIVO = '1')
+      )
+    `;
+
+    await DatabaseService.executeQuery(sql);
+
+    res.json({ success: true, message: 'Usuários de setores ativos foram ativados com sucesso.' });
   } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
+    console.error('Erro ao corrigir status:', error);
+    res.status(500).json({ success: false, message: 'Erro ao executar correção', error });
   }
 });
 
-// Rota de debug por CPF (não retorna a senha)
+// Rota para listar usuários com paginação e filtros
+router.get('/', async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const search = req.query.search as string;
+    const setorId = req.query.setorId ? parseInt(req.query.setorId as string) : undefined;
+    const ativo = req.query.ativo === 'true' ? true : req.query.ativo === 'false' ? false : undefined;
+
+    const options: any = {
+      page,
+      limit,
+      searchTerm: search,
+      setorId,
+      ativo
+    };
+
+    const result = await UserModel.findAll(options);
+
+    res.json({
+      success: true,
+      data: result.data,
+      pagination: result.pagination
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Rota para buscar usuário por ID
+router.get('/:id(\\d+)', async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ success: false, error: 'ID inválido' });
+      return;
+    }
+
+    const user = await UserModel.findById(id);
+    if (!user) {
+      res.status(404).json({ success: false, error: 'Usuário não encontrado' });
+      return;
+    }
+
+    res.json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Rota para criar usuário
+router.post('/', async (req, res, next) => {
+  try {
+    const userData = req.body;
+
+    // Validação básica
+    if (!userData.nome || !userData.email || !userData.cpf) {
+      res.status(400).json({ success: false, error: 'Nome, email e CPF são obrigatórios' });
+      return;
+    }
+
+    const newUser = await UserModel.create(userData);
+    res.status(201).json({ success: true, data: newUser });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Rota para atualizar usuário
+router.put('/:id(\\d+)', async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ success: false, error: 'ID inválido' });
+      return;
+    }
+
+    const userData = req.body;
+    const updatedUser = await UserModel.update(id, userData);
+
+    if (!updatedUser) {
+      res.status(404).json({ success: false, error: 'Usuário não encontrado' });
+      return;
+    }
+
+    res.json({ success: true, data: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Rota para inativar usuário (exclusão lógica)
+router.delete('/:id(\\d+)', async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ success: false, error: 'ID inválido' });
+      return;
+    }
+
+    const deleted = await UserModel.delete(id);
+    if (!deleted) {
+      res.status(404).json({ success: false, error: 'Usuário não encontrado' });
+      return;
+    }
+
+    res.json({ success: true, message: 'Usuário inativado com sucesso' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Rota de debug para verificar usuário por CPF
 router.get('/debug-user-cpf/:cpf', async (req, res) => {
   try {
+    const cpf = req.params.cpf;
     const oracledb = require('oracledb');
-    const { cpf } = req.params;
-    const cpfDigits = cpf.replace(/\D/g, '');
 
     const connection = await oracledb.getConnection({
       user: process.env.DB_USER,
@@ -321,32 +375,29 @@ router.get('/debug-user-cpf/:cpf', async (req, res) => {
     });
 
     const result = await connection.execute(
-      `SELECT ID, NOME, E_MAIL, CPF, SENHA, USUARIO_ATIVO
-       FROM USUARIOS
-       WHERE REGEXP_REPLACE(TO_CHAR(CPF), '[^0-9]', '') = :cpf_digits`,
-      { cpf_digits: cpfDigits }
+      `SELECT ID, NOME, E_MAIL, CPF, SENHA, USUARIO_ATIVO 
+       FROM USUARIOS 
+       WHERE REGEXP_REPLACE(TO_CHAR(CPF), '[^0-9]', '') = :cpf`,
+      { cpf: cpf.replace(/\D/g, '') }
     );
 
     await connection.close();
 
     if (!result.rows || result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Usuário não encontrado por CPF' });
+      res.status(404).json({ success: false, error: 'Usuário não encontrado por CPF' });
+      return;
     }
 
     const row = result.rows[0];
-    const senha = String(row.SENHA || '');
     const info = {
       id: row.ID,
       nome: row.NOME,
       email: row.E_MAIL,
       cpf: row.CPF,
-      usuario_ativo: row.USUARIO_ATIVO,
-      senha_length: senha.length,
-      is_bcrypt: /^\$2[aby]\$/.test(senha),
-      is_md5: /^[a-fA-F0-9]{32}$/.test(senha),
-      is_sha1: /^[a-fA-F0-9]{40}$/.test(senha),
-      is_sha256: /^[a-fA-F0-9]{64}$/.test(senha),
-      is_plain: !(/^\$2[aby]\$/.test(senha) || /^[a-fA-F0-9]{32}$/.test(senha) || /^[a-fA-F0-9]{40}$/.test(senha) || /^[a-fA-F0-9]{64}$/.test(senha))
+      ativo: row.USUARIO_ATIVO,
+      senha_hash: row.SENHA ? row.SENHA.substring(0, 20) + '...' : 'NULL',
+      senha_length: row.SENHA ? row.SENHA.length : 0,
+      is_bcrypt: row.SENHA && row.SENHA.startsWith('$2')
     };
 
     res.json({ success: true, data: info });
@@ -360,7 +411,8 @@ router.post('/debug-check-password', async (req, res) => {
   try {
     const { cpf, senha } = req.body || {};
     if (!cpf || !senha) {
-      return res.status(400).json({ success: false, error: 'CPF e senha são obrigatórios' });
+      res.status(400).json({ success: false, error: 'CPF e senha são obrigatórios' });
+      return;
     }
 
     const oracledb = require('oracledb');
@@ -382,7 +434,8 @@ router.post('/debug-check-password', async (req, res) => {
     await connection.close();
 
     if (!result.rows || result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Usuário não encontrado por CPF' });
+      res.status(404).json({ success: false, error: 'Usuário não encontrado por CPF' });
+      return;
     }
 
     const row = result.rows[0];
@@ -437,7 +490,8 @@ router.post('/debug-reset-password-cpf', async (req, res) => {
   try {
     const { cpf, novaSenha } = req.body || {};
     if (!cpf || !novaSenha) {
-      return res.status(400).json({ success: false, error: 'CPF e novaSenha são obrigatórios' });
+      res.status(400).json({ success: false, error: 'CPF e novaSenha são obrigatórios' });
+      return;
     }
 
     const oracledb = require('oracledb');
@@ -447,7 +501,8 @@ router.post('/debug-reset-password-cpf', async (req, res) => {
     // Validação básica de senha (compatível com validatePassword do modelo)
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(novaSenha)) {
-      return res.status(400).json({ success: false, error: 'Nova senha não atende aos critérios de segurança' });
+      res.status(400).json({ success: false, error: 'Nova senha não atende aos critérios de segurança' });
+      return;
     }
 
     const hashed = await bcrypt.hash(novaSenha, 12);
@@ -469,7 +524,8 @@ router.post('/debug-reset-password-cpf', async (req, res) => {
     await connection.close();
 
     if (updateResult.rowsAffected === 0) {
-      return res.status(404).json({ success: false, error: 'Usuário não encontrado por CPF' });
+      res.status(404).json({ success: false, error: 'Usuário não encontrado por CPF' });
+      return;
     }
 
     res.json({ success: true, data: { cpf: cpfDigits, rowsAffected: updateResult.rowsAffected } });
@@ -483,7 +539,8 @@ router.post('/debug-authenticate-cpf', async (req, res) => {
   try {
     const { cpf, senha } = req.body || {};
     if (!cpf || !senha) {
-      return res.status(400).json({ success: false, error: 'CPF e senha são obrigatórios' });
+      res.status(400).json({ success: false, error: 'CPF e senha são obrigatórios' });
+      return;
     }
 
     const authResult = await UserModel.authenticate({ cpf, senha });
@@ -492,25 +549,32 @@ router.post('/debug-authenticate-cpf', async (req, res) => {
     res.json({
       success: true,
       data: {
-        user: authResult.user,
-        token: authResult.token,
-        refreshToken: authResult.refreshToken,
-        expiresIn: authResult.expiresIn
+        id: authResult.user.id,
+        nome: authResult.user.nome,
+        email: authResult.user.email,
+        token_gerado: !!authResult.token
       }
     });
+
   } catch (error) {
-    // Autenticação local retorna erros descritivos; repassar com 401
-    res.status(401).json({ success: false, error: (error as Error).message });
+    // Capturar erro de autenticação e retornar detalhes
+    res.status(401).json({
+      success: false,
+      error: (error as Error).message,
+      stack: process.env.NODE_ENV === 'development' ? (error as Error).stack : undefined
+    });
   }
 });
 
-// Versão GET para facilitar teste via querystring (evita issues de JSON)
+// Testar autenticação local por CPF via QUERY (apenas em desenvolvimento)
 router.get('/debug-authenticate-cpf-q', async (req, res) => {
   try {
     const cpf = String(req.query.cpf || '').trim();
     const senha = String(req.query.senha || '').trim();
+
     if (!cpf || !senha) {
-      return res.status(400).json({ success: false, error: 'CPF e senha são obrigatórios via query' });
+      res.status(400).json({ success: false, error: 'CPF e senha são obrigatórios via query' });
+      return;
     }
 
     const authResult = await UserModel.authenticate({ cpf, senha });
@@ -518,442 +582,21 @@ router.get('/debug-authenticate-cpf-q', async (req, res) => {
     res.json({
       success: true,
       data: {
-        user: authResult.user,
-        token: authResult.token,
-        refreshToken: authResult.refreshToken,
-        expiresIn: authResult.expiresIn
+        id: authResult.user.id,
+        nome: authResult.user.nome,
+        email: authResult.user.email,
+        token_gerado: !!authResult.token
       }
     });
+
   } catch (error) {
-    res.status(401).json({ success: false, error: (error as Error).message });
+    res.status(401).json({
+      success: false,
+      error: (error as Error).message
+    });
   }
 });
-
-// Rota temporária para verificar dados do usuário (sem autenticação)
-router.get('/check-user-data/:email', async (req, res) => {
-  try {
-    const { email } = req.params;
-    const oracledb = require('oracledb');
-    
-    const connection = await oracledb.getConnection({
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      connectString: process.env.DB_CONNECT_STRING
-    });
-    
-    const result = await connection.execute(
-      'SELECT ID, NOME, EMAIL, SENHA, LENGTH(SENHA) AS SENHA_LENGTH, CARGO FROM USUARIOS WHERE EMAIL = :email',
-      { email: email }
-    );
-    
-    await connection.close();
-    
-    res.json({ 
-      success: true, 
-      data: result.rows, 
-      columns: result.metaData,
-      message: `Dados do usuário ${email}`
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
-  }
-});
-
-// Rota para criar usuários de teste (limpa e cria 3 usuários)
-router.post('/create-test-users', async (req, res) => {
-  try {
-    const bcrypt = require('bcrypt');
-    const oracledb = require('oracledb');
-    
-    const connection = await oracledb.getConnection({
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      connectString: process.env.DB_CONNECT_STRING
-    });
-    
-    // Primeiro, limpa todos os usuários existentes
-    await connection.execute('DELETE FROM USUARIOS', {}, { autoCommit: true });
-    
-    // Cria os 3 usuários de teste
-    const users = [
-      {
-        nome: 'Administrador Sistema',
-        email: 'admin@sefaz.go.gov.br',
-        senha: await bcrypt.hash('admin123', 10),
-        orgao: 'SEFAZ',
-        setor: 'ADMINISTRAÇÃO',
-        lotacao: 'DIRETORIA',
-        perfil: 'ADMIN'
-      },
-      {
-        nome: 'João Silva',
-        email: 'joao.silva@sefaz.go.gov.br',
-        senha: await bcrypt.hash('123456', 10),
-        orgao: 'SEFAZ',
-        setor: 'TECNOLOGIA',
-        lotacao: 'DESENVOLVIMENTO',
-        perfil: 'USER'
-      },
-      {
-        nome: 'Maria Santos',
-        email: 'maria.santos@sefaz.go.gov.br',
-        senha: await bcrypt.hash('123456', 10),
-        orgao: 'SEFAZ',
-        setor: 'FINANCEIRO',
-        lotacao: 'CONTABILIDADE',
-        perfil: 'USER'
-      }
-    ];
-    
-    const query = `
-        INSERT INTO USUARIOS (ID, NOME, EMAIL, SENHA, DEPARTAMENTO, CARGO, ATIVO, CREATED_AT)
-        VALUES (USUARIOS_SEQ.NEXTVAL, :nome, :email, :senha, :orgao, :perfil, 1, CURRENT_TIMESTAMP)
-      `;
-    
-    for (const user of users) {
-      await connection.execute(query, {
-        nome: user.nome,
-        email: user.email,
-        senha: user.senha,
-        orgao: user.orgao,
-        setor: user.setor,
-        lotacao: user.lotacao,
-        perfil: user.perfil
-      }, { autoCommit: true });
-    }
-    
-    await connection.close();
-    
-    res.json({ 
-      success: true, 
-      message: 'Usuários de teste criados com sucesso',
-      users: users.map(u => ({ nome: u.nome, email: u.email, perfil: u.perfil, setor: u.setor }))
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
-  }
-});
-
-/**
- * @route GET /api/users/search-users-and-sectors
- * @desc Buscar usuários e setores combinados (para encomendas) - Rota pública
- * @access Public
- */
-router.get(
-  '/search-users-and-sectors',
-  [
-    query('q')
-      .notEmpty()
-      .withMessage('Termo de busca é obrigatório')
-      .isLength({ min: 2, max: 100 })
-      .withMessage('Termo de busca deve ter entre 2 e 100 caracteres'),
-    query('limit')
-      .optional()
-      .isInt({ min: 1, max: 50 })
-      .withMessage('Limite deve ser um número entre 1 e 50')
-  ],
-  validateRequest,
-  userController.searchUsersAndSectors.bind(userController)
-);
-
-// Aplicar middleware de autenticação para todas as rotas abaixo
-router.use(authMiddleware);
-
-/**
- * @route GET /api/users/profile
- * @desc Obter perfil do usuário logado
- * @access Private
- */
-router.get(
-  '/profile',
-  userController.getProfile.bind(userController)
-);
-
-/**
- * @route GET /api/users/password-status
- * @desc Obter status da senha padrão (SENHA_ALTERADA)
- * @access Private
- */
-router.get(
-  '/password-status',
-  userController.passwordStatus.bind(userController)
-);
-
-/**
- * @route PUT /api/users/profile
- * @desc Atualizar perfil do usuário logado
- * @access Private
- */
-router.put(
-  '/profile',
-  [
-    body('nome')
-      .optional()
-      .isLength({ min: 2, max: 100 })
-      .withMessage('Nome deve ter entre 2 e 100 caracteres'),
-    body('telefone')
-      .optional()
-      .matches(/^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/)
-      .withMessage('Telefone deve estar no formato válido')
-  ],
-  validateRequest,
-  userController.updateProfile.bind(userController)
-);
-
-/**
- * @route PUT /api/users/change-password
- * @desc Alterar senha do usuário logado
- * @access Private
- */
-router.put(
-  '/change-password',
-  rateLimitMiddleware({ windowMs: 15 * 60 * 1000, max: 3 }), // 3 tentativas por 15 minutos
-  changePasswordValidation,
-  validateRequest,
-  userController.changePassword.bind(userController)
-);
-
-/**
- * @route POST /api/users/logout
- * @desc Fazer logout do usuário
- * @access Private
- */
-router.post(
-  '/logout',
-  userController.logout.bind(userController)
-);
-
-/**
- * @route GET /api/users
- * @desc Listar usuários com filtros e paginação
- * @access Private
- */
-router.get(
-  '/',
-  listValidation,
-  validateRequest,
-  userController.index.bind(userController)
-);
-
-/**
- * @route GET /api/users/search
- * @desc Buscar usuários por texto livre
- * @access Private
- */
-router.get(
-  '/search',
-  [
-    query('q')
-      .notEmpty()
-      .withMessage('Termo de busca é obrigatório')
-      .isLength({ min: 2, max: 100 })
-      .withMessage('Termo de busca deve ter entre 2 e 100 caracteres'),
-    query('page')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Página deve ser um número inteiro positivo'),
-    query('limit')
-      .optional()
-      .isInt({ min: 1, max: 100 })
-      .withMessage('Limite deve ser um número entre 1 e 100')
-  ],
-  validateRequest,
-  userController.search.bind(userController)
-);
-
-/**
- * @route GET /api/users/department/:departamento
- * @desc Buscar usuários por departamento
- * @access Private
- */
-router.get(
-  '/department/:departamento',
-  departmentValidation,
-  validateRequest,
-  userController.findByDepartment.bind(userController)
-);
-
-/**
- * @route GET /api/users/role/:cargo
- * @desc Buscar usuários por cargo
- * @access Private
- */
-router.get(
-  '/role/:cargo',
-  cargoValidation,
-  validateRequest,
-  userController.findByRole.bind(userController)
-);
-
-
-
-/**
- * @route GET /api/users/setor/:setor
- * @desc Buscar usuários por setor
- * @access Private
- */
-router.get(
-  '/setor/:setor',
-  [
-    param('setor')
-      .notEmpty()
-      .withMessage('Setor é obrigatório')
-      .isLength({ min: 2, max: 200 })
-      .withMessage('Setor deve ter entre 2 e 200 caracteres'),
-    query('page')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Página deve ser um número inteiro positivo'),
-    query('limit')
-      .optional()
-      .isInt({ min: 1, max: 100 })
-      .withMessage('Limite deve ser um número entre 1 e 100')
-  ],
-  validateRequest,
-  userController.findBySetor.bind(userController)
-);
-
-/**
- * @route GET /api/users/orgao/:orgao
- * @desc Buscar usuários por órgão
- * @access Private
- */
-router.get(
-  '/orgao/:orgao',
-  [
-    param('orgao')
-      .notEmpty()
-      .withMessage('Órgão é obrigatório')
-      .isLength({ min: 2, max: 100 })
-      .withMessage('Órgão deve ter entre 2 e 100 caracteres'),
-    query('page')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Página deve ser um número inteiro positivo'),
-    query('limit')
-      .optional()
-      .isInt({ min: 1, max: 100 })
-      .withMessage('Limite deve ser um número entre 1 e 100')
-  ],
-  validateRequest,
-  userController.findByOrgao.bind(userController)
-);
-
-/**
- * @route GET /api/users/:id/org-info
- * @desc Obter dados completos do usuário com informações organizacionais
- * @access Private
- */
-router.get(
-  '/:id/org-info',
-  idValidation,
-  validateRequest,
-  userController.getUserWithOrgInfo.bind(userController)
-);
-
-/**
- * Rota para obter usuários com dados organizacionais
- */
-router.get(
-  '/with-org-data',
-  listValidation,
-  validateRequest,
-  userController.getUsersWithOrgData.bind(userController)
-);
-
-/**
- * @route GET /api/users/stats
- * @desc Obter estatísticas de usuários
- * @access Private (Admin)
- */
-router.get(
-  '/stats',
-  userController.getStats.bind(userController)
-);
-
-// Aplicar middleware de autenticação para todas as rotas abaixo
-router.use(authMiddleware);
-
-/**
- * @route GET /api/users/profile
- * @desc Obter perfil do usuário logado
- * @access Private
- */
-router.get(
-  '/profile',
-  userController.getProfile.bind(userController)
-);
-
-
-/**
- * @route POST /api/users/logout
- * @desc Fazer logout do usuário
- * @access Private
- */
-router.post(
-  '/logout',
-  userController.logout.bind(userController)
-);
-
-/**
- * @route GET /api/users/:id
- * @desc Obter usuário por ID
- * @access Private
- */
-router.get(
-  '/:id',
-  idValidation,
-  validateRequest,
-  userController.show.bind(userController)
-);
-
-
-
-/**
- * @route PUT /api/users/:id
- * @desc Atualizar usuário
- * @access Private (Admin ou próprio usuário)
- */
-router.put(
-  '/:id',
-  updateUserValidation,
-  validateRequest,
-  userController.update.bind(userController)
-);
-
-/**
- * @route DELETE /api/users/:id
- * @desc Excluir usuário (soft delete)
- * @access Private (Admin)
- */
-router.delete(
-  '/:id',
-  idValidation,
-  validateRequest,
-  userController.destroy.bind(userController)
-);
-
-/**
- * @route DELETE /api/users
- * @desc Excluir múltiplos usuários (soft delete)
- * @access Private (Admin)
- */
-router.delete(
-  '/',
-  [
-    body('ids')
-      .isArray({ min: 1 })
-      .withMessage('IDs devem ser fornecidos como array')
-      .custom((ids) => {
-        if (!ids.every((id: any) => Number.isInteger(id) && id > 0)) {
-          throw new Error('Todos os IDs devem ser números inteiros positivos');
-        }
-        return true;
-      })
-  ],
-  validateRequest,
-  userController.destroyMultiple.bind(userController)
-);
 
 export default router;
-export { router as userRoutes };
+// Status de senha do usuário logado
+router.get('/password-status', authMiddleware, (req, res, next) => userController.passwordStatus(req as AuthenticatedRequest, res, next));

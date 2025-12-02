@@ -2,11 +2,11 @@ import { Router } from 'express';
 import { LdapController } from '../controllers/ldap.controller';
 
 const router = Router();
-const ldapController = new LdapController();
+const controller = new LdapController(); // Passando nome da tabela ou contexto com cast
 
 // Rotas LDAP (sem middleware de autenticação para permitir testes)
-router.post('/test-connection', ldapController.testConnection.bind(ldapController));
-router.get('/status', ldapController.getStatus.bind(ldapController));
-router.post('/test-user-authentication', ldapController.testUserAuthentication.bind(ldapController));
+router.post('/test-connection', controller.testConnection.bind(controller));
+router.get('/status', controller.getStatus.bind(controller));
+router.post('/test-user-authentication', controller.testUserAuthentication.bind(controller));
 
 export default router;

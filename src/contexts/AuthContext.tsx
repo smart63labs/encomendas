@@ -127,14 +127,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             );
             const flag = response.data?.data?.isDefaultPassword ?? false;
             setIsDefaultPassword(Boolean(flag));
-          } catch (error) {
-            console.error('Erro ao recuperar status de senha:', error);
-            // Em caso de falha/401, limpar sessão para evitar estado inconsistente
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('auth_user');
-            setToken(null);
-            setUser(null);
-            setIsDefaultPassword(false);
+          } catch (error: any) {
+            const status = error?.response?.status;
+            if (status === 401) {
+              localStorage.removeItem('auth_token');
+              localStorage.removeItem('auth_user');
+              setToken(null);
+              setUser(null);
+              setIsDefaultPassword(false);
+            }
           } finally {
             setIsLoading(false);
           }

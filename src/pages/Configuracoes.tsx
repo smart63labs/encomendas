@@ -5311,9 +5311,15 @@ export const Configuracoes = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {paginatedMalotes.length === 0 ? (
+                        {loadingMalotes ? (
                           <TableRow>
-                            <TableCell colSpan={9} className="h-24 text-center">Nenhum malote encontrado.</TableCell>
+                            <TableCell colSpan={14} className="h-24 text-center">
+                              <RefreshCw className="w-6 h-6 animate-spin mx-auto" />
+                            </TableCell>
+                          </TableRow>
+                        ) : paginatedMalotes.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={14} className="h-24 text-center">Nenhum malote encontrado.</TableCell>
                           </TableRow>
                         ) : (
                           paginatedMalotes.map((m: any) => (
@@ -5369,7 +5375,12 @@ export const Configuracoes = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {Object.keys(malotesAgrupadosPorSetorDestino).length === 0 ? (
+                    {loadingMalotes ? (
+                      <div className="text-center py-12">
+                        <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2" />
+                        <p className="text-muted-foreground">Carregando malotes...</p>
+                      </div>
+                    ) : Object.keys(malotesAgrupadosPorSetorDestino).length === 0 ? (
                       <div className="text-center py-8">
                         <p className="text-muted-foreground">Nenhum malote encontrado.</p>
                       </div>

@@ -2,15 +2,17 @@
 
 ## 📋 Descrição
 
-Sistema completo de protocolo eletrônico desenvolvido para modernizar a gestão pública do Governo do Tocantins. O sistema permite gerenciar processos administrativos, tramitações, usuários, documentos e anexos de forma digital, segura e eficiente.
+Sistema completo de protocolo eletrônico desenvolvido para modernizar a gestão pública do Governo do Tocantins. O sistema permite gerenciar processos administrativos, tramitações, usuários, documentos, encomendas e anexos de forma digital, segura e eficiente, com todos os dados persistidos em banco de dados Oracle 23ai.
 
 ## 🚀 Funcionalidades Principais
 
 ### 👥 Gestão de Usuários
-- Autenticação JWT + LDAP
+- **Autenticação JWT via Banco de Dados Oracle 23ai**
 - Perfis de acesso (Admin, Usuário)
 - Gerenciamento de permissões por setor
 - Controle de sessões e segurança
+- Sistema de troca de senha
+- **Senhas Padrão**: `Admin@123` (Admin) / `User@123` (Usuário Comum)
 
 ### 📄 Gestão de Processos
 - Criação e edição de processos
@@ -39,6 +41,89 @@ Sistema completo de protocolo eletrônico desenvolvido para modernizar a gestão
 - Sistema de versionamento
 - Compressão e otimização automática
 
+## 🗄️ Estado de Implementação do Sistema
+
+### ✅ Backend: Estrutura do Banco de Dados Oracle 23ai
+
+O backend possui **12 tabelas implementadas** no Oracle Database 23ai:
+
+| Tabela | Descrição | Backend API |
+|--------|-----------|-------------|
+| `USUARIOS` | Dados de usuários do sistema | ✅ Implementado |
+| `PROCESSOS` | Processos administrativos | ✅ Implementado |
+| `TRAMITACOES` | Histórico de movimentações | ✅ Implementado |
+| `SETORES` | Hierarquia organizacional | ✅ Implementado |
+| `ENCOMENDAS` | Rastreamento de encomendas | ✅ Implementado |
+| `MALOTES` | Controle de malotes físicos | ✅ Implementado |
+| `LACRES` | Controle de lacres | ✅ Implementado |
+| `DOCUMENTOS` | Metadados de documentos | ✅ Implementado |
+| `ANEXOS` | Arquivos vinculados | ✅ Implementado |
+| `PRAZOS` | Controle de vencimentos | ✅ Implementado |
+| `CONFIGURACOES` | Parâmetros do sistema | ✅ Implementado |
+| `LOGS_AUDITORIA` | Logs de auditoria | ✅ Implementado |
+
+### 🔌 Integração Frontend ↔ Backend
+
+**Status da integração dos módulos do menu (navbar):**
+
+| Módulo (Menu) | Backend API | Integração Frontend | Dados |
+|---------------|-------------|---------------------|-------|
+| **Encomendas** | ✅ Oracle 23ai | ✅ Integrado | Banco de Dados |
+| **Documentos** | ✅ Oracle 23ai | ⚠️ Mockado | LocalStorage/Mock |
+| **Processos** | ✅ Oracle 23ai | ⚠️ Mockado | LocalStorage/Mock |
+| **Prazos** | ✅ Oracle 23ai | ⚠️ Mockado | LocalStorage/Mock |
+| **Arquivo** | ✅ Oracle 23ai | ⚠️ Mockado | LocalStorage/Mock |
+| **Tramitação** | ✅ Oracle 23ai | ⚠️ Mockado | LocalStorage/Mock |
+| **Usuários** | ✅ Oracle 23ai | ⚠️ Mockado | LocalStorage/Mock |
+| **Configurações** | ✅ Oracle 23ai | ⚠️ Mockado | LocalStorage/Mock |
+
+> [!IMPORTANT]
+> **Status Atual**: Apenas o módulo **Encomendas** está completamente integrado com o banco de dados Oracle 23ai. Os demais módulos do menu possuem APIs backend funcionais, mas o frontend ainda utiliza dados mockados (localStorage) para desenvolvimento.
+
+### ⚠️ Não Implementado
+
+| Funcionalidade | Status | Observação |
+|----------------|--------|------------|
+| **LDAP** | ❌ Não implementado | Planejado para versão futura. Atualmente usa autenticação via banco de dados |
+| **Integração Frontend** | 🔄 Em andamento | Apenas Encomendas integrado. Demais módulos usam dados mockados |
+
+## 🔐 Autenticação e Credenciais
+
+### Sistema de Autenticação Atual
+
+- **Método**: Autenticação via Banco de Dados Oracle 23ai
+- **Tecnologia**: JWT (JSON Web Tokens)
+- **LDAP**: ⚠️ **NÃO implementado** (apenas planejado)
+
+### Credenciais Padrão do Sistema
+
+Após a instalação, os usuários devem fazer login com as seguintes credenciais padrão:
+
+| Perfil | CPF/Email | Senha Padrão | Observação |
+|--------|-----------|--------------|------------|
+| **Administrador** | CPF do usuário admin | `Admin@123` | Acesso total ao sistema |
+| **Usuário Comum** | CPF do usuário | `User@123` | Acesso limitado conforme permissões |
+
+> [!IMPORTANT]
+> **Segurança**: Por questões de segurança, o sistema **exige a troca da senha padrão no primeiro acesso**. Após o login inicial, o usuário será direcionado para alterar sua senha.
+
+### Primeiro Acesso
+
+1. Acesse o sistema em: `http://localhost:8080` ou `http://10.9.1.95:8080/`
+2. Faça login com seu CPF e a senha padrão correspondente ao seu perfil
+3. O sistema solicitará a troca da senha padrão
+4. Defina uma nova senha forte (mínimo 8 caracteres)
+5. Faça login novamente com a nova senha
+
+### Troca de Senha
+
+Para trocar a senha após o primeiro acesso:
+1. Acesse **Configurações** → **Perfil** → **Alterar Senha**
+2. Informe a senha atual
+3. Defina a nova senha (mínimo 8 caracteres)
+4. Confirme a nova senha
+5. Clique em **Salvar**
+
 ## 🛠️ Stack Tecnológico
 
 ### Frontend
@@ -55,16 +140,18 @@ Sistema completo de protocolo eletrônico desenvolvido para modernizar a gestão
 - **Runtime**: Node.js 18+
 - **Framework**: Express.js
 - **Language**: TypeScript
-- **Database**: Oracle Database /23Ai
-- **Authentication**: JWT + LDAP (LDAP a ser implementado)
+- **Database**: Oracle Database 23ai
+- **Authentication**: JWT + Autenticação via Banco de Dados
+- **LDAP**: ⚠️ Não implementado (planejado para versão futura)
 - **Validation**: Joi/Express Validator
 - **Security**: Helmet, CORS, Rate Limiting
 - **Logging**: Winston + Morgan
 - **File Upload**: Multer + Sharp
 
 ### Database
-- **Primary**: Oracle Database Free 23Ai
+- **Primary**: Oracle Database 23ai
 - **Schema**: protocolo_user
+- **Service Name**: FREEPDB1
 - **Connection**: Oracle Instant Client
 - **Backup**: Oracle Data Pump
 
@@ -80,7 +167,7 @@ Sistema completo de protocolo eletrônico desenvolvido para modernizar a gestão
 
 - Node.js 18+
 - npm ou yarn
-- Oracle Database 19c+ ou Oracle Free 23Ai
+- Oracle Database 23ai (ou superior)
 - Oracle Instant Client
 - Docker (opcional)
 
@@ -176,10 +263,12 @@ kubectl apply -f k8s/
 
 ## 📊 Status do Projeto
 
-- ✅ **Frontend**: 100% concluído
-- ✅ **Backend**: API REST funcional
-- ✅ **Database**: Estrutura Oracle implementada
-- ✅ **Autenticação**: JWT + LDAP
+- ✅ **Frontend**: 100% concluído (interface completa)
+- ✅ **Backend**: API REST funcional com 18 controllers
+- ✅ **Database**: Oracle 23ai com 12 tabelas implementadas
+- ✅ **Autenticação**: JWT via Banco de Dados Oracle
+- 🔄 **Integração Frontend-Backend**: Apenas módulo Encomendas integrado (demais módulos usam dados mockados)
+- ⚠️ **LDAP**: Não implementado (planejado)
 - ✅ **Docker**: Containerização completa
 - ✅ **Kubernetes**: Deploy em produção
 
@@ -209,4 +298,6 @@ Desenvolvido pela Secretaria da Fazenda do Estado do Tocantins (SEFAZ-TO) para m
 ---
 
 **Versão**: 2.0.0  
-**Última atualização**: Outubro 2025
+**Última atualização**: Dezembro 2025  
+**Banco de Dados**: Oracle 23ai  
+**Autenticação**: JWT via Banco de Dados (LDAP não implementado)

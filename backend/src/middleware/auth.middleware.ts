@@ -19,6 +19,7 @@ interface JWTPayload {
  */
 export interface AuthenticatedRequest extends Request {
   user?: {
+    id: number;
     userId: number;
     email: string;
     nome: string;
@@ -160,6 +161,7 @@ export const authMiddleware = async (
 
     // Adicionar dados do usuário ao request
     req.user = {
+      id: user.id!,
       userId: user.id!,
       email: user.email,
       nome: user.nome || user.name,

@@ -46,12 +46,18 @@ const carregarSetores = async (): Promise<AnySetor[]> => {
 const MapFitBounds: React.FC<{ pontos: L.LatLng[] }> = ({ pontos }) => {
   const map = useMap();
   useEffect(() => {
-    if (pontos.length > 0) {
-      const bounds = L.latLngBounds(pontos);
-      map.fitBounds(bounds, { padding: [20, 20] });
-    } else {
-      map.setView([COORDENADAS_TOCANTINS.lat, COORDENADAS_TOCANTINS.lng], ZOOM_TOCANTINS);
-    }
+    try {
+      if (pontos.length > 0) {
+        const bounds = L.latLngBounds(pontos);
+        if ((map as any)?._mapPane) {
+          map.fitBounds(bounds, { padding: [20, 20] });
+        }
+      } else {
+        if ((map as any)?._mapPane) {
+          map.setView([COORDENADAS_TOCANTINS.lat, COORDENADAS_TOCANTINS.lng], ZOOM_TOCANTINS);
+        }
+      }
+    } catch {}
   }, [map, pontos]);
   return null;
 };
@@ -266,6 +272,7 @@ const MapaGeralMalotes: React.FC<MapaGeralMalotesProps> = ({ isVisible = true, r
         center={[COORDENADAS_TOCANTINS.lat, COORDENADAS_TOCANTINS.lng]}
         zoom={ZOOM_TOCANTINS}
         scrollWheelZoom={true}
+        zoomAnimation={false}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer

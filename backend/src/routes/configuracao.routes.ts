@@ -44,7 +44,7 @@ router.get('/categorias', (req, res) => configuracaoController.listarCategorias(
  * @desc Busca configurações gerais por ID de configuração
  * @param configuracaoId - ID da configuração principal
  */
-router.get('/geral/:configuracaoId', (req, res) => configuracaoGeralController.buscarPorConfiguracaoId(req, res));
+router.get('/geral/:configuracaoId(\\d+)', (req, res) => configuracaoGeralController.buscarPorConfiguracaoId(req, res));
 
 /**
  * @route PUT /api/configuracoes/geral/:configuracaoId
@@ -52,14 +52,14 @@ router.get('/geral/:configuracaoId', (req, res) => configuracaoGeralController.b
  * @param configuracaoId - ID da configuração principal
  * @body ConfiguracaoGeral
  */
-router.put('/geral/:configuracaoId', (req, res) => configuracaoGeralController.salvar(req, res));
+router.put('/geral/:configuracaoId(\\d+)', (req, res) => configuracaoGeralController.salvar(req, res));
 
 /**
  * @route GET /api/configuracoes/seguranca/:configuracaoId
  * @desc Busca configurações de segurança por ID de configuração
  * @param configuracaoId - ID da configuração principal
  */
-router.get('/seguranca/:configuracaoId', (req, res) => configuracaoSegurancaController.buscarPorConfiguracaoId(req, res));
+router.get('/seguranca/:configuracaoId(\\d+)', (req, res) => configuracaoSegurancaController.buscarPorConfiguracaoId(req, res));
 
 /**
  * @route PUT /api/configuracoes/seguranca/:configuracaoId
@@ -67,14 +67,14 @@ router.get('/seguranca/:configuracaoId', (req, res) => configuracaoSegurancaCont
  * @param configuracaoId - ID da configuração principal
  * @body ConfiguracaoSeguranca
  */
-router.put('/seguranca/:configuracaoId', (req, res) => configuracaoSegurancaController.salvar(req, res));
+router.put('/seguranca/:configuracaoId(\\d+)', (req, res) => configuracaoSegurancaController.salvar(req, res));
 
 /**
  * @route GET /api/configuracoes/notificacoes/:configuracaoId
  * @desc Busca configurações de notificações por ID de configuração
  * @param configuracaoId - ID da configuração principal
  */
-router.get('/notificacoes/:configuracaoId', (req, res) => configuracaoNotificacoesController.buscarPorConfiguracaoId(req, res));
+router.get('/notificacoes/:configuracaoId(\\d+)', (req, res) => configuracaoNotificacoesController.buscarPorConfiguracaoId(req, res));
 
 /**
  * @route PUT /api/configuracoes/notificacoes/:configuracaoId
@@ -82,14 +82,14 @@ router.get('/notificacoes/:configuracaoId', (req, res) => configuracaoNotificaco
  * @param configuracaoId - ID da configuração principal
  * @body ConfiguracaoNotificacoes
  */
-router.put('/notificacoes/:configuracaoId', (req, res) => configuracaoNotificacoesController.salvar(req, res));
+router.put('/notificacoes/:configuracaoId(\\d+)', (req, res) => configuracaoNotificacoesController.salvar(req, res));
 
 /**
  * @route GET /api/configuracoes/sistema/:configuracaoId
  * @desc Busca configurações de sistema por ID de configuração
  * @param configuracaoId - ID da configuração principal
  */
-router.get('/sistema/:configuracaoId', (req, res) => configuracaoSistemaController.buscarPorConfiguracaoId(req, res));
+router.get('/sistema/:configuracaoId(\\d+)', (req, res) => configuracaoSistemaController.buscarPorConfiguracaoId(req, res));
 
 /**
  * @route PUT /api/configuracoes/sistema/:configuracaoId
@@ -97,14 +97,14 @@ router.get('/sistema/:configuracaoId', (req, res) => configuracaoSistemaControll
  * @param configuracaoId - ID da configuração principal
  * @body ConfiguracaoSistema
  */
-router.put('/sistema/:configuracaoId', (req, res) => configuracaoSistemaController.salvar(req, res));
+router.put('/sistema/:configuracaoId(\\d+)', (req, res) => configuracaoSistemaController.salvar(req, res));
 
 /**
  * @route GET /api/configuracoes/aparencia/:configuracaoId
  * @desc Busca configurações de aparência por ID de configuração
  * @param configuracaoId - ID da configuração principal
  */
-router.get('/aparencia/:configuracaoId', (req, res) => configuracaoAparenciaController.buscarPorConfiguracaoId(req, res));
+router.get('/aparencia/:configuracaoId(\\d+)', (req, res) => configuracaoAparenciaController.buscarPorConfiguracaoId(req, res));
 
 /**
  * @route PUT /api/configuracoes/aparencia/:configuracaoId
@@ -112,14 +112,14 @@ router.get('/aparencia/:configuracaoId', (req, res) => configuracaoAparenciaCont
  * @param configuracaoId - ID da configuração principal
  * @body ConfiguracaoAparencia
  */
-router.put('/aparencia/:configuracaoId', (req, res) => configuracaoAparenciaController.salvar(req, res));
+router.put('/aparencia/:configuracaoId(\\d+)', (req, res) => configuracaoAparenciaController.salvar(req, res));
 
 /**
  * @route GET /api/configuracoes/apis/:configuracaoId
  * @desc Busca configurações de APIs por ID de configuração
  * @param configuracaoId - ID da configuração principal
  */
-router.get('/apis/:configuracaoId', (req, res) => configuracaoApisController.buscarPorConfiguracaoId(req, res));
+router.get('/apis/:configuracaoId(\\d+)', (req, res) => configuracaoApisController.buscarPorConfiguracaoId(req, res));
 
 /**
  * @route PUT /api/configuracoes/apis/:configuracaoId
@@ -127,7 +127,7 @@ router.get('/apis/:configuracaoId', (req, res) => configuracaoApisController.bus
  * @param configuracaoId - ID da configuração principal
  * @body ConfiguracaoApis
  */
-router.put('/apis/:configuracaoId', (req, res) => configuracaoApisController.salvar(req, res));
+router.put('/apis/:configuracaoId(\\d+)', (req, res) => configuracaoApisController.salvar(req, res));
 
 // ==================== ROTAS GENÉRICAS (DEVEM VIR APÓS AS ROTAS ESPECÍFICAS) ====================
 

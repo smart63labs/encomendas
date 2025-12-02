@@ -10,7 +10,7 @@ Testar a funcionalidade de troca de senha do sistema, validando o fluxo completo
 - **Nome**: João Silva Admin
 - **CPF**: 11144477735
 - **Senha Inicial**: Admin@123
-- **Nova Senha**: Anderline49@
+- **Nova Senha**: Anderl************
 - **Role**: ADMIN
 
 ### Usuário USER  
@@ -18,7 +18,7 @@ Testar a funcionalidade de troca de senha do sistema, validando o fluxo completo
 - **Nome**: Maria Santos User
 - **CPF**: 22255588844
 - **Senha Inicial**: User@123
-- **Nova Senha**: Anderline49@
+- **Nova Senha**: Anderl************
 - **Role**: USER
 
 ## Ambiente Verificado
@@ -41,7 +41,7 @@ Testar a funcionalidade de troca de senha do sistema, validando o fluxo completo
 #### Passo 2: Troca de Senha
 1. Navegue até a área de configurações/perfil do usuário
 2. Localize a opção "Alterar Senha" ou similar
-3. Altere a senha de `Admin@123` para `Anderline49@`
+3. Altere a senha de `Admin@123` para `Anderl************`
 4. ✅ Confirmar que a alteração foi salva com sucesso
 
 #### Passo 3: Logout e Novo Login
@@ -62,7 +62,7 @@ Testar a funcionalidade de troca de senha do sistema, validando o fluxo completo
 #### Passo 2: Troca de Senha
 1. Navegue até a área de configurações/perfil do usuário
 2. Localize a opção "Alterar Senha" ou similar
-3. Altere a senha de `User@123` para `Anderline49@`
+3. Altere a senha de `User@123` para `Anderl************`
 4. ✅ Confirmar que a alteração foi salva com sucesso
 
 #### Passo 3: Logout e Novo Login

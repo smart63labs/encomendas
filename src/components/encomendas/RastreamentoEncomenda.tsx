@@ -267,7 +267,33 @@ const RastreamentoEncomenda = () => {
                     </Badge>
                   </div>
                 </div>
-                
+
+                {(dadosRastreamento.numeroAR || dadosRastreamento.numeroMalote || dadosRastreamento.numeroLacre) && (
+                  <div className="border-t pt-4">
+                    <h4 className="font-medium text-foreground mb-3">Identificador</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {dadosRastreamento.numeroAR && (
+                        <div>
+                          <p className="text-xs text-foreground-secondary">AR</p>
+                          <p className="text-sm font-mono">{dadosRastreamento.numeroAR}</p>
+                        </div>
+                      )}
+                      {dadosRastreamento.numeroMalote && (
+                        <div>
+                          <p className="text-xs text-foreground-secondary">Malote</p>
+                          <p className="text-sm font-mono">{dadosRastreamento.numeroMalote}</p>
+                        </div>
+                      )}
+                      {dadosRastreamento.numeroLacre && (
+                        <div>
+                          <p className="text-xs text-foreground-secondary">Lacre</p>
+                          <p className="text-sm font-mono">{dadosRastreamento.numeroLacre}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <div className="border-t pt-4">
                   <h4 className="font-medium text-foreground mb-3">Descrição do Conteúdo</h4>
                   <p className="text-sm text-foreground-secondary bg-muted p-3 rounded">

@@ -45,6 +45,7 @@ import { useAuth } from "@/contexts/AuthContext";
     const [showMapaMalotes, setShowMapaMalotes] = useState(false);
   const [showRotaOtima, setShowRotaOtima] = useState(false);
   const [encomendas, setEncomendas] = useState<Encomenda[]>([]);
+  const [loadingEncomendas, setLoadingEncomendas] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [hubSetorId, setHubSetorId] = useState<number | null>(null);
   
@@ -185,6 +186,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
   const loadEncomendas = async () => {
     try {
+      setLoadingEncomendas(true);
       // Estratégia para carregar TODAS as encomendas
       let response;
       let allEncomendas = [];
@@ -230,7 +232,7 @@ import { useAuth } from "@/contexts/AuthContext";
           id: encomenda.id?.toString() || '',
           codigo: encomenda.numeroEncomenda || '',
           codigoRastreamento: encomenda.numeroEncomenda || '',
-          tipo: 'Encomenda',
+          tipo: encomenda.tipo || 'Encomenda',
           remetente: encomenda.remetente,
           destinatario: encomenda.destinatario,
           setorOrigem: encomenda.setorOrigem ?? encomenda.SETOR_ORIGEM ?? encomenda.setor_origem ?? '',
@@ -249,10 +251,10 @@ import { useAuth } from "@/contexts/AuthContext";
           descricao: encomenda.descricao || '',
           observacoes: '',
           // Identificadores
-          numeroMalote: encomenda.numeroMalote ?? encomenda.NUMERO_MALOTE ?? '',
-          numeroLacre: encomenda.numeroLacre ?? encomenda.NUMERO_LACRE ?? '',
-          numeroAR: encomenda.numeroAR ?? encomenda.NUMERO_AR ?? '',
-          codigoLacreMalote: encomenda.numeroLacre ?? encomenda.NUMERO_LACRE ?? '',
+          numeroMalote: encomenda.numeroMalote || '',
+          numeroLacre: encomenda.numeroLacre || '',
+          numeroAR: encomenda.numeroAR || '',
+          codigoLacreMalote: encomenda.numeroLacre || '',
           // Campos camelCase esperados pelos componentes
           remetenteMatricula: encomenda.remetenteMatricula ?? encomenda.remetente_matricula ?? '',
           remetenteVinculo: encomenda.remetenteVinculo ?? encomenda.remetente_vinculo ?? '',
@@ -282,6 +284,8 @@ import { useAuth } from "@/contexts/AuthContext";
       console.error('Erro ao carregar encomendas:', error);
       setEncomendas([]);
       computeStatsFromVisible([]);
+    } finally {
+      setLoadingEncomendas(false);
     }
   };
 
@@ -443,6 +447,7 @@ import { useAuth } from "@/contexts/AuthContext";
                   viewMode={viewMode} 
                   refreshTrigger={refreshTrigger}
                   onTrack={handleTrackWithCode}
+                  loading={loadingEncomendas}
             />
           </div>
         </div>

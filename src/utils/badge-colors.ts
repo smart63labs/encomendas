@@ -37,6 +37,10 @@ export const getStatusLabel = (status: string) => {
 // Cores para Tipo de Encomendas
 export const getTipoColor = (tipo: string) => {
   switch (tipo?.toLowerCase()) {
+    case 'malote':
+      return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
+    case 'correspondencia':
+      return 'bg-teal-100 text-teal-800 hover:bg-teal-200';
     case 'malote_interno':
     case 'malote interno':
       return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
@@ -49,7 +53,15 @@ export const getTipoColor = (tipo: string) => {
       return 'bg-orange-100 text-orange-800 hover:bg-orange-200';
     case 'material':
     case 'material de escritório':
+    case 'material_escritorio':
       return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
+    case 'material_limpeza':
+      return 'bg-lime-100 text-lime-800 hover:bg-lime-200';
+    case 'material_consumo':
+      return 'bg-amber-100 text-amber-800 hover:bg-amber-200';
+    case 'insumo_tecnico':
+    case 'insumo técnico':
+      return 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200';
     case 'outros':
       return 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200';
     default:
@@ -59,6 +71,10 @@ export const getTipoColor = (tipo: string) => {
 
 export const getTipoLabel = (tipo: string) => {
   switch (tipo?.toLowerCase()) {
+    case 'malote':
+      return 'Malote';
+    case 'correspondencia':
+      return 'Correspondência';
     case 'malote_interno':
       return 'Malote Interno';
     case 'malote_externo':
@@ -69,7 +85,15 @@ export const getTipoLabel = (tipo: string) => {
       return 'Equipamento';
     case 'material':
     case 'material de escritório':
+    case 'material_escritorio':
       return 'Material';
+    case 'material_limpeza':
+      return 'Material de Limpeza';
+    case 'material_consumo':
+      return 'Material de Consumo';
+    case 'insumo_tecnico':
+    case 'insumo técnico':
+      return 'Insumo Técnico / TI';
     case 'outros':
       return 'Outros';
     default:

@@ -178,7 +178,7 @@ export class UserModel extends BaseModel {
       id: processed.id || row.ID,
       nome: processed.nome || row.NOME,
       e_mail: processed.eMail || row.E_MAIL,
-      
+
       // Campos opcionais da nova estrutura
       setor_id: processed.setorId || row.SETOR_ID,
       role: processed.role || row.ROLE,
@@ -232,7 +232,7 @@ export class UserModel extends BaseModel {
       cidade_endereco: processed.cidadeEndereco || row.CIDADE_ENDERECO,
       uf_endereco: processed.ufEndereco || row.UF_ENDERECO,
       cep_endereco: processed.cepEndereco || row.CEP_ENDERECO,
-      
+
       // Campos de compatibilidade com frontend (mantidos para não quebrar código existente)
       name: processed.nome || row.NOME,
       email: processed.eMail || row.E_MAIL || processed.email || row.EMAIL,
@@ -278,7 +278,7 @@ export class UserModel extends BaseModel {
       lastLogin: processed.ultimoLogin || row.ULTIMO_LOGIN || row.LAST_LOGIN,
       createdAt: processed.dataCriacao || row.DATA_CRIACAO || processed.createdAt || row.CREATED_AT,
       updatedAt: processed.dataAtualizacao || row.DATA_ATUALIZACAO || processed.updatedAt || row.UPDATED_AT,
-      
+
       // Campos de setor (se incluídos na consulta)
       setor: processed.setor || row.SETOR,
       orgao: processed.orgao || row.ORGAO,
@@ -289,7 +289,7 @@ export class UserModel extends BaseModel {
       cidade: processed.cidade || row.CIDADE,
       estado: processed.estado || row.ESTADO,
       cep: processed.cep || row.CEP,
-      
+
       // Campos em maiúsculo para compatibilidade com frontend
       NOME: processed.nome || row.NOME,
       E_MAIL: processed.eMail || row.E_MAIL,
@@ -429,7 +429,7 @@ export class UserModel extends BaseModel {
       FROM ${this.tableName} u
       LEFT JOIN SETORES s ON ${uCols.has('SETOR_ID') ? 'u.SETOR_ID' : 'NULL'} = s.ID
     `;
-    
+
     const binds: any = {};
     const conditions: string[] = [];
 
@@ -557,15 +557,15 @@ export class UserModel extends BaseModel {
         FROM USUARIOS u
         WHERE u.E_MAIL = :email
       `;
-      
+
       const result = await DatabaseService.executeQuery(sql, { email });
-      
+
       if (!result.rows || result.rows.length === 0) {
         return null;
       }
-      
+
       const rawUser = result.rows[0] as any;
-      
+
       // Mapear campos do banco para o objeto user
       const user: IUser = {
         id: rawUser.ID,
@@ -582,7 +582,7 @@ export class UserModel extends BaseModel {
         data_atualizacao: rawUser.DATA_ATUALIZACAO,
         ultimo_login: rawUser.ULTIMO_LOGIN
       };
-      
+
       return user;
     } catch (error) {
       console.error('Erro ao buscar usuário com senha:', error);
@@ -643,48 +643,48 @@ export class UserModel extends BaseModel {
    */
   private static mapFieldsToColumns(data: any): any {
     const mapped = { ...data };
-    
+
     // Mapeamento de campos específicos para a nova estrutura da tabela USUARIOS
     if ('ativo' in mapped) {
       mapped.USUARIO_ATIVO = mapped.ativo ? 1 : 0;
       delete mapped.ativo;
     }
-    
+
     if ('usuario_ativo' in mapped) {
       mapped.USUARIO_ATIVO = mapped.usuario_ativo;
       delete mapped.usuario_ativo;
     }
-    
+
     if ('nome' in mapped) {
       mapped.NOME = mapped.nome;
       delete mapped.nome;
     }
-    
+
     if ('email' in mapped) {
       mapped.E_MAIL = mapped.email;
       delete mapped.email;
     }
-    
+
     if ('e_mail' in mapped) {
       mapped.E_MAIL = mapped.e_mail;
       delete mapped.e_mail;
     }
-    
+
     if ('senha' in mapped) {
       mapped.SENHA = mapped.senha;
       delete mapped.senha;
     }
-    
+
     if ('telefone' in mapped) {
       mapped.TELEFONE = mapped.telefone;
       delete mapped.telefone;
     }
-    
+
     if ('cargo' in mapped) {
       mapped.CARGO = mapped.cargo;
       delete mapped.cargo;
     }
-    
+
     if ('perfil' in mapped) {
       // Converter perfil para role
       let roleValue = mapped.perfil.toString().toUpperCase();
@@ -692,81 +692,81 @@ export class UserModel extends BaseModel {
       mapped.ROLE = roleValue;
       delete mapped.perfil;
     }
-    
+
     if ('role' in mapped) {
       mapped.ROLE = mapped.role;
       delete mapped.role;
     }
-    
+
     if ('setor_id' in mapped) {
       mapped.SETOR_ID = mapped.setor_id;
       delete mapped.setor_id;
     }
-    
+
     if ('matricula' in mapped) {
       mapped.MATRICULA = mapped.matricula;
       delete mapped.matricula;
     }
-    
+
     if ('vinculo_funcional' in mapped) {
       mapped.VINCULO_FUNCIONAL = mapped.vinculo_funcional;
       delete mapped.vinculo_funcional;
     }
-    
+
     if ('cpf' in mapped) {
       mapped.CPF = mapped.cpf;
       delete mapped.cpf;
     }
-    
+
     if ('pis/pasep' in mapped) {
       // Mapear para o nome exato da coluna no Oracle (com barra)
       mapped['PIS/PASEP'] = mapped['pis/pasep'];
       delete mapped['pis/pasep'];
     }
-    
+
     if ('pis_pasep' in mapped) {
       // Alias compatível apontando para a mesma coluna
       mapped['PIS/PASEP'] = mapped.pis_pasep;
       delete mapped.pis_pasep;
     }
-    
+
     if ('comissao_funçao' in mapped) {
       // Nome exato da coluna possui cedilha
       mapped['COMISSAO_FUNÇAO'] = mapped['comissao_funçao'];
       delete mapped['comissao_funçao'];
     }
-    
+
     if ('ultimo_login' in mapped) {
       mapped.ULTIMO_LOGIN = mapped.ultimo_login;
       delete mapped.ultimo_login;
     }
-    
+
     if ('tentativas_login' in mapped) {
       mapped.TENTATIVAS_LOGIN = mapped.tentativas_login;
       delete mapped.tentativas_login;
     }
-    
+
     if ('data_criacao' in mapped) {
       mapped.DATA_CRIACAO = mapped.data_criacao;
       delete mapped.data_criacao;
     }
-    
+
     if ('data_atualizacao' in mapped) {
       mapped.DATA_ATUALIZACAO = mapped.data_atualizacao;
       delete mapped.data_atualizacao;
     }
-    
+
     // Mapear indicador de alteração de senha
     if ('senhaAlterada' in mapped) {
       mapped.SENHA_ALTERADA = mapped.senhaAlterada;
       delete mapped.senhaAlterada;
     }
-    
+
     if ('bloqueado_ate' in mapped) {
       mapped.BLOQUEADO_ATE = mapped.bloqueado_ate;
       delete mapped.bloqueado_ate;
     }
-    
+
     return mapped;
   }
 
@@ -775,7 +775,7 @@ export class UserModel extends BaseModel {
    */
   static async updateUser(id: number, userData: Partial<IUser>): Promise<IUser | null> {
     console.log('🔍 [USER MODEL] Iniciando updateUser - ID:', id, 'Dados:', Object.keys(userData));
-    
+
     // Se está atualizando a senha, fazer hash
     if (userData.senha) {
       console.log('🔍 [USER MODEL] Fazendo hash da senha');
@@ -788,7 +788,7 @@ export class UserModel extends BaseModel {
       console.log('🔍 [USER MODEL] Iniciando validação dos dados');
       const validation = await this.validateUserData(userData, id);
       console.log('🔍 [USER MODEL] Validação concluída:', validation.valid);
-      
+
       if (!validation.valid) {
         throw new Error(`Dados inválidos: ${validation.errors.join(', ')}`);
       }
@@ -805,7 +805,7 @@ export class UserModel extends BaseModel {
     console.log('🔍 [USER MODEL] Chamando método update do BaseModel');
     const result = await this.update<IUser>(id, mappedData);
     console.log('🔍 [USER MODEL] Método update concluído');
-    
+
     return result;
   }
 
@@ -824,10 +824,10 @@ export class UserModel extends BaseModel {
       FROM ${this.tableName} u
       WHERE REGEXP_REPLACE(TO_CHAR(u.CPF), '[^0-9]', '') = :cpf_digits
     `;
-    
+
     const result = await DatabaseService.executeQuery(sql, { cpf_digits: cpfDigits });
     const rawUser = result.rows?.[0];
-    
+
     if (!rawUser) {
       throw new Error('Usuário não encontrado');
     }
@@ -946,13 +946,13 @@ export class UserModel extends BaseModel {
     }
 
     // TODO: Reset tentativas de login (requer colunas TENTATIVAS_LOGIN e BLOQUEADO_ATE)
-     // await this.resetLoginAttempts(user.id!);
-     
-     // Atualizar último login manualmente
-     await DatabaseService.executeQuery(
-       `UPDATE ${this.tableName} SET ULTIMO_LOGIN = CURRENT_TIMESTAMP WHERE ID = :userId`,
-       { userId: user.id }
-     );
+    // await this.resetLoginAttempts(user.id!);
+
+    // Atualizar último login manualmente
+    await DatabaseService.executeQuery(
+      `UPDATE ${this.tableName} SET ULTIMO_LOGIN = CURRENT_TIMESTAMP WHERE ID = :userId`,
+      { userId: user.id }
+    );
 
     // Verificar se está usando senha padrão
     // Cobrir casos conhecidos de senhas padrão usadas em ambientes de desenvolvimento/seed
@@ -993,13 +993,13 @@ export class UserModel extends BaseModel {
 
       const decoded = jwt.verify(refreshToken, refreshSecret) as any;
       const user = await this.findById<IUser>(decoded.userId);
-      
+
       if (!user || !user.ativo) {
         throw new Error('Token inválido');
       }
 
       const newToken = this.generateToken(user);
-      
+
       return {
         token: newToken,
         expiresIn: 24 * 60 * 60
@@ -1013,8 +1013,8 @@ export class UserModel extends BaseModel {
    * Alterar senha do usuário
    */
   static async changePassword(
-    userId: number, 
-    senhaAtual: string, 
+    userId: number,
+    senhaAtual: string,
     novaSenha: string
   ): Promise<boolean> {
     // Buscar usuário com senha usando DatabaseService diretamente
@@ -1207,7 +1207,7 @@ export class UserModel extends BaseModel {
    * Atualizar vínculo funcional de um usuário
    */
   static async updateVinculoFuncional(
-    userId: number, 
+    userId: number,
     vinculoFuncional: string
   ): Promise<IUser | null> {
     // Validar formato do vínculo (2 dígitos)
@@ -1278,18 +1278,18 @@ export class UserModel extends BaseModel {
     const sql = `
       SELECT DISTINCT 
         u.ID,
-        u.NAME as NOME,
-        u.EMAIL,
-        u.ROLE as CARGO,
+        u.NOME,
+        u.E_MAIL,
+        u.CARGO,
         s.NOME_SETOR as DEPARTAMENTO,
-        u.PHONE as TELEFONE,
+        u.TELEFONE,
         u.MATRICULA as NUMERO_FUNCIONAL,
         u.VINCULO_FUNCIONAL,
         u.SETOR_ID,
-        u.IS_ACTIVE as ATIVO,
-        u.CREATED_AT,
-        u.UPDATED_AT,
-        u.LAST_LOGIN as ULTIMO_LOGIN,
+        u.USUARIO_ATIVO as ATIVO,
+        u.DATA_CRIACAO as CREATED_AT,
+        u.DATA_ATUALIZACAO as UPDATED_AT,
+        u.ULTIMO_LOGIN,
         s.NOME_SETOR as SETOR,
         s.ORGAO,
         s.LOGRADOURO,
@@ -1303,33 +1303,33 @@ export class UserModel extends BaseModel {
         s.EMAIL as EMAIL_SETOR
       FROM ${this.tableName} u
       LEFT JOIN SETORES s ON u.SETOR_ID = s.ID
-      WHERE UPPER(u.NAME) LIKE UPPER(:searchTerm)
-      AND u.IS_ACTIVE = 1
-      ORDER BY u.NAME
+      WHERE UPPER(u.NOME) LIKE UPPER(:searchTerm)
+      AND (u.USUARIO_ATIVO = 1 OR UPPER(u.USUARIO_ATIVO) = 'S')
+      ORDER BY u.NOME
     `;
 
-    const binds = { searchTerm: `%${nome}%` };
-    
+    const binds: any = { searchTerm: `%${nome}%` };
+
     // Contar total de registros primeiro
     const countSql = `
       SELECT COUNT(*) as total
       FROM ${this.tableName} u
       LEFT JOIN SETORES s ON u.SETOR_ID = s.ID
-      WHERE UPPER(u.NAME) LIKE UPPER(:searchTerm)
-      AND u.IS_ACTIVE = 1
+      WHERE UPPER(u.NOME) LIKE UPPER(:searchTerm)
+      AND (u.USUARIO_ATIVO = 1 OR UPPER(u.USUARIO_ATIVO) = 'S')
     `;
-    
+
     const countResult = await DatabaseService.executeQuery(countSql, binds);
     const total = (countResult.rows?.[0] as any)?.TOTAL || 0;
-    
+
     // Aplicar paginação na query principal
     const { page = 1, limit = 10 } = pagination;
     const offset = (page - 1) * limit;
-    
+
     const paginatedSql = sql + ` OFFSET :paginationOffset ROWS FETCH NEXT :paginationLimit ROWS ONLY`;
     binds.paginationOffset = offset;
     binds.paginationLimit = limit;
-    
+
     // Utiliza diretamente o DatabaseService para executar a query
     const result = await DatabaseService.executeQuery(paginatedSql, binds);
 
@@ -1409,7 +1409,7 @@ export class UserModel extends BaseModel {
    * Validar dados do usuário
    */
   private static async validateUserData(
-    data: Partial<IUser>, 
+    data: Partial<IUser>,
     excludeId?: number
   ): Promise<{ valid: boolean; errors: string[] }> {
     const errors: string[] = [];
@@ -1438,14 +1438,14 @@ export class UserModel extends BaseModel {
               const currentUser = await this.findById<IUser>(excludeId);
               if (currentUser && currentUser.email !== data.email) {
                 // Só verificar duplicação se o email realmente mudou
-                const existingUser = await this.findByEmail(data.email);
+                const existingUser = await this.findByEmail(data.email || '');
                 if (existingUser && existingUser.id !== excludeId) {
                   errors.push('Email já está em uso');
                 }
               }
             } else {
               // Para criação, sempre verificar duplicação
-              const existingUser = await this.findByEmail(data.email);
+              const existingUser = await this.findByEmail(data.email || '');
               if (existingUser) {
                 errors.push('Email já está em uso');
               }
@@ -1468,14 +1468,14 @@ export class UserModel extends BaseModel {
               const currentUser = await this.findById<IUser>(excludeId);
               if (currentUser && currentUser.cpf !== data.cpf) {
                 // Só verificar duplicação se o CPF realmente mudou
-                const existingUser = await this.findByCpf(data.cpf);
+                const existingUser = await this.findByCpf(data.cpf || '');
                 if (existingUser && existingUser.id !== excludeId) {
                   errors.push('CPF já está em uso');
                 }
               }
             } else {
               // Para criação, sempre verificar duplicação
-              const existingUser = await this.findByCpf(data.cpf);
+              const existingUser = await this.findByCpf(data.cpf || '');
               if (existingUser) {
                 errors.push('CPF já está em uso');
               }
@@ -1523,7 +1523,7 @@ export class UserModel extends BaseModel {
    */
   private static validateCpf(cpf: string): boolean {
     cpf = cpf.replace(/[^\d]/g, '');
-    
+
     if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
       return false;
     }
@@ -1542,7 +1542,7 @@ export class UserModel extends BaseModel {
     }
     remainder = (sum * 10) % 11;
     if (remainder === 10 || remainder === 11) remainder = 0;
-    
+
     return remainder === parseInt(cpf.charAt(10));
   }
 
@@ -1629,11 +1629,11 @@ export class UserModel extends BaseModel {
   /**
    * Sobrescrever findAll para incluir JOIN com SETORES
    */
-  static override async findAll(
+  static override async findAll<T = IUser>(
     filters: SearchFilters = {},
     pagination: PaginationOptions = {}
-  ): Promise<PaginatedResult<IUser>> {
-    const { page = 1, limit = 10, orderBy = 'created_at', orderDirection = 'DESC' } = pagination;
+  ): Promise<PaginatedResult<T>> {
+    const { page = 1, limit = 10, orderBy = 'ID', orderDirection = 'DESC' } = pagination;
     const offset = (page - 1) * limit;
 
     // Construir query base com JOIN
@@ -1650,7 +1650,7 @@ export class UserModel extends BaseModel {
       const value = filters[key];
       if (value !== undefined && value !== null && value !== '') {
         const columnName = key === 'setor' ? 's.NOME_SETOR' : `u.${key}`;
-        
+
         if (typeof value === 'string' && value.includes('%')) {
           // Busca com LIKE
           conditions.push(`UPPER(${columnName}) LIKE UPPER(:filter${index})`);
@@ -1699,7 +1699,7 @@ export class UserModel extends BaseModel {
         total,
         pages: Math.ceil(total / limit)
       }
-    };
+    } as unknown as PaginatedResult<T>;
   }
 }
 

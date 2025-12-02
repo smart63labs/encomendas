@@ -729,6 +729,7 @@ const NovaEncomendaWizard = forwardRef<any, NovaEncomendaWizardProps>((props, re
         setSuggestedRemetentes([]);
         setSearchingRemetente(false);
       }
+
       if (destinatarioRef.current && !destinatarioRef.current.contains(event.target as Node)) {
         setSuggestedDestinatarios([]);
         setSearchingDestinatario(false);
@@ -834,22 +835,22 @@ const NovaEncomendaWizard = forwardRef<any, NovaEncomendaWizardProps>((props, re
                     Dados do Remetente
                   </h4>
                   <div className="space-y-0">
-                  <div className="space-y-0.5 relative" ref={remetenteRef}>
-                    <Label htmlFor="remetente">Dados do Remetente *</Label>
-                    <div className="relative">
-                      <Input
-                        id="remetente"
-                        value={formData.remetente}
-                        onChange={(e) => handleInputChange('remetente', e.target.value)}
-                        placeholder="Digite o nome do servidor ou do setor ..."
-                        readOnly
-                        className={`pr-8 h-10 ${validationErrors.remetente ? 'border-red-500 focus:border-red-500' : ''}`}
-                        title=""
-                      />
-                      {searchingRemetente && (
-                        <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground animate-spin" />
-                      )}
-                    </div>
+                    <div className="space-y-0.5 relative" ref={remetenteRef}>
+                      <Label htmlFor="remetente">Dados do Remetente *</Label>
+                      <div className="relative">
+                        <Input
+                          id="remetente"
+                          value={formData.remetente}
+                          onChange={(e) => handleInputChange('remetente', e.target.value)}
+                          placeholder="Digite o nome do servidor ou do setor ..."
+                          readOnly
+                          className={`pr-8 h-10 ${validationErrors.remetente ? 'border-red-500 focus:border-red-500' : ''}`}
+                          title=""
+                        />
+                        {searchingRemetente && (
+                          <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground animate-spin" />
+                        )}
+                      </div>
                       {validationErrors.remetente && (
                         <p className="text-sm text-red-600 mt-1">{validationErrors.remetente}</p>
                       )}
@@ -859,8 +860,8 @@ const NovaEncomendaWizard = forwardRef<any, NovaEncomendaWizardProps>((props, re
                             <div
                               key={item.id || `remetente-${index}`}
                               className={`px-3 py-2 border-b border-gray-100 last:border-b-0 ${item.tipo === 'user'
-                                  ? 'cursor-pointer hover:bg-gray-100'
-                                  : 'cursor-not-allowed bg-gray-50'
+                                ? 'cursor-pointer hover:bg-gray-100'
+                                : 'cursor-not-allowed bg-gray-50'
                                 }`}
                               onClick={() => item.tipo === 'user' && selectUser(item, 'remetente')}
                             >
@@ -960,7 +961,20 @@ const NovaEncomendaWizard = forwardRef<any, NovaEncomendaWizardProps>((props, re
                         <p className="text-sm text-red-600 mt-1">{validationErrors.destinatario}</p>
                       )}
                       {suggestedDestinatarios.length > 0 && (
-                        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+                        <div className="absolute z-50 w-full bottom-full mb-1 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden flex flex-col">
+                          {/* Contador de resultados */}
+                          <div className="px-3 py-2 bg-blue-50 border-b border-blue-200 text-xs font-medium text-blue-700 flex items-center gap-3 shrink-0">
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              Setores: {suggestedDestinatarios.filter((item: any) => item.isGroup).length}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <User className="w-3 h-3" />
+                              Usuários: {suggestedDestinatarios.filter((item: any) => item.tipo === 'user').length}
+                            </span>
+                          </div>
+                          {/* Lista de resultados */}
+                          <div className="overflow-auto max-h-60">
                           {suggestedDestinatarios.map((item, index) => (
                             <div
                               key={item.id || `destinatario-${index}`}
@@ -1005,6 +1019,7 @@ const NovaEncomendaWizard = forwardRef<any, NovaEncomendaWizardProps>((props, re
                               )}
                             </div>
                           ))}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -1047,269 +1062,269 @@ const NovaEncomendaWizard = forwardRef<any, NovaEncomendaWizardProps>((props, re
                       )}
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Coluna da direita: Mapa */}
-              <div className="mt-0">
-                <MapaWizard
-                  setorOrigem={formData.setor_origem}
-                  setorDestino={formData.setor_destino}
-                  setorOrigemData={setorOrigemData}
-                  setorDestinoData={setorDestinoData}
-                />
-              </div>
-            </div>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="space-y-3">
-            <div className="text-center mb-2">
-              <FileText className="w-8 h-8 text-primary mx-auto mb-1" />
-              <h3 className="text-lg font-semibold text-primary font-heading">Descrição da Mercadoria</h3>
-              <p className="text-sm text-foreground-secondary">Informe os detalhes da mercadoria</p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <Label htmlFor="descricao">Descrição do Conteúdo *</Label>
-                <Textarea
-                  id="descricao"
-                  value={formData.descricao}
-                  onChange={(e) => handleInputChange('descricao', e.target.value)}
-                  placeholder="Descreva detalhadamente o conteúdo da encomenda..."
-                  rows={3}
-                  className={`resize-none ${validationErrors.descricao ? 'border-red-500 focus:border-red-500' : ''}`}
-                />
-                {validationErrors.descricao && (
-                  <p className="text-sm text-red-600 mt-1">{validationErrors.descricao}</p>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label htmlFor="peso">Peso (kg)</Label>
-                  <Input
-                    id="peso"
-                    type="number"
-                    step="0.1"
-                    value={formData.peso}
-                    onChange={(e) => handleInputChange('peso', e.target.value)}
-                    placeholder="0.0"
-                    className="h-9"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="dimensoes">Dimensões (cm)</Label>
-                  <Input
-                    id="dimensoes"
-                    value={formData.dimensoes}
-                    onChange={(e) => handleInputChange('dimensoes', e.target.value)}
-                    placeholder="C x L x A"
-                    className="h-9"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="valor">Valor Declarado (R$)</Label>
-                  <Input
-                    id="valor"
-                    type="number"
-                    step="0.01"
-                    value={formData.valor_declarado}
-                    onChange={(e) => handleInputChange('valor_declarado', e.target.value)}
-                    placeholder="0.00"
-                    className="h-9"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label htmlFor="observacoes">Observações</Label>
-                <Textarea
-                  id="observacoes"
-                  value={formData.observacoes}
-                  onChange={(e) => handleInputChange('observacoes', e.target.value)}
-                  placeholder="Informações adicionais sobre a encomenda (opcional)..."
-                  rows={2}
-                  className="resize-none"
-                />
-              </div>
-
-              {/* Seletor de Malote e Lacre - apenas para tipo "malote" */}
-              {formData.tipo === 'malote' && (
-                <div className="space-y-1">
-                  <div className="mt-2 flex items-center gap-2 flex-wrap">
-                    <Button type="button" variant="outline" size="sm" onClick={() => setSelectModalOpen(true)}>
-                      Selecionar Malote e Lacre
-                    </Button>
-                    {/* Mostrar primeiro o Malote, depois o Lacre, em badges com cores distintas */}
-                    {formData.maloteNumero && (
-                      <Badge variant="default" className="shadow-sm">
-                        Malote #{formData.maloteNumero}
-                      </Badge>
-                    )}
-                    {formData.codigoLacremalote && (
-                      <Badge
-                        variant="outline"
-                        className="shadow-sm bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-200"
-                      >
-                        Lacre {formData.codigoLacremalote}
-                      </Badge>
-                    )}
                   </div>
                 </div>
-              )}
 
-              {/* Campo AR - apenas para tipo "correspondencia" */}
-              {formData.tipo === 'correspondencia' && (
-                <div className="space-y-1">
-                  <Label htmlFor="avisoRecebimento">AR - Aviso de Recebimento</Label>
-                  <Input
-                    id="avisoRecebimento"
-                    value={formData.avisoRecebimento}
-                    onChange={(e) => handleInputChange('avisoRecebimento', e.target.value)}
-                    placeholder="Ex: BR201521105BR"
-                    className="h-9"
-                    maxLength={13}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Código de rastreamento do AR (opcional)
-                  </p>
-                </div>
-              )}
-            </div>
-            <SelectLacreMaloteModal
-              isOpen={selectModalOpen}
-              onClose={() => setSelectModalOpen(false)}
-              setorOrigemId={setorOrigemData?.ID ?? null}
-              setorDestinoId={setorDestinoData?.ID ?? null}
-              onSelectLacre={handleSelectLacre}
-              onSelectMalote={handleSelectMalote}
-            />
-          </div>
-        );
-
-      case 4:
-        return (
-          <div className="space-y-0">
-            <div className="text-center mb-0">
-              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-0">
-                <Check className="w-3 h-3 text-green-600" />
-              </div>
-              <h3 className="text-base font-semibold text-primary font-heading mb-0">Protocolo Gerado</h3>
-              <p className="text-xs text-foreground-secondary mb-1">Sua encomenda foi cadastrada com sucesso!</p>
-            </div>
-
-            {generatedCode && encomendaData ? (
-              <div className="flex flex-col lg:flex-row justify-center items-start gap-2">
-                {/* Espaçador para manter a etiqueta centrada sob o título em telas grandes */}
-                <div className="hidden lg:block lg:w-40" aria-hidden="true" />
-                {/* Etiqueta da Encomenda (coluna central) */}
-                <div className="mx-auto w-fit" ref={etiquetaRef}>
-                  <EtiquetaEncomenda
-                    codigo={generatedCode}
-                    remetente={formData.remetente}
-                    destinatario={formData.destinatario}
+                {/* Coluna da direita: Mapa */}
+                <div className="mt-0">
+                  <MapaWizard
                     setorOrigem={formData.setor_origem}
                     setorDestino={formData.setor_destino}
-                    descricao={formData.descricao}
-                    observacoes={formData.observacoes}
-                    dataPostagem={new Date().toISOString()}
-                    codigoLacre={formData.codigoLacremalote}
-                    numeroMalote={formData.maloteNumero}
-                    numeroAR={formData.avisoRecebimento}
-                    qrCodeData={encomendaData.qrCode}
-                    enderecoSetor={encomendaData.enderecoSetor}
-                    enderecoSetorOrigem={enderecoSetorOrigem}
-                    enderecoSetorDestino={enderecoSetorDestino}
-                    urgente={formData.urgente}
-                    remetenteMatricula={formData.remetenteMatricula}
-                    remetenteVinculo={formData.remetenteVinculo}
-                    destinatarioMatricula={formData.destinatarioMatricula}
-                    destinatarioVinculo={formData.destinatarioVinculo}
+                    setorOrigemData={setorOrigemData}
+                    setorDestinoData={setorDestinoData}
+                  />
+                </div>
+              </div>
+            </div>
+            );
+
+            case 3:
+            return (
+            <div className="space-y-3">
+              <div className="text-center mb-2">
+                <FileText className="w-8 h-8 text-primary mx-auto mb-1" />
+                <h3 className="text-lg font-semibold text-primary font-heading">Descrição da Mercadoria</h3>
+                <p className="text-sm text-foreground-secondary">Informe os detalhes da mercadoria</p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <Label htmlFor="descricao">Descrição do Conteúdo *</Label>
+                  <Textarea
+                    id="descricao"
+                    value={formData.descricao}
+                    onChange={(e) => handleInputChange('descricao', e.target.value)}
+                    placeholder="Descreva detalhadamente o conteúdo da encomenda..."
+                    rows={3}
+                    className={`resize-none ${validationErrors.descricao ? 'border-red-500 focus:border-red-500' : ''}`}
+                  />
+                  {validationErrors.descricao && (
+                    <p className="text-sm text-red-600 mt-1">{validationErrors.descricao}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <Label htmlFor="peso">Peso (kg)</Label>
+                    <Input
+                      id="peso"
+                      type="number"
+                      step="0.1"
+                      value={formData.peso}
+                      onChange={(e) => handleInputChange('peso', e.target.value)}
+                      placeholder="0.0"
+                      className="h-9"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="dimensoes">Dimensões (cm)</Label>
+                    <Input
+                      id="dimensoes"
+                      value={formData.dimensoes}
+                      onChange={(e) => handleInputChange('dimensoes', e.target.value)}
+                      placeholder="C x L x A"
+                      className="h-9"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="valor">Valor Declarado (R$)</Label>
+                    <Input
+                      id="valor"
+                      type="number"
+                      step="0.01"
+                      value={formData.valor_declarado}
+                      onChange={(e) => handleInputChange('valor_declarado', e.target.value)}
+                      placeholder="0.00"
+                      className="h-9"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="observacoes">Observações</Label>
+                  <Textarea
+                    id="observacoes"
+                    value={formData.observacoes}
+                    onChange={(e) => handleInputChange('observacoes', e.target.value)}
+                    placeholder="Informações adicionais sobre a encomenda (opcional)..."
+                    rows={2}
+                    className="resize-none"
                   />
                 </div>
 
-                {/* Botões de Ação (coluna direita) */}
-                <div className="flex flex-col gap-1 w-full lg:w-40">
-                  <Button
-                    variant="outline"
-                    onClick={handlePrint}
-                    className="btn-govto-secondary gap-1 text-xs h-6 w-full"
-                  >
-                    <Printer className="w-2 h-2" />
-                    Imprimir Etiqueta
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleDownloadPDF}
-                    className="btn-govto-secondary gap-1 text-xs h-6 w-full"
-                  >
-                    <Download className="w-2 h-2" />
-                    Download PDF
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleShare}
-                    className="btn-govto-secondary gap-1 text-xs h-6 w-full"
-                  >
-                    <Share2 className="w-2 h-2" />
-                    Compartilhar
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <Card className="card-govto">
-                <CardContent className="p-2">
-                  <div className="text-center space-y-2">
-                    <div className="text-lg font-bold text-primary font-heading">
-                      EN-XXXX-XXXXXX
+                {/* Seletor de Malote e Lacre - apenas para tipo "malote" */}
+                {formData.tipo === 'malote' && (
+                  <div className="space-y-1">
+                    <div className="mt-2 flex items-center gap-2 flex-wrap">
+                      <Button type="button" variant="outline" size="sm" onClick={() => setSelectModalOpen(true)}>
+                        Selecionar Malote e Lacre
+                      </Button>
+                      {/* Mostrar primeiro o Malote, depois o Lacre, em badges com cores distintas */}
+                      {formData.maloteNumero && (
+                        <Badge variant="default" className="shadow-sm">
+                          Malote #{formData.maloteNumero}
+                        </Badge>
+                      )}
+                      {formData.codigoLacremalote && (
+                        <Badge
+                          variant="outline"
+                          className="shadow-sm bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-200"
+                        >
+                          Lacre {formData.codigoLacremalote}
+                        </Badge>
+                      )}
                     </div>
-                    <div className="flex justify-center">
-                      <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <QrCode className="w-10 h-10 text-foreground-muted" />
-                      </div>
-                    </div>
-                    <p className="text-xs text-foreground-muted">
-                      Etiqueta será gerada após cadastro
+                  </div>
+                )}
+
+                {/* Campo AR - apenas para tipo "correspondencia" */}
+                {formData.tipo === 'correspondencia' && (
+                  <div className="space-y-1">
+                    <Label htmlFor="avisoRecebimento">AR - Aviso de Recebimento</Label>
+                    <Input
+                      id="avisoRecebimento"
+                      value={formData.avisoRecebimento}
+                      onChange={(e) => handleInputChange('avisoRecebimento', e.target.value)}
+                      placeholder="Ex: BR201521105BR"
+                      className="h-9"
+                      maxLength={13}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Código de rastreamento do AR (opcional)
                     </p>
                   </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        );
+                )}
+              </div>
+              <SelectLacreMaloteModal
+                isOpen={selectModalOpen}
+                onClose={() => setSelectModalOpen(false)}
+                setorOrigemId={setorOrigemData?.ID ?? null}
+                setorDestinoId={setorDestinoData?.ID ?? null}
+                onSelectLacre={handleSelectLacre}
+                onSelectMalote={handleSelectMalote}
+              />
+            </div>
+            );
 
-      default:
-        return null;
+            case 4:
+            return (
+            <div className="space-y-0">
+              <div className="text-center mb-0">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-0">
+                  <Check className="w-3 h-3 text-green-600" />
+                </div>
+                <h3 className="text-base font-semibold text-primary font-heading mb-0">Protocolo Gerado</h3>
+                <p className="text-xs text-foreground-secondary mb-1">Sua encomenda foi cadastrada com sucesso!</p>
+              </div>
+
+              {generatedCode && encomendaData ? (
+                <div className="flex flex-col lg:flex-row justify-center items-start gap-2">
+                  {/* Espaçador para manter a etiqueta centrada sob o título em telas grandes */}
+                  <div className="hidden lg:block lg:w-40" aria-hidden="true" />
+                  {/* Etiqueta da Encomenda (coluna central) */}
+                  <div className="mx-auto w-fit" ref={etiquetaRef}>
+                    <EtiquetaEncomenda
+                      codigo={generatedCode}
+                      remetente={formData.remetente}
+                      destinatario={formData.destinatario}
+                      setorOrigem={formData.setor_origem}
+                      setorDestino={formData.setor_destino}
+                      descricao={formData.descricao}
+                      observacoes={formData.observacoes}
+                      dataPostagem={new Date().toISOString()}
+                      codigoLacre={formData.codigoLacremalote}
+                      numeroMalote={formData.maloteNumero}
+                      numeroAR={formData.avisoRecebimento}
+                      qrCodeData={encomendaData.qrCode}
+                      enderecoSetor={encomendaData.enderecoSetor}
+                      enderecoSetorOrigem={enderecoSetorOrigem}
+                      enderecoSetorDestino={enderecoSetorDestino}
+                      urgente={formData.urgente}
+                      remetenteMatricula={formData.remetenteMatricula}
+                      remetenteVinculo={formData.remetenteVinculo}
+                      destinatarioMatricula={formData.destinatarioMatricula}
+                      destinatarioVinculo={formData.destinatarioVinculo}
+                    />
+                  </div>
+
+                  {/* Botões de Ação (coluna direita) */}
+                  <div className="flex flex-col gap-1 w-full lg:w-40">
+                    <Button
+                      variant="outline"
+                      onClick={handlePrint}
+                      className="btn-govto-secondary gap-1 text-xs h-6 w-full"
+                    >
+                      <Printer className="w-2 h-2" />
+                      Imprimir Etiqueta
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleDownloadPDF}
+                      className="btn-govto-secondary gap-1 text-xs h-6 w-full"
+                    >
+                      <Download className="w-2 h-2" />
+                      Download PDF
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleShare}
+                      className="btn-govto-secondary gap-1 text-xs h-6 w-full"
+                    >
+                      <Share2 className="w-2 h-2" />
+                      Compartilhar
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Card className="card-govto">
+                  <CardContent className="p-2">
+                    <div className="text-center space-y-2">
+                      <div className="text-lg font-bold text-primary font-heading">
+                        EN-XXXX-XXXXXX
+                      </div>
+                      <div className="flex justify-center">
+                        <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                          <QrCode className="w-10 h-10 text-foreground-muted" />
+                        </div>
+                      </div>
+                      <p className="text-xs text-foreground-muted">
+                        Etiqueta será gerada após cadastro
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+            );
+
+            default:
+            return null;
     }
   };
 
-  return (
-    <div className="h-full flex flex-col">
-      {/* Conteúdo com scroll */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-1">
-          <Card className="card-govto">
-            <CardContent className="p-2">
-              <div className="w-full">
-                {/* Conteúdo principal do wizard - ocupa toda a largura */}
-                <div className="w-full">
-                  {renderStepContent()}
-                </div>
+            return (
+            <div className="h-full flex flex-col">
+              {/* Conteúdo com scroll */}
+              <div className="flex-1 overflow-y-auto">
+                <div className="p-1">
+                  <Card className="card-govto">
+                    <CardContent className="p-2">
+                      <div className="w-full">
+                        {/* Conteúdo principal do wizard - ocupa toda a largura */}
+                        <div className="w-full">
+                          {renderStepContent()}
+                        </div>
 
-                {/* Mapa customizado será adicionado aqui */}
+                        {/* Mapa customizado será adicionado aqui */}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+            </div>
+            );
 });
 
-NovaEncomendaWizard.displayName = 'NovaEncomendaWizard';
+            NovaEncomendaWizard.displayName = 'NovaEncomendaWizard';
 
-export default NovaEncomendaWizard;
+            export default NovaEncomendaWizard;

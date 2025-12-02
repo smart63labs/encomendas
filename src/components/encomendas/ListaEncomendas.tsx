@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
-import { Package, MapPin, Calendar, User, Eye, Edit, Trash2, QrCode, Building2, Hash, Clock, Weight, Info, AlertCircle, Printer, MoreHorizontal, Filter, ChevronUp, ChevronDown, CheckCircle } from "lucide-react";
+import { Package, MapPin, Calendar, User, Eye, Edit, Trash2, QrCode, Building2, Hash, Clock, Weight, Info, AlertCircle, Printer, MoreHorizontal, Filter, ChevronUp, ChevronDown, CheckCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,10 +43,11 @@ interface ListaEncomendaProps {
   viewMode: 'grid' | 'list';
   refreshTrigger?: number; // Prop para forçar atualização
   onTrack?: (codigoRastreamento: string) => void; // Callback para abrir modal de rastreamento
+  loading?: boolean; // Estado de carregamento
 }
 
 
-const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, onTrack }: ListaEncomendaProps) => {
+const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, onTrack, loading = false }: ListaEncomendaProps) => {
   const [encomendas, setEncomendas] = useState<Encomenda[]>([]);
   const [selectedEncomenda, setSelectedEncomenda] = useState<Encomenda | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -644,11 +645,11 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
                     <TableHead className="w-[36px] text-xs"></TableHead>
                     {renderSortableHeader('codigo', 'Protocolo', 'w-[160px]')}
                     {renderSortableHeader('numeroAR', 'AR', 'w-[110px]')}
-                    {renderSortableHeader('numeroMalote', 'Malote', 'w-[110px]')}
-                    {renderSortableHeader('numeroLacre', 'Lacre', 'w-[110px]')}
+                    {renderSortableHeader('numeroMalote', 'Malote', 'w-[90px]')}
+                    {renderSortableHeader('numeroLacre', 'Lacre', 'w-[90px]')}
                     
                     {renderSortableHeader('status', 'Status', 'w-[80px]')}
-                    {renderSortableHeader('tipo', 'Tipo', 'w-[70px]')}
+                    {renderSortableHeader('tipo', 'Tipo', 'w-[120px]')}
                     {renderSortableHeader('prioridade', 'Prioridade', 'w-[80px]')}
                     {renderSortableHeader('dataEnvio', 'Data Envio', 'w-[80px]')}
                     {renderSortableHeader('dataEntrega', 'Data Entrega', 'w-[80px]')}
@@ -657,7 +658,22 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedEncomendas.map((encomenda) => (
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={12} className="h-24 text-center">
+                        <div className="flex items-center justify-center">
+                          <RefreshCw className="w-6 h-6 animate-spin mr-2" />
+                          <span>Carregando encomendas...</span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ) : paginatedEncomendas.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={12} className="h-24 text-center">
+                        Nenhuma encomenda encontrada
+                      </TableCell>
+                    </TableRow>
+                  ) : paginatedEncomendas.map((encomenda) => (
                     <Fragment key={encomenda.id?.toString() || encomenda.codigo || `${encomenda.numeroAR || ''}-${encomenda.numeroMalote || ''}-${encomenda.numeroLacre || ''}`}>
                     <TableRow key={`${encomenda.id}-row`} className="hover:bg-muted/30">
                       <TableCell className="w-[36px] py-2 px-1">
@@ -678,25 +694,18 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
                         <div className="font-medium text-primary text-nowrap text-xs">
                           {encomenda.codigo}
                         </div>
-                        {encomenda.numeroAR && (
-                          <div className="mt-0.5 space-y-0.5">
-                            {encomenda.numeroAR && (
-                              <div className="text-[10px] text-foreground-muted truncate">AR: {encomenda.numeroAR}</div>
-                            )}
-                          </div>
-                        )}
                       </TableCell>
                       <TableCell className="py-2 px-2 w-[110px]">
                         <span className="text-xs font-mono truncate" title={encomenda.numeroAR || '-' }>
                           {encomenda.numeroAR || '-'}
                         </span>
                       </TableCell>
-                      <TableCell className="py-2 px-2 w-[110px]">
+                      <TableCell className="py-2 px-2 w-[90px]">
                         <span className="text-xs font-mono truncate" title={encomenda.numeroMalote || '-' }>
                           {encomenda.numeroMalote || '-'}
                         </span>
                       </TableCell>
-                      <TableCell className="py-2 px-2 w-[110px]">
+                      <TableCell className="py-2 px-2 w-[90px]">
                         <span className="text-xs font-mono truncate" title={encomenda.numeroLacre || '-' }>
                           {encomenda.numeroLacre || '-'}
                         </span>
@@ -708,7 +717,7 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
                           <span className="text-xs">{getStatusLabel(encomenda.status)}</span>
                         </Badge>
                       </TableCell>
-                      <TableCell className="py-2 px-2">
+                      <TableCell className="py-2 px-2 w-[120px]">
                         <Badge className={getTipoColor(encomenda.tipo)} size="sm">
                           <span className="text-xs">{getTipoLabel(encomenda.tipo)}</span>
                         </Badge>
@@ -835,7 +844,7 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
                               <div className="bg-gray-50 p-2 rounded-lg">
                                 <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                                   <Hash className="w-4 h-4" />
-                                  Identificadores
+                                  Identificador
                                 </h4>
                                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
                                   {encomenda.numeroAR && (
@@ -1019,7 +1028,16 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-              {paginatedEncomendas.map((encomenda) => (
+              {loading ? (
+                <div className="col-span-full flex items-center justify-center h-48">
+                  <RefreshCw className="w-8 h-8 animate-spin mr-2" />
+                  <span>Carregando encomendas...</span>
+                </div>
+              ) : paginatedEncomendas.length === 0 ? (
+                <div className="col-span-full flex items-center justify-center h-48 text-muted-foreground">
+                  Nenhuma encomenda encontrada
+                </div>
+              ) : paginatedEncomendas.map((encomenda) => (
                 <Card
                   key={encomenda.id?.toString() || encomenda.codigo || `${encomenda.numeroAR || ''}-${encomenda.numeroMalote || ''}-${encomenda.numeroLacre || ''}`}
                   className="hover:shadow-md transition-shadow"
@@ -1283,7 +1301,7 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
                 <div className="bg-gray-50 p-2 rounded-lg">
                   <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                     <Hash className="w-4 h-4" />
-                    Identificadores
+                    Identificador
                   </h4>
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
                     {selectedEncomenda.numeroAR && (
@@ -1530,7 +1548,7 @@ const ListaEncomendas = ({ searchTerm, statusFilter, viewMode, refreshTrigger, o
                 <div className="bg-gray-50 p-2 rounded">
                   <h4 className="text-xs font-semibold text-gray-700 mb-1 flex items-center gap-2">
                     <Hash className="w-4 h-4" />
-                    Identificadores
+                    Identificador
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
                     {encomendaToDelete.numeroAR && (

@@ -434,7 +434,11 @@ type LocalOption = { label: string; coord: Coordenada; usuario?: string; setor?:
   const MapUpdater: React.FC<{ center: [number, number]; zoom: number }> = ({ center, zoom }) => {
     const map = useMap();
     useEffect(() => {
-      map.setView(center, zoom);
+      try {
+        if ((map as any)?._mapPane) {
+          map.setView(center, zoom);
+        }
+      } catch {}
     }, [map, center, zoom]);
     return null;
   };
@@ -444,10 +448,10 @@ type LocalOption = { label: string; coord: Coordenada; usuario?: string; setor?:
     useEffect(() => {
       if (!bounds) return;
       try {
-        map.fitBounds(bounds, { padding: [24, 24], maxZoom: 12 });
-      } catch (e) {
-        // silencioso
-      }
+        if ((map as any)?._mapPane) {
+          map.fitBounds(bounds, { padding: [24, 24], maxZoom: 12 });
+        }
+      } catch {}
     }, [trigger]);
     return null;
   };
@@ -751,7 +755,7 @@ type LocalOption = { label: string; coord: Coordenada; usuario?: string; setor?:
           </div>
         </div>
 
-        <MapContainer key={`mapa-rota-${centerUse[0]}-${centerUse[1]}-${zoomUse}`} center={centerUse} zoom={zoomUse} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+        <MapContainer key={`mapa-rota-${centerUse[0]}-${centerUse[1]}-${zoomUse}`} center={centerUse} zoom={zoomUse} scrollWheelZoom={true} zoomAnimation={false} style={{ height: '100%', width: '100%' }}>
           <MapUpdater center={centerUse} zoom={zoomUse} />
           <FitBoundsOnTrigger trigger={fitBoundsTick} bounds={boundsAll} />
           <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

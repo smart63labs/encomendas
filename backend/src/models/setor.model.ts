@@ -44,8 +44,8 @@ export class SetorModel extends BaseModel {
   protected static override tableName = 'setores';
   protected static override primaryKey = 'id';
   protected static override fillable = [
-    'codigo_setor', 'nome_setor', 'orgao', 'ativo', 'logradouro', 'numero', 
-    'coluna1', 'bairro', 'cidade', 'estado', 'cep', 'telefone', 'email', 
+    'codigo_setor', 'nome_setor', 'orgao', 'ativo', 'logradouro', 'numero',
+    'coluna1', 'bairro', 'cidade', 'estado', 'cep', 'telefone', 'email',
     'latitude', 'longitude'
   ];
   // Desabilita timestamps automáticos (updated_at/created_at) para evitar erro ORA-00904
@@ -128,20 +128,22 @@ export class SetorModel extends BaseModel {
   ): Promise<PaginatedResult<ISetor>> {
     const sql = `
       SELECT * FROM ${this.tableName}
-      WHERE (UPPER(setor) LIKE UPPER(?) OR UPPER(orgao) LIKE UPPER(?) OR UPPER(lotacao) LIKE UPPER(?))
+      WHERE (UPPER(nome_setor) LIKE UPPER(:search) OR UPPER(orgao) LIKE UPPER(:search))
       AND ativo = 1
-      ORDER BY orgao, setor, lotacao
+      ORDER BY orgao, nome_setor
     `;
-    
+
     const searchTerm = `%${nome}%`;
-    const result = await this.executeQuery(sql, [searchTerm, searchTerm, searchTerm]);
-    
+    const result = await this.query<ISetor>(sql, { search: searchTerm });
+
     return {
       data: result,
-      total: result.length,
-      page: pagination.page || 1,
-      limit: pagination.limit || 10,
-      totalPages: Math.ceil(result.length / (pagination.limit || 10))
+      pagination: {
+        page: pagination.page || 1,
+        limit: pagination.limit || 10,
+        total: result.length,
+        pages: Math.ceil(result.length / (pagination.limit || 10))
+      }
     };
   }
 
@@ -149,7 +151,7 @@ export class SetorModel extends BaseModel {
    * Obter hierarquia completa de um setor
    */
   static async getHierarquiaCompleta(codigoSetor: string): Promise<{
-    orgao: string;
+    orgao: string | undefined;
     setor: string;
     lotacao?: string;
     hierarquia: string;
@@ -161,9 +163,8 @@ export class SetorModel extends BaseModel {
 
     return {
       orgao: setor.orgao,
-      setor: setor.setor,
-      lotacao: setor.lotacao,
-      hierarquia: setor.hierarquia_setor || `${setor.orgao} > ${setor.setor}${setor.lotacao ? ` > ${setor.lotacao}` : ''}`
+      setor: setor.nome_setor,
+      hierarquia: `${setor.orgao || ''} > ${setor.nome_setor}`
     };
   }
 
@@ -223,7 +224,7 @@ export class SetorModel extends BaseModel {
       FROM ${this.tableName}
     `;
 
-    const statsResult = await this.executeQuery(sql);
+    const statsResult = await this.query(sql);
     const stats = statsResult[0] || { total: 0, ativos: 0, inativos: 0 };
 
     // Estatísticas por órgão
@@ -234,7 +235,7 @@ export class SetorModel extends BaseModel {
       GROUP BY orgao
       ORDER BY count DESC
     `;
-    const orgaoStats = await this.executeQuery(orgaoSql);
+    const orgaoStats = await this.query(orgaoSql);
     const porOrgao: { [key: string]: number } = {};
     orgaoStats.forEach((row: any) => {
       porOrgao[row.orgao] = parseInt(row.count);
@@ -248,7 +249,7 @@ export class SetorModel extends BaseModel {
       GROUP BY municipio_lotacao
       ORDER BY count DESC
     `;
-    const municipioStats = await this.executeQuery(municipioSql);
+    const municipioStats = await this.query(municipioSql);
     const porMunicipio: { [key: string]: number } = {};
     municipioStats.forEach((row: any) => {
       porMunicipio[row.municipio_lotacao] = parseInt(row.count);

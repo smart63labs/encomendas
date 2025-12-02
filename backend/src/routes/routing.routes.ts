@@ -70,7 +70,7 @@ router.post('/directions', async (req: Request, res: Response) => {
       }
     });
 
-    const routeData = response.data;
+    const routeData = response.data as any;
 
     // Verificar se há features na resposta
     if (!routeData.features || routeData.features.length === 0) {

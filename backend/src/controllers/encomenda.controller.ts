@@ -49,10 +49,10 @@ export class EncomendaController extends BaseController {
       // Se a rota for pública ou sem usuário, mantém comportamento de ver tudo (ou muda conforme necessidade)
       if (req.user) {
         const isAdmin = ['ADMIN', 'ADMINISTRADOR'].includes(req.user.role?.toUpperCase() || '');
-        
+
         if (!isAdmin) {
           const setorId = req.user.setorId;
-          
+
           if (setorId) {
             userFilter = `AND (e.SETOR_ORIGEM_ID = :userSetorId OR e.SETOR_DESTINO_ID = :userSetorId)`;
             binds.userSetorId = setorId;
@@ -115,7 +115,7 @@ export class EncomendaController extends BaseController {
 
       // Query de contagem também precisa do filtro
       const countQuery = `SELECT COUNT(*) as total FROM ${this.tableName} e WHERE 1=1 ${userFilter}`;
-      
+
       // Binds para o count (remove offset e limit)
       const countBinds = { ...binds };
       delete countBinds.offset;
@@ -130,6 +130,18 @@ export class EncomendaController extends BaseController {
         result.rows?.map(row => this.mapRowToEncomenda(row)) || []
       );
       const total = countResult.rows?.[0]?.TOTAL || 0;
+
+      // Log para debug: verificar se os IDs dos setores estão sendo retornados
+      if (encomendas.length > 0) {
+        console.log('📦 Primeira encomenda retornada:', {
+          id: encomendas[0].id,
+          numeroEncomenda: encomendas[0].numeroEncomenda,
+          setorOrigemId: encomendas[0].setorOrigemId,
+          setorDestinoId: encomendas[0].setorDestinoId,
+          setorOrigem: encomendas[0].setorOrigem,
+          setorDestino: encomendas[0].setorDestino
+        });
+      }
 
       this.sendSuccess(res, {
         data: encomendas,
@@ -189,9 +201,9 @@ export class EncomendaController extends BaseController {
         LEFT JOIN LACRE l ON e.LACRE_ID = l.ID
         WHERE e.ID = :id
       `;
-      
+
       const result = await DatabaseService.executeQuery(query, { id });
-      
+
       if (!result.rows || result.rows.length === 0) {
         return this.sendError(res, 'Encomenda não encontrada', 404);
       }
@@ -216,7 +228,7 @@ export class EncomendaController extends BaseController {
       console.log('TraceID storeFromWizard:', traceId);
       const wizardData = req.body;
       console.log('Dados recebidos do wizard:', JSON.stringify(wizardData, null, 2));
-      
+
       // Normalizar possíveis IDs recebidos como string
       const toNumberOrNull = (v: any): number | null => {
         if (v === null || v === undefined) return null;
@@ -227,7 +239,7 @@ export class EncomendaController extends BaseController {
       const destinatarioIdRaw = toNumberOrNull(wizardData.destinatarioId);
       const setorOrigemIdRaw = toNumberOrNull((wizardData as any).setorOrigemId);
       const setorDestinoIdRaw = toNumberOrNull((wizardData as any).setorDestinoId);
-      
+
       // Usar os IDs enviados pelo frontend ou buscar por nome como fallback
       let usuarioRemetenteId = remetenteIdRaw || null;
       let setorRemetenteId: number | null = null;
@@ -285,11 +297,11 @@ export class EncomendaController extends BaseController {
           }
         }
       }
-      
+
       // Usar o ID do destinatário enviado pelo frontend ou buscar por nome
       let usuarioDestinatarioId = destinatarioIdRaw || null;
       let setorDestinatarioId: number | null = null;
-      
+
       // Se foi enviado o ID do destinatário, buscar o setor: primeiro tentar como usuário
       if (destinatarioIdRaw) {
         // Se setorDestinoId foi enviado (preferência), usar diretamente
@@ -299,7 +311,7 @@ export class EncomendaController extends BaseController {
         } else {
           const setorDestinatarioQueryUsuario = `SELECT SETOR_ID FROM USUARIOS WHERE ID = :destinatarioId`;
           const setorDestinatarioResultUsuario = await DatabaseService.executeQuery(setorDestinatarioQueryUsuario, { destinatarioId: destinatarioIdRaw });
-          
+
           if (setorDestinatarioResultUsuario.rows && setorDestinatarioResultUsuario.rows.length > 0) {
             const setorData = setorDestinatarioResultUsuario.rows[0] as any;
             setorDestinatarioId = Number(setorData.SETOR_ID);
@@ -321,7 +333,7 @@ export class EncomendaController extends BaseController {
         // Fallback: buscar por nome se não foi enviado o ID (USUARIOS.NOME)
         const destinatarioQueryUsuario = `SELECT ID, SETOR_ID FROM USUARIOS WHERE NOME = :destinatario`;
         const destinatarioResultUsuario = await DatabaseService.executeQuery(destinatarioQueryUsuario, { destinatario: wizardData.destinatario });
-        
+
         if (destinatarioResultUsuario.rows && destinatarioResultUsuario.rows.length > 0) {
           const destinatarioData = destinatarioResultUsuario.rows[0] as any;
           usuarioDestinatarioId = destinatarioData.ID;
@@ -339,7 +351,13 @@ export class EncomendaController extends BaseController {
           }
         }
       }
-      
+
+      // Obter ID do usuário logado
+      const id = (req as any).user?.id;
+      if (!id) {
+        return this.sendError(res, 'ID do usuário não encontrado', 400);
+      }
+
       let hubSetorIdNumber: number | null = null;
       let requireHub: boolean = false;
       try {
@@ -359,7 +377,7 @@ export class EncomendaController extends BaseController {
       if (!usuarioRemetenteId && !setorRemetenteId) {
         return this.sendError(res, 'Remetente (usuário ou setor) é obrigatório', 400);
       }
-      
+
       // Pelo menos um dos dois (destinatário ou setor) deve ser informado  
       if (!usuarioDestinatarioId && !setorDestinatarioId) {
         return this.sendError(res, 'Destinatário (usuário ou setor) é obrigatório', 400);
@@ -377,15 +395,15 @@ export class EncomendaController extends BaseController {
       if (setorRemetenteId === setorDestinatarioId) {
         return this.sendError(res, 'Setor de origem e setor de destino devem ser diferentes', 400);
       }
-      
+
       // Gerar código de rastreamento único com referências aos IDs
-      const codigoRastreamento = this.generateTrackingCode(
-        usuarioRemetenteId, 
-        usuarioDestinatarioId, 
-        setorRemetenteId, 
+      let codigoRastreamento = this.generateTrackingCode(
+        usuarioRemetenteId || undefined,
+        usuarioDestinatarioId || undefined,
+        setorRemetenteId,
         setorDestinatarioId
       );
-      
+
       // Gerar código do lacre do malote (opcional)
       const codigoLacremalote = wizardData.codigoLacremalote || null;
 
@@ -429,7 +447,7 @@ export class EncomendaController extends BaseController {
       // Buscar dados do setor para incluir endereço na etiqueta
       const setorQuery = `SELECT NOME_SETOR, LOGRADOURO, NUMERO, COMPLEMENTO, BAIRRO, CIDADE, ESTADO, CEP FROM SETORES WHERE ID = :setorId AND ATIVO = 1`;
       const setorResult = await DatabaseService.executeQuery(setorQuery, { setorId: setorRemetenteId });
-      
+
       let enderecoSetor = 'Endereço não encontrado';
       let nomeSetor = 'Setor não encontrado';
       if (setorResult.rows && setorResult.rows.length > 0) {
@@ -521,7 +539,7 @@ export class EncomendaController extends BaseController {
       );
       const existingCols = new Set<string>((allColsCheck.rows || []).map((r: any) => String(r.COLUMN_NAME)));
       const existingOptionalCols = new Set<string>(
-        ['QR_CODE','CODIGO_BARRAS','URGENTE','LACRE_ID','MALOTE_ID','NUMERO_AR','SETOR_HUB','SETOR_HUB_ID'].filter(c => existingCols.has(c))
+        ['QR_CODE', 'CODIGO_BARRAS', 'URGENTE', 'LACRE_ID', 'MALOTE_ID', 'NUMERO_AR', 'SETOR_HUB', 'SETOR_HUB_ID'].filter(c => existingCols.has(c))
       );
 
       // Metadados das colunas opcionais para binds type-aware
@@ -617,7 +635,7 @@ export class EncomendaController extends BaseController {
         {
           const meta = optMeta.get('QR_CODE');
           let val = qrCodeData;
-          const isVarchar = meta && ['VARCHAR2','CHAR','NVARCHAR2','NCHAR'].includes(meta.type);
+          const isVarchar = meta && ['VARCHAR2', 'CHAR', 'NVARCHAR2', 'NCHAR'].includes(meta.type);
           if (isVarchar && meta!.length > 0 && val.length > meta!.length) {
             val = val.slice(0, meta!.length);
           }
@@ -633,7 +651,7 @@ export class EncomendaController extends BaseController {
           if (meta?.type === 'NUMBER') {
             const digits = String(codigoBarras).replace(/\D+/g, '');
             val = digits ? Number(digits) : null;
-          } else if (meta && ['VARCHAR2','CHAR','NVARCHAR2','NCHAR'].includes(meta.type)) {
+          } else if (meta && ['VARCHAR2', 'CHAR', 'NVARCHAR2', 'NCHAR'].includes(meta.type)) {
             const s = String(codigoBarras);
             val = meta.length > 0 && s.length > meta.length ? s.slice(0, meta.length) : s;
           }
@@ -647,7 +665,7 @@ export class EncomendaController extends BaseController {
           const meta = optMeta.get('URGENTE');
           const isUrg = !!wizardData.urgente;
           let val: any = isUrg ? 1 : 0;
-          if (meta && ['VARCHAR2','CHAR','NVARCHAR2','NCHAR'].includes(meta.type)) {
+          if (meta && ['VARCHAR2', 'CHAR', 'NVARCHAR2', 'NCHAR'].includes(meta.type)) {
             val = isUrg ? 'S' : 'N';
           } else if (meta?.type === 'NUMBER') {
             val = isUrg ? 1 : 0;
@@ -676,7 +694,7 @@ export class EncomendaController extends BaseController {
             if (meta?.type === 'NUMBER') {
               const digits = String(raw).replace(/\D+/g, '');
               val = digits ? Number(digits) : null;
-            } else if (meta && ['VARCHAR2','CHAR','NVARCHAR2','NCHAR'].includes(meta.type)) {
+            } else if (meta && ['VARCHAR2', 'CHAR', 'NVARCHAR2', 'NCHAR'].includes(meta.type)) {
               const s = String(raw);
               val = meta.length > 0 && s.length > meta.length ? s.slice(0, meta.length) : s;
             }
@@ -730,7 +748,7 @@ export class EncomendaController extends BaseController {
               if (cbMeta?.type === 'NUMBER') {
                 const digits = String(valCB).replace(/\D+/g, '');
                 valCB = digits ? Number(digits) : null;
-              } else if (cbMeta && ['VARCHAR2','CHAR','NVARCHAR2','NCHAR'].includes(cbMeta.type)) {
+              } else if (cbMeta && ['VARCHAR2', 'CHAR', 'NVARCHAR2', 'NCHAR'].includes(cbMeta.type)) {
                 const s = String(valCB);
                 valCB = cbMeta.length > 0 && s.length > cbMeta.length ? s.slice(0, cbMeta.length) : s;
               }
@@ -782,7 +800,7 @@ export class EncomendaController extends BaseController {
         console.warn('Aviso: falha ao atualizar vínculos de MALOTE/LACRE após criação da encomenda:', linkErr);
       }
 
-      this.sendSuccess(res, { 
+      this.sendSuccess(res, {
         encomendaId: newEncomendaId,
         codigo: codigoRastreamento,
         qrCode: qrCodeData,
@@ -875,7 +893,7 @@ export class EncomendaController extends BaseController {
         // Se ocorrer erro na validação adicional, seguir com as validações já garantidas acima
         console.warn('Aviso: falha ao validar setores dos usuários. Prosseguindo com validações básicas. Detalhes:', e);
       }
-      
+
       const query = `
         INSERT INTO ${this.tableName} (
           NUMERO_ENCOMENDA, DESCRICAO, STATUS, DATA_CRIACAO, DATA_ATUALIZACAO,
@@ -905,7 +923,7 @@ export class EncomendaController extends BaseController {
         if (nextStatus === 'entregue') {
           const linkRes = await DatabaseService.executeQuery(
             `SELECT MALOTE_ID, LACRE_ID, SETOR_DESTINO_ID FROM ${this.tableName} WHERE ID = :id`,
-            { id }
+            { id: encomenda.id }
           );
           const linkRow = linkRes.rows?.[0] as any;
           const maloteId = linkRow?.MALOTE_ID ? Number(linkRow.MALOTE_ID) : null;
@@ -1171,13 +1189,13 @@ export class EncomendaController extends BaseController {
     const mes = String(dataPostagem.getMonth() + 1).padStart(2, '0');
     const dia = String(dataPostagem.getDate()).padStart(2, '0');
     const numeroSequencial = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-    
+
     // Incluir referências aos IDs no código
     const remetenteRef = usuarioRemetenteId ? String(usuarioRemetenteId).padStart(3, '0') : '000';
     const destinatarioRef = usuarioDestinatarioId ? String(usuarioDestinatarioId).padStart(3, '0') : '000';
     const setorOrigemRef = setorRemetenteId ? String(setorRemetenteId).padStart(2, '0') : '00';
     const setorDestinoRef = setorDestinatarioId ? String(setorDestinatarioId).padStart(2, '0') : '00';
-    
+
     // Formato: EN-YYYYMMDD-RRRSSDDDTT-XXXXXX 
     // Onde: RRR=usuário remetente, SS=setor origem, DDD=usuário destinatário, TT=setor destino, XXXXXX=sequencial
     // Componentes unidos sem hífens: RRRSSDDDTT
@@ -1188,10 +1206,9 @@ export class EncomendaController extends BaseController {
    * Mapeia uma linha do banco para o objeto Encomenda
    */
   private async mapRowToEncomenda(row: any): Promise<IEncomenda> {
-    // Função auxiliar para tratar campos que podem ser JSON ou texto estruturado
-    const parseDescricaoField = (field: any): {descricao: string, observacoes: string} => {
-      if (!field) return {descricao: '', observacoes: ''};
-      
+    const parseDescricaoField = (field: any): { descricao: string, observacoes: string, tipo?: string } => {
+      if (!field) return { descricao: '', observacoes: '' };
+
       // Converter para string primeiro
       let fieldStr = '';
       if (typeof field === 'string') {
@@ -1202,17 +1219,22 @@ export class EncomendaController extends BaseController {
       } else {
         fieldStr = String(field);
       }
-      
+
       // Separar descrição e observações do texto estruturado
       let descricao = '';
       let observacoes = '';
-      
+      let tipo: string | undefined;
+
       if (fieldStr) {
         const linhas = fieldStr.split('\n');
-        
+
         for (const linha of linhas) {
           const linhaTrimmed = linha.trim();
-          
+
+          if (linhaTrimmed.startsWith('Tipo:')) {
+            tipo = linhaTrimmed.replace('Tipo:', '').trim();
+            continue;
+          }
           if (linhaTrimmed.startsWith('Descrição:')) {
             descricao = linhaTrimmed.replace('Descrição:', '').trim();
           } else if (linhaTrimmed.startsWith('Observações:')) {
@@ -1220,21 +1242,21 @@ export class EncomendaController extends BaseController {
           }
         }
       }
-      
-      return {descricao, observacoes};
+
+      return tipo !== undefined ? { descricao, observacoes, tipo } : { descricao, observacoes };
     };
 
     // Função auxiliar para tratar campos QR Code
     const parseQrCodeField = (field: any): string => {
       if (!field) return '';
-    
+
       // Se vier como Lob (CLOB), ler como stream
       const isLob = field && typeof field === 'object' && (
         (field.type && String(field.type).toUpperCase().includes('CLOB')) ||
         typeof field.getData === 'function' ||
         typeof field.toString === 'function'
       );
-    
+
       if (isLob && typeof (field as any).getData === 'function') {
         try {
           let fieldStr = '';
@@ -1250,29 +1272,29 @@ export class EncomendaController extends BaseController {
           console.log('Erro ao processar Lob QR:', e);
         }
       }
-    
+
       if (typeof field === 'string') {
         try {
           // Primeiro, tentar corrigir escape duplo se existir
           let cleanedData = field.trim();
-    
+
           // Se começa e termina com aspas duplas, remover elas
           if (cleanedData.startsWith('"') && cleanedData.endsWith('"')) {
             cleanedData = cleanedData.slice(1, -1);
           }
-    
+
           // Corrigir escape duplo de aspas ("" -> ")
           cleanedData = cleanedData.replace(/""/g, '"');
-    
+
           // Corrigir escape simples também
           cleanedData = cleanedData.replace(/\\"/g, '"');
-    
+
           // Remover quebras de linha desnecessárias
           cleanedData = cleanedData.replace(/\r?\n/g, '');
-    
+
           // Verificar se é um JSON válido após limpeza
           const parsedData = JSON.parse(cleanedData);
-    
+
           // Se conseguiu fazer parse, retornar o JSON limpo e normalizado
           return JSON.stringify(parsedData);
         } catch {
@@ -1280,7 +1302,7 @@ export class EncomendaController extends BaseController {
           return field;
         }
       }
-    
+
       if (typeof field === 'object') {
         try {
           return JSON.stringify(field);
@@ -1289,76 +1311,76 @@ export class EncomendaController extends BaseController {
           return '[Dados do QR Code não disponíveis]';
         }
       }
-    
+
       return String(field);
     };
 
     const descricaoData = parseDescricaoField(row.DESCRICAO);
+
+    // Log para debug: verificar se os IDs dos setores estão vindo do banco
+    if (row.ID === 351 || row.ID === 350) {
+      console.log('🔍 Debug mapRowToEncomenda - ID:', row.ID, {
+        SETOR_ORIGEM_ID: row.SETOR_ORIGEM_ID,
+        SETOR_DESTINO_ID: row.SETOR_DESTINO_ID,
+        SETOR_ORIGEM_NOME: row.SETOR_ORIGEM_NOME,
+        SETOR_DESTINO_NOME: row.SETOR_DESTINO_NOME
+      });
+    }
 
     return {
       id: Number(row.ID) || 0,
       numeroEncomenda: String(row.NUMERO_ENCOMENDA || ''),
       descricao: descricaoData.descricao,
       observacoes: descricaoData.observacoes,
-      status: String(row.STATUS || 'pendente'),
-      dataCriacao: row.DATA_CRIACAO ? new Date(row.DATA_CRIACAO) : undefined,
-      dataAtualizacao: row.DATA_ATUALIZACAO ? new Date(row.DATA_ATUALIZACAO) : undefined,
-      dataPostagem: row.DATA_CRIACAO ? new Date(row.DATA_CRIACAO).toISOString() : new Date().toISOString(),
-      dataEntrega: row.DATA_ENTREGA ? new Date(row.DATA_ENTREGA) : undefined,
+      status: (row.STATUS as any) || 'pendente',
+      dataCriacao: row.DATA_CRIACAO ? new Date(row.DATA_CRIACAO) : new Date(),
+      dataAtualizacao: row.DATA_ATUALIZACAO ? new Date(row.DATA_ATUALIZACAO) : new Date(),
+      // data_postagem removido
+      dataEntrega: row.DATA_ENTREGA ? new Date(row.DATA_ENTREGA) : undefined as any,
       usuarioOrigemId: Number(row.USUARIO_ORIGEM_ID) || 0,
-      usuarioDestinoId: Number(row.USUARIO_DESTINO_ID) || 0,
-      setorOrigemId: Number(row.SETOR_ORIGEM_ID) || 0,
-      setorDestinoId: Number(row.SETOR_DESTINO_ID) || 0,
       remetente: String(row.REMETENTE_NOME || 'Usuário não encontrado'),
       destinatario: String(row.DESTINATARIO_NOME || 'Usuário não encontrado'),
       setorOrigem: String(row.SETOR_ORIGEM_NOME || 'Setor não encontrado'),
       setorDestino: String(row.SETOR_DESTINO_NOME || 'Setor não encontrado'),
-      setorOrigemCoordenadas: {
-        latitude: row.SETOR_ORIGEM_LATITUDE ? Number(row.SETOR_ORIGEM_LATITUDE) : null,
-        longitude: row.SETOR_ORIGEM_LONGITUDE ? Number(row.SETOR_ORIGEM_LONGITUDE) : null
-      },
-      setorDestinoCoordenadas: {
-        latitude: row.SETOR_DESTINO_LATITUDE ? Number(row.SETOR_DESTINO_LATITUDE) : null,
-        longitude: row.SETOR_DESTINO_LONGITUDE ? Number(row.SETOR_DESTINO_LONGITUDE) : null
-      },
-      setorOrigemCep: row.SETOR_ORIGEM_CEP ? String(row.SETOR_ORIGEM_CEP) : null,
-      setorDestinoCep: row.SETOR_DESTINO_CEP ? String(row.SETOR_DESTINO_CEP) : null,
-      // Dados completos de endereço dos setores
-      setorOrigemEndereco: {
-        logradouro: row.SETOR_ORIGEM_LOGRADOURO ? String(row.SETOR_ORIGEM_LOGRADOURO) : null,
-        numero: row.SETOR_ORIGEM_NUMERO ? String(row.SETOR_ORIGEM_NUMERO) : null,
-        complemento: row.SETOR_ORIGEM_COMPLEMENTO ? String(row.SETOR_ORIGEM_COMPLEMENTO) : null,
-        bairro: row.SETOR_ORIGEM_BAIRRO ? String(row.SETOR_ORIGEM_BAIRRO) : null,
-        cidade: row.SETOR_ORIGEM_CIDADE ? String(row.SETOR_ORIGEM_CIDADE) : null,
-        estado: row.SETOR_ORIGEM_ESTADO ? String(row.SETOR_ORIGEM_ESTADO) : null,
-        cep: row.SETOR_ORIGEM_CEP ? String(row.SETOR_ORIGEM_CEP) : null
-      },
-      setorDestinoEndereco: {
-        logradouro: row.SETOR_DESTINO_LOGRADOURO ? String(row.SETOR_DESTINO_LOGRADOURO) : null,
-        numero: row.SETOR_DESTINO_NUMERO ? String(row.SETOR_DESTINO_NUMERO) : null,
-        complemento: row.SETOR_DESTINO_COMPLEMENTO ? String(row.SETOR_DESTINO_COMPLEMENTO) : null,
-        bairro: row.SETOR_DESTINO_BAIRRO ? String(row.SETOR_DESTINO_BAIRRO) : null,
-        cidade: row.SETOR_DESTINO_CIDADE ? String(row.SETOR_DESTINO_CIDADE) : null,
-        estado: row.SETOR_DESTINO_ESTADO ? String(row.SETOR_DESTINO_ESTADO) : null,
-        cep: row.SETOR_DESTINO_CEP ? String(row.SETOR_DESTINO_CEP) : null
-      },
-      codigoLacreMalote: row.NUMERO_LACRE ? String(row.NUMERO_LACRE) : '',
-      qrCode: parseQrCodeField(row.QR_CODE),
-      codigoBarras: String(row.CODIGO_BARRAS || ''),
-      urgente: Number(row.URGENTE) === 1,
-      prioridade: Number(row.URGENTE) === 1 ? 'urgente' : 'normal',
-      encomendaPaiId: row.ENCOMENDA_PAI_ID !== undefined && row.ENCOMENDA_PAI_ID !== null ? Number(row.ENCOMENDA_PAI_ID) : null,
-      setorHub: row.SETOR_HUB ? String(row.SETOR_HUB) as 'SIM' : null,
-      setorHubId: row.SETOR_HUB_ID !== undefined && row.SETOR_HUB_ID !== null ? Number(row.SETOR_HUB_ID) : null,
-      // Números de vínculo
-      numeroMalote: row.NUMERO_MALOTE ? String(row.NUMERO_MALOTE) : null,
-      numeroLacre: row.NUMERO_LACRE ? String(row.NUMERO_LACRE) : null,
-      numeroAR: row.NUMERO_AR ? String(row.NUMERO_AR) : null,
+      // IDs dos setores (CRÍTICO para filtro de visibilidade no frontend)
+      setorOrigemId: row.SETOR_ORIGEM_ID != null ? Number(row.SETOR_ORIGEM_ID) : undefined,
+      setorDestinoId: row.SETOR_DESTINO_ID != null ? Number(row.SETOR_DESTINO_ID) : undefined,
       // Dados de matrícula e vínculo do remetente e destinatário
       remetenteMatricula: row.REMETENTE_MATRICULA ? String(row.REMETENTE_MATRICULA) : null,
       remetenteVinculo: row.REMETENTE_VINCULO ? String(row.REMETENTE_VINCULO) : null,
       destinatarioMatricula: row.DESTINATARIO_MATRICULA ? String(row.DESTINATARIO_MATRICULA) : null,
-      destinatarioVinculo: row.DESTINATARIO_VINCULO ? String(row.DESTINATARIO_VINCULO) : null
+      destinatarioVinculo: row.DESTINATARIO_VINCULO ? String(row.DESTINATARIO_VINCULO) : null,
+      // Identificadores
+      numeroMalote: row.NUMERO_MALOTE ? String(row.NUMERO_MALOTE) : undefined,
+      numeroLacre: row.NUMERO_LACRE ? String(row.NUMERO_LACRE) : undefined,
+      numeroAR: row.NUMERO_AR ? String(row.NUMERO_AR) : undefined,
+      // Coordenadas e endereço dos setores
+      setorOrigemCoordenadas: {
+        latitude: row.SETOR_ORIGEM_LATITUDE != null ? Number(row.SETOR_ORIGEM_LATITUDE) : null,
+        longitude: row.SETOR_ORIGEM_LONGITUDE != null ? Number(row.SETOR_ORIGEM_LONGITUDE) : null,
+      },
+      setorDestinoCoordenadas: {
+        latitude: row.SETOR_DESTINO_LATITUDE != null ? Number(row.SETOR_DESTINO_LATITUDE) : null,
+        longitude: row.SETOR_DESTINO_LONGITUDE != null ? Number(row.SETOR_DESTINO_LONGITUDE) : null,
+      },
+      setorOrigemEndereco: {
+        logradouro: row.SETOR_ORIGEM_LOGRADOURO ? String(row.SETOR_ORIGEM_LOGRADOURO) : undefined,
+        numero: row.SETOR_ORIGEM_NUMERO ? String(row.SETOR_ORIGEM_NUMERO) : undefined,
+        complemento: row.SETOR_ORIGEM_COMPLEMENTO ? String(row.SETOR_ORIGEM_COMPLEMENTO) : undefined,
+        bairro: row.SETOR_ORIGEM_BAIRRO ? String(row.SETOR_ORIGEM_BAIRRO) : undefined,
+        cidade: row.SETOR_ORIGEM_CIDADE ? String(row.SETOR_ORIGEM_CIDADE) : undefined,
+        estado: row.SETOR_ORIGEM_ESTADO ? String(row.SETOR_ORIGEM_ESTADO) : undefined,
+        cep: row.SETOR_ORIGEM_CEP ? String(row.SETOR_ORIGEM_CEP) : undefined,
+      },
+      setorDestinoEndereco: {
+        logradouro: row.SETOR_DESTINO_LOGRADOURO ? String(row.SETOR_DESTINO_LOGRADOURO) : undefined,
+        numero: row.SETOR_DESTINO_NUMERO ? String(row.SETOR_DESTINO_NUMERO) : undefined,
+        complemento: row.SETOR_DESTINO_COMPLEMENTO ? String(row.SETOR_DESTINO_COMPLEMENTO) : undefined,
+        bairro: row.SETOR_DESTINO_BAIRRO ? String(row.SETOR_DESTINO_BAIRRO) : undefined,
+        cidade: row.SETOR_DESTINO_CIDADE ? String(row.SETOR_DESTINO_CIDADE) : undefined,
+        estado: row.SETOR_DESTINO_ESTADO ? String(row.SETOR_DESTINO_ESTADO) : undefined,
+        cep: row.SETOR_DESTINO_CEP ? String(row.SETOR_DESTINO_CEP) : undefined,
+      }
     };
   }
 
@@ -1423,7 +1445,7 @@ export class EncomendaController extends BaseController {
       `;
 
       const result = await DatabaseService.executeQuery(query, { userId });
-      
+
       const notifications = result.rows?.map(row => ({
         id: Number(row.ID),
         numeroEncomenda: String(row.NUMERO_ENCOMENDA),
@@ -1436,7 +1458,7 @@ export class EncomendaController extends BaseController {
         setorOrigemNome: String(row.SETOR_ORIGEM_NOME || '')
       })) || [];
 
-      this.sendSuccess(res, { 
+      this.sendSuccess(res, {
         data: notifications,
         count: notifications.length
       });
@@ -1457,13 +1479,13 @@ export class EncomendaController extends BaseController {
       // Verificar se a encomenda existe
       const checkQuery = `SELECT ID, STATUS FROM ${this.tableName} WHERE ID = :id`;
       const checkResult = await DatabaseService.executeQuery(checkQuery, { id });
-      
+
       if (!checkResult.rows || checkResult.rows.length === 0) {
         return this.sendError(res, 'Encomenda não encontrada', 404);
       }
 
       const encomenda = checkResult.rows[0] as any;
-      
+
       if (encomenda.STATUS === 'entregue') {
         return this.sendError(res, 'Encomenda já foi confirmada como entregue', 400);
       }
@@ -1512,7 +1534,7 @@ export class EncomendaController extends BaseController {
 
       // Nova regra: não utilizar ENCOMENDAS_EVENTOS. Validação e histórico ficam na própria tabela ENCOMENDAS.
 
-      this.sendSuccess(res, { 
+      this.sendSuccess(res, {
         message: 'Entrega confirmada com sucesso',
         data: { id: Number(id), status: 'entregue' }
       });

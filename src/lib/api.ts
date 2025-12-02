@@ -129,9 +129,10 @@ class ApiService {
   }
 
   // Métodos específicos para usuários
-  async searchUsersAndSectors(query: string, limit: number = 50) {
+  async searchUsersAndSectors(query: string, limit?: number) {
     // Nova função para busca combinada de usuários e setores
-    const params: any = { q: query, limit };
+    const params: any = { q: query };
+    if (limit) params.limit = limit;
     return this.get('/users/search-users-and-sectors', params);
   }
 
@@ -234,7 +235,8 @@ class ApiService {
     onError?: (event: Event) => void
   ): EventSource {
     const streamUrl = `${API_BASE_URL}/encomendas/stream`;
-    const es = new EventSource(streamUrl, { withCredentials: true });
+    // Nota: EventSource não suporta headers customizados, então não enviamos token
+    const es = new EventSource(streamUrl);
     es.addEventListener('encomendas:update', (e) => {
       try {
         onMessage(e as MessageEvent);

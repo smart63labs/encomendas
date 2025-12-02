@@ -75,23 +75,24 @@ const Layout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen overflow-hidden bg-background flex flex-col">
       <Header />
-      
-      <div className="flex flex-1">
-        <Sidebar 
-          activeModule={activeModule} 
-          onModuleChange={handleModuleChange}
-        />
-        
-        <main className="flex-1 flex flex-col">
-          <div className="flex-1">
-            {children}
+      <div className="flex-1 overflow-y-auto">
+        <div className="flex pt-16">
+          <Sidebar 
+            activeModule={activeModule} 
+            onModuleChange={handleModuleChange}
+          />
+          <div className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col">
+              <div className="flex-1">
+                {children}
+              </div>
+            </main>
           </div>
-        </main>
+        </div>
+        <Footer />
       </div>
-      
-      <Footer />
     </div>
   );
 };

@@ -43,6 +43,24 @@ router.get('/', listValidation, validateRequest, authMiddleware, encomendaContro
 router.get('/stats', validateRequest, encomendaController.getStats.bind(encomendaController));
 router.get('/search', validateRequest, encomendaController.search.bind(encomendaController));
 router.get('/notifications/:userId', validateRequest, encomendaController.getNotifications.bind(encomendaController));
+
+// SSE: stream de atualizações de encomendas (deve vir antes de rotas dinâmicas)
+// Nota: SSE não suporta headers customizados, então não usamos authMiddleware aqui
+router.get('/stream', (req, res) => {
+  console.log('📡 Cliente SSE conectado em /encomendas/stream');
+  
+  // Validação opcional via query param se necessário
+  // const token = req.query.token;
+  // if (token) { /* validar token */ }
+  
+  try {
+    sse.setupStream(req, res);
+  } catch (error) {
+    console.error('❌ Erro ao configurar stream SSE:', error);
+    res.status(500).json({ success: false, error: 'Erro ao configurar stream' });
+  }
+});
+
 // Rota específica para o wizard de encomendas (deve vir antes de rotas dinâmicas)
 router.post('/wizard', wizardValidation, validateRequest, authMiddleware, encomendaController.storeFromWizard.bind(encomendaController));
 router.get('/:id', idValidation, validateRequest, encomendaController.show.bind(encomendaController));
@@ -50,11 +68,6 @@ router.post('/', createValidation, validateRequest, authMiddleware, encomendaCon
 router.put('/:id', updateValidation, validateRequest, authMiddleware, encomendaController.update.bind(encomendaController));
 router.put('/:id/confirm-receipt', idValidation, validateRequest, authMiddleware, encomendaController.confirmReceipt.bind(encomendaController));
 router.delete('/:id', idValidation, validateRequest, authMiddleware, requireAdmin, encomendaController.destroy.bind(encomendaController));
-
-// SSE: stream de atualizações de encomendas
-router.get('/stream', (req, res) => {
-  sse.setupStream(req, res);
-});
 
 export default router;
 export { router as encomendaRoutes };

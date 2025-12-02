@@ -19,10 +19,10 @@ export interface IEncomenda {
   valorDeclarado?: number;
   peso?: number;
   observacoes?: string;
-  usuarioOrigemId?: number;
-  usuarioDestinoId?: number;
-  setorOrigemId?: number;
-  setorDestinoId?: number;
+  usuarioOrigemId?: number | undefined;
+  usuarioDestinoId?: number | undefined;
+  setorOrigemId?: number | undefined;
+  setorDestinoId?: number | undefined;
   setorOrigem?: string;
   setorDestino?: string;
   codigoLacreMalote?: string;
@@ -38,6 +38,38 @@ export interface IEncomenda {
   remetenteVinculo?: string | null;
   destinatarioMatricula?: string | null;
   destinatarioVinculo?: string | null;
+  // Identificadores adicionais
+  numeroMalote?: string | undefined;
+  numeroLacre?: string | undefined;
+  numeroAR?: string | undefined;
+  // Coordenadas dos setores
+  setorOrigemCoordenadas?: {
+    latitude: number | null;
+    longitude: number | null;
+  };
+  setorDestinoCoordenadas?: {
+    latitude: number | null;
+    longitude: number | null;
+  };
+  // Endereços dos setores
+  setorOrigemEndereco?: {
+    logradouro?: string | undefined;
+    numero?: string | undefined;
+    complemento?: string | undefined;
+    bairro?: string | undefined;
+    cidade?: string | undefined;
+    estado?: string | undefined;
+    cep?: string | undefined;
+  };
+  setorDestinoEndereco?: {
+    logradouro?: string | undefined;
+    numero?: string | undefined;
+    complemento?: string | undefined;
+    bairro?: string | undefined;
+    cidade?: string | undefined;
+    estado?: string | undefined;
+    cep?: string | undefined;
+  };
   created_at?: Date;
   updated_at?: Date;
 }

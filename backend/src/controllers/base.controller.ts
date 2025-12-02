@@ -37,11 +37,13 @@ export interface QueryParams {
  * Interface para usuário autenticado
  */
 export interface AuthenticatedUser {
+  id: number;
   userId: number;
   email: string;
   nome: string;
   role: string;
   isActive: boolean;
+  setorId?: number;
 }
 
 /**
@@ -69,9 +71,9 @@ export abstract class BaseController {
     try {
       const pagination = this.extractPagination(req.query as QueryParams);
       const filters = this.extractFilters(req.query as QueryParams);
-      
+
       const result = await this.model.findAll(filters, pagination);
-      
+
       this.sendSuccess(res, result.data, 'Registros recuperados com sucesso', {
         pagination: result.pagination
       });
@@ -86,14 +88,14 @@ export abstract class BaseController {
   async show(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
-      
+
       if (!id || isNaN(Number(id))) {
         this.sendError(res, 'ID inválido', 400);
         return;
       }
 
       const record = await this.model.findById(Number(id));
-      
+
       if (!record) {
         this.sendError(res, 'Registro não encontrado', 404);
         return;
@@ -111,7 +113,7 @@ export abstract class BaseController {
   async store(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = req.body;
-      
+
       // Validar dados de entrada
       const validation = await this.validateStoreData(data, req);
       if (!validation.valid) {
@@ -121,12 +123,12 @@ export abstract class BaseController {
 
       // Processar dados antes de criar
       const processedData = await this.beforeStore(data, req);
-      
+
       const newRecord = await this.model.create(processedData);
-      
+
       // Processar dados após criar
       await this.afterStore(newRecord, req);
-      
+
       this.sendSuccess(res, newRecord, 'Registro criado com sucesso', {}, 201);
     } catch (error) {
       next(error);
@@ -140,7 +142,7 @@ export abstract class BaseController {
     try {
       const { id } = req.params;
       const data = req.body;
-      
+
       if (!id || isNaN(Number(id))) {
         this.sendError(res, 'ID inválido', 400);
         return;
@@ -162,12 +164,12 @@ export abstract class BaseController {
 
       // Processar dados antes de atualizar
       const processedData = await this.beforeUpdate(data, Number(id), req);
-      
+
       const updatedRecord = await this.model.update(Number(id), processedData);
-      
+
       // Processar dados após atualizar
       await this.afterUpdate(updatedRecord, Number(id), req);
-      
+
       this.sendSuccess(res, updatedRecord, 'Registro atualizado com sucesso');
     } catch (error) {
       next(error);
@@ -180,7 +182,7 @@ export abstract class BaseController {
   async destroy(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
-      
+
       if (!id || isNaN(Number(id))) {
         this.sendError(res, 'ID inválido', 400);
         return;
@@ -202,9 +204,9 @@ export abstract class BaseController {
 
       // Processar antes de excluir
       await this.beforeDelete(Number(id), req);
-      
+
       const deleted = await this.model.delete(Number(id));
-      
+
       if (!deleted) {
         this.sendError(res, 'Falha ao excluir registro', 500);
         return;
@@ -212,7 +214,7 @@ export abstract class BaseController {
 
       // Processar após excluir
       await this.afterDelete(Number(id), req);
-      
+
       this.sendSuccess(res, null, 'Registro excluído com sucesso');
     } catch (error) {
       next(error);
@@ -225,7 +227,7 @@ export abstract class BaseController {
   async search(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { q: searchTerm } = req.query as { q?: string };
-      
+
       if (!searchTerm || searchTerm.trim().length < 2) {
         this.sendError(res, 'Termo de busca deve ter pelo menos 2 caracteres', 400);
         return;
@@ -234,14 +236,14 @@ export abstract class BaseController {
       const pagination = this.extractPagination(req.query as QueryParams);
       const filters = this.extractFilters(req.query as QueryParams);
       const searchFields = this.getSearchFields();
-      
+
       const result = await this.model.search(
         searchTerm.trim(),
         searchFields,
         filters,
         pagination
       );
-      
+
       this.sendSuccess(res, result.data, 'Busca realizada com sucesso', {
         pagination: result.pagination,
         searchTerm
@@ -258,7 +260,7 @@ export abstract class BaseController {
     try {
       const filters = this.extractFilters(req.query as QueryParams);
       const total = await this.model.count(filters);
-      
+
       this.sendSuccess(res, { total }, 'Contagem realizada com sucesso');
     } catch (error) {
       next(error);
@@ -271,7 +273,7 @@ export abstract class BaseController {
   async destroyMany(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { ids } = req.body;
-      
+
       if (!Array.isArray(ids) || ids.length === 0) {
         this.sendError(res, 'Lista de IDs é obrigatória', 400);
         return;
@@ -301,9 +303,9 @@ export abstract class BaseController {
       const canDeleteResults = await Promise.all(
         existingIds.map(id => this.canDelete(id, req))
       );
-      
+
       const allowedIds = existingIds.filter((id, index) => canDeleteResults[index].allowed);
-      
+
       if (allowedIds.length === 0) {
         this.sendError(res, 'Nenhum registro pode ser excluído', 400);
         return;
@@ -311,12 +313,12 @@ export abstract class BaseController {
 
       // Processar antes de excluir
       await Promise.all(allowedIds.map(id => this.beforeDelete(id, req)));
-      
+
       const deletedCount = await this.model.deleteMany(allowedIds);
-      
+
       // Processar após excluir
       await Promise.all(allowedIds.map(id => this.afterDelete(id, req)));
-      
+
       this.sendSuccess(res, {
         deletedCount,
         requestedCount: validIds.length,
@@ -334,7 +336,7 @@ export abstract class BaseController {
     // Aceitar parâmetros em português (limite/pagina) ou inglês (limit/page)
     const pageStr = query.page || query.pagina || '1';
     const limitStr = query.limit || query.limite || '10';
-    
+
     const page = Math.max(1, parseInt(pageStr as string, 10));
     const limit = Math.min(100, Math.max(1, parseInt(limitStr as string, 10)));
     const orderBy = query.orderBy || 'created_at';
@@ -348,10 +350,10 @@ export abstract class BaseController {
    */
   protected extractFilters(query: QueryParams): SearchFilters {
     const filters: SearchFilters = {};
-    
+
     // Filtros básicos que podem ser aplicados a qualquer modelo
     const excludeParams = ['page', 'limit', 'orderBy', 'orderDirection', 'search', 'q', 'pagina', 'limite'];
-    
+
     Object.keys(query).forEach(key => {
       if (!excludeParams.includes(key) && query[key] !== undefined && query[key] !== '') {
         filters[key] = query[key];
@@ -372,7 +374,7 @@ export abstract class BaseController {
    * Validar dados para criação (pode ser sobrescrito nas classes filhas)
    */
   protected async validateStoreData(
-    data: any, 
+    data: any,
     req: AuthenticatedRequest
   ): Promise<{ valid: boolean; errors: string[] }> {
     return { valid: true, errors: [] };
@@ -382,8 +384,8 @@ export abstract class BaseController {
    * Validar dados para atualização (pode ser sobrescrito nas classes filhas)
    */
   protected async validateUpdateData(
-    data: any, 
-    id: number, 
+    data: any,
+    id: number,
     req: AuthenticatedRequest
   ): Promise<{ valid: boolean; errors: string[] }> {
     return { valid: true, errors: [] };
@@ -393,7 +395,7 @@ export abstract class BaseController {
    * Verificar se pode excluir (pode ser sobrescrito nas classes filhas)
    */
   protected async canDelete(
-    id: number, 
+    id: number,
     req: AuthenticatedRequest
   ): Promise<{ allowed: boolean; reason?: string }> {
     const role = req.user?.role?.toUpperCase() || '';
@@ -536,7 +538,7 @@ export abstract class BaseController {
     operation: () => Promise<T>
   ): Promise<T> {
     const connection = await DatabaseService.getConnection();
-    
+
     try {
       await connection.execute('BEGIN');
       const result = await operation();
@@ -562,12 +564,12 @@ export abstract class BaseController {
   ): Promise<void> {
     try {
       console.log('🔍 Iniciando log de auditoria:', { action, resourceType, resourceId, userId });
-      
+
       const sql = `
         INSERT INTO AUDITORIA (OPERACAO, TABELA, REGISTRO_ID, USUARIO_ID, OBSERVACOES, DATA_OPERACAO)
         VALUES (:operacao, :tabela, :registro_id, :usuario_id, :observacoes, SYSDATE)
       `;
-      
+
       const params = {
         operacao: action,
         tabela: resourceType,
@@ -575,12 +577,12 @@ export abstract class BaseController {
         usuario_id: userId,
         observacoes: details ? JSON.stringify(details) : null
       };
-      
+
       console.log('📝 Parâmetros do log de auditoria:', params);
       console.log('📝 SQL do log de auditoria:', sql);
-      
+
       const result = await DatabaseService.executeQuery(sql, params);
-      
+
       console.log('✅ Log de auditoria registrado com sucesso. Resultado:', result);
     } catch (error) {
       // Log de auditoria não deve quebrar a operação principal
@@ -597,7 +599,7 @@ export abstract class BaseController {
     permission: string
   ): boolean {
     if (!user) return false;
-    
+
     // Implementação básica - pode ser expandida com sistema de permissões mais complexo
     // Por enquanto, apenas verifica se o usuário está autenticado
     return true;
@@ -628,10 +630,10 @@ export abstract class BaseController {
     }
 
     const sanitized: any = {};
-    
+
     Object.keys(data).forEach(key => {
       const value = data[key];
-      
+
       if (typeof value === 'string') {
         // Remover scripts e tags HTML básicas
         sanitized[key] = value

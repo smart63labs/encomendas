@@ -15,10 +15,10 @@ export interface Configuracao {
   obrigatoria: boolean;
   editavel: boolean;
   ordemExibicao: number;
-  usuarioCriacaoId?: number;
-  usuarioAlteracaoId?: number;
-  dataCriacao?: Date;
-  dataAlteracao?: Date;
+  usuarioCriacaoId?: number | null;
+  usuarioAlteracaoId?: number | null;
+  dataCriacao?: Date | null;
+  dataAlteracao?: Date | null;
   ativo: boolean;
 }
 
@@ -124,8 +124,8 @@ export class ConfiguracaoUtils {
   static validateValue(valor: any, tipo: TipoConfig): boolean {
     switch (tipo) {
       case 'boolean':
-        return typeof valor === 'boolean' || 
-               (typeof valor === 'string' && ['true', 'false'].includes(valor.toLowerCase()));
+        return typeof valor === 'boolean' ||
+          (typeof valor === 'string' && ['true', 'false'].includes(valor.toLowerCase()));
       case 'number':
         return !isNaN(Number(valor));
       case 'json':

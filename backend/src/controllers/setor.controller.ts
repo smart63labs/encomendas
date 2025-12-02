@@ -33,24 +33,17 @@ export class SetorController extends BaseController {
   /**
    * Listar setores com filtros e paginação
    */
-  static async index(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  static async index(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response> {
     try {
       const queryParams = req.query as QueryParams;
-      const filters: ISetorFilters = {
-        codigo_setor: queryParams.codigo_setor as string,
-        orgao: queryParams.orgao as string,
-        nome_setor: queryParams.nome_setor as string,
-        cidade: queryParams.cidade as string,
-        estado: queryParams.estado as string,
-        ativo: queryParams.ativo ? queryParams.ativo === 'true' : undefined
-      };
+      const filters: ISetorFilters = {};
 
-      // Remover filtros vazios
-      Object.keys(filters).forEach(key => {
-        if (filters[key as keyof ISetorFilters] === undefined || filters[key as keyof ISetorFilters] === '') {
-          delete filters[key as keyof ISetorFilters];
-        }
-      });
+      if (queryParams.codigo_setor) filters.codigo_setor = queryParams.codigo_setor as string;
+      if (queryParams.orgao) filters.orgao = queryParams.orgao as string;
+      if (queryParams.nome_setor) filters.nome_setor = queryParams.nome_setor as string;
+      if (queryParams.cidade) filters.cidade = queryParams.cidade as string;
+      if (queryParams.estado) filters.estado = queryParams.estado as string;
+      if (queryParams.ativo !== undefined) filters.ativo = queryParams.ativo === 'true';
 
       const pagination = {
         page: parseInt(queryParams.page as string) || 1,
@@ -63,14 +56,15 @@ export class SetorController extends BaseController {
         success: true,
         data: result.data,
         pagination: {
-          page: result.page,
-          limit: result.limit,
-          total: result.total,
-          totalPages: result.totalPages
+          page: result.pagination.page,
+          limit: result.pagination.limit,
+          total: result.pagination.total,
+          totalPages: result.pagination.pages
         }
       });
     } catch (error) {
       next(error);
+      return res.status(500).json({ success: false, message: 'Erro interno' });
     }
   }
 
@@ -95,6 +89,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return; // Garantir retorno void
     }
   }
 
@@ -119,6 +114,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -128,7 +124,7 @@ export class SetorController extends BaseController {
   static async search(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
       const { q } = req.query;
-      
+
       if (!q || typeof q !== 'string') {
         return res.status(400).json({
           success: false,
@@ -147,14 +143,15 @@ export class SetorController extends BaseController {
         success: true,
         data: result.data,
         pagination: {
-          page: result.page,
-          limit: result.limit,
-          total: result.total,
-          totalPages: result.totalPages
+          page: result.pagination.page,
+          limit: result.pagination.limit,
+          total: result.pagination.total,
+          totalPages: result.pagination.pages
         }
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -164,7 +161,7 @@ export class SetorController extends BaseController {
   static async findByOrgao(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
       const { orgao } = req.params;
-      
+
       const pagination = {
         page: parseInt(req.query.page as string) || 1,
         limit: parseInt(req.query.limit as string) || 10
@@ -176,14 +173,45 @@ export class SetorController extends BaseController {
         success: true,
         data: result.data,
         pagination: {
-          page: result.page,
-          limit: result.limit,
-          total: result.total,
-          totalPages: result.totalPages
+          page: result.pagination.page,
+          limit: result.pagination.limit,
+          total: result.pagination.total,
+          totalPages: result.pagination.pages
         }
       });
     } catch (error) {
       next(error);
+      return;
+    }
+  }
+
+  /**
+   * Buscar setores por setor
+   */
+  static async findBySetor(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    try {
+      const { setor } = req.params;
+
+      const pagination = {
+        page: parseInt(req.query.page as string) || 1,
+        limit: parseInt(req.query.limit as string) || 10
+      };
+
+      const result = await SetorModel.findBySetor(setor, pagination);
+
+      return res.json({
+        success: true,
+        data: result.data,
+        pagination: {
+          page: result.pagination.page,
+          limit: result.pagination.limit,
+          total: result.pagination.total,
+          totalPages: result.pagination.pages
+        }
+      });
+    } catch (error) {
+      next(error);
+      return;
     }
   }
 
@@ -208,6 +236,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -232,6 +261,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -255,6 +285,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -276,6 +307,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -287,10 +319,10 @@ export class SetorController extends BaseController {
       const setorData: CreateSetorData = req.body;
 
       // Validações básicas
-      if (!setorData.codigo_setor || !setorData.orgao || !setorData.setor) {
+      if (!setorData.codigo_setor || !setorData.orgao || !setorData.nome_setor) {
         return res.status(400).json({
           success: false,
-          message: 'Código do setor, órgão e setor são obrigatórios'
+          message: 'Código do setor, órgão e nome do setor são obrigatórios'
         });
       }
 
@@ -309,6 +341,7 @@ export class SetorController extends BaseController {
         });
       }
       next(error);
+      return;
     }
   }
 
@@ -342,6 +375,7 @@ export class SetorController extends BaseController {
         });
       }
       next(error);
+      return;
     }
   }
 
@@ -376,6 +410,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -395,7 +430,7 @@ export class SetorController extends BaseController {
       }
 
       const { id } = req.params;
-      
+
       const deleted = await SetorModel.delete(parseInt(id));
 
       if (!deleted) {
@@ -411,6 +446,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -428,15 +464,19 @@ export class SetorController extends BaseController {
         });
       }
 
-      const result = await SetorModel.deleteMultiple(ids);
+      const deletedCount = await SetorModel.deleteMany(ids);
 
       return res.json({
         success: true,
-        message: `${result.deletedCount} setores excluídos com sucesso`,
-        data: result
+        message: `${deletedCount} setores removidos com sucesso`,
+        data: {
+          deletedCount,
+          requestedCount: ids.length
+        }
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 
@@ -453,6 +493,7 @@ export class SetorController extends BaseController {
       });
     } catch (error) {
       next(error);
+      return;
     }
   }
 }

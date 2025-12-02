@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { DatabaseService } from '../config/database';
-import { 
-  Configuracao, 
-  ConfiguracaoInput, 
-  ConfiguracaoUpdate, 
+import {
+  Configuracao,
+  ConfiguracaoInput,
+  ConfiguracaoUpdate,
   ConfiguracaoFiltros,
   ConfiguracaoOrdenacao,
   ConfiguracaoUtils,
@@ -52,7 +52,7 @@ export class ConfiguracaoController {
         FROM CONFIGURACOES 
         WHERE 1=1
       `;
-      
+
       const params: any = {};
       let paramIndex = 1;
 
@@ -68,17 +68,20 @@ export class ConfiguracaoController {
       }
       if (ativo !== undefined) {
         sql += ` AND ATIVO = :param${paramIndex}`;
-        params[`param${paramIndex}`] = (ativo === true || ativo === 'true') ? 'S' : 'N';
+        const ativoStr = String(ativo);
+        params[`param${paramIndex}`] = (ativoStr === 'true' || ativoStr === '1') ? 'S' : 'N';
         paramIndex++;
       }
       if (editavel !== undefined) {
         sql += ` AND EDITAVEL = :param${paramIndex}`;
-        params[`param${paramIndex}`] = (editavel === true || editavel === 'true') ? 'S' : 'N';
+        const editavelStr = String(editavel);
+        params[`param${paramIndex}`] = (editavelStr === 'true' || editavelStr === '1') ? 'S' : 'N';
         paramIndex++;
       }
       if (obrigatoria !== undefined) {
         sql += ` AND OBRIGATORIA = :param${paramIndex}`;
-        params[`param${paramIndex}`] = (obrigatoria === true || obrigatoria === 'true') ? 'S' : 'N';
+        const obrigatoriaStr = String(obrigatoria);
+        params[`param${paramIndex}`] = (obrigatoriaStr === 'true' || obrigatoriaStr === '1') ? 'S' : 'N';
         paramIndex++;
       }
 
@@ -86,7 +89,7 @@ export class ConfiguracaoController {
       const camposValidos = ['categoria', 'chave', 'ordemExibicao', 'dataCriacao', 'dataAlteracao'];
       const campoOrdenacao = camposValidos.includes(ordenarPor as string) ? ordenarPor : 'ordemExibicao';
       const direcaoOrdenacao = direcao === 'DESC' ? 'DESC' : 'ASC';
-      
+
       const campoSql = {
         'categoria': 'CATEGORIA',
         'chave': 'CHAVE',
@@ -104,12 +107,12 @@ export class ConfiguracaoController {
       params.paginationLimit = Number(limite);
 
       const result = await DatabaseService.executeQuery(sql, params);
-      
+
       // Contar total de registros
       let sqlCount = `SELECT COUNT(*) as TOTAL FROM CONFIGURACOES WHERE 1=1`;
       const paramsCount: { [key: string]: any } = {};
       let paramCountIndex = 1;
-      
+
       if (categoria) {
         sqlCount += ` AND CATEGORIA = :param${paramCountIndex}`;
         paramsCount[`param${paramCountIndex}`] = categoria;
@@ -121,20 +124,23 @@ export class ConfiguracaoController {
         paramCountIndex++;
       }
       if (ativo !== undefined) {
-         sqlCount += ` AND ATIVO = :param${paramCountIndex}`;
-         paramsCount[`param${paramCountIndex}`] = (ativo === true || ativo === 'true') ? 'S' : 'N';
-         paramCountIndex++;
-       }
-       if (editavel !== undefined) {
-         sqlCount += ` AND EDITAVEL = :param${paramCountIndex}`;
-         paramsCount[`param${paramCountIndex}`] = (editavel === true || editavel === 'true') ? 'S' : 'N';
-         paramCountIndex++;
-       }
-       if (obrigatoria !== undefined) {
-         sqlCount += ` AND OBRIGATORIA = :param${paramCountIndex}`;
-         paramsCount[`param${paramCountIndex}`] = (obrigatoria === true || obrigatoria === 'true') ? 'S' : 'N';
-         paramCountIndex++;
-       }
+        sqlCount += ` AND ATIVO = :param${paramCountIndex}`;
+        const ativoStr = String(ativo);
+        paramsCount[`param${paramCountIndex}`] = (ativoStr === 'true' || ativoStr === '1') ? 'S' : 'N';
+        paramCountIndex++;
+      }
+      if (editavel !== undefined) {
+        sqlCount += ` AND EDITAVEL = :param${paramCountIndex}`;
+        const editavelStr = String(editavel);
+        paramsCount[`param${paramCountIndex}`] = (editavelStr === 'true' || editavelStr === '1') ? 'S' : 'N';
+        paramCountIndex++;
+      }
+      if (obrigatoria !== undefined) {
+        sqlCount += ` AND OBRIGATORIA = :param${paramCountIndex}`;
+        const obrigatoriaStr = String(obrigatoria);
+        paramsCount[`param${paramCountIndex}`] = (obrigatoriaStr === 'true' || obrigatoriaStr === '1') ? 'S' : 'N';
+        paramCountIndex++;
+      }
 
       const countResult = await DatabaseService.executeQuery(sqlCount, paramsCount);
       const total = countResult.rows?.[0]?.TOTAL || 0;
@@ -149,24 +155,24 @@ export class ConfiguracaoController {
             isUndefined: row.VALOR === undefined,
             constructor: row.VALOR?.constructor?.name
           });
-          
+
           if (row.VALOR === null || row.VALOR === undefined) return '';
           if (typeof row.VALOR === 'string') return row.VALOR;
           if (typeof row.VALOR === 'number') return String(row.VALOR);
           if (typeof row.VALOR === 'boolean') return String(row.VALOR);
-          
+
           // Se chegou aqui, é um objeto - vamos tentar extrair o valor
           if (row.VALOR && typeof row.VALOR === 'object') {
             // Verificar se tem propriedades comuns do Oracle
             if (row.VALOR.val !== undefined) return String(row.VALOR.val);
             if (row.VALOR.value !== undefined) return String(row.VALOR.value);
             if (row.VALOR.data !== undefined) return String(row.VALOR.data);
-            
+
             // Se é um Buffer, converter para string
             if (Buffer.isBuffer(row.VALOR)) {
               return row.VALOR.toString('utf8');
             }
-            
+
             // Verificar se é um CLOB do Oracle
             if (row.VALOR.constructor?.name === 'Lob' || row.VALOR._type || row.VALOR.getData) {
               try {
@@ -186,7 +192,7 @@ export class ConfiguracaoController {
                 return '[CLOB não legível]';
               }
             }
-            
+
             // Para outros objetos, tentar JSON.stringify com cuidado
             try {
               return JSON.stringify(row.VALOR, (key, value) => {
@@ -203,7 +209,7 @@ export class ConfiguracaoController {
               return '[Objeto não serializável]';
             }
           }
-          
+
           return String(row.VALOR);
         } catch (e) {
           console.error(`Erro ao processar valor para chave ${row.CHAVE}:`, e);
@@ -211,22 +217,22 @@ export class ConfiguracaoController {
         }
       };
 
-      const configuracoes: Configuracao[] = await Promise.all(result.rows?.map(async (row: any) => ({
+      const configuracoes: Configuracao[] = result.rows ? await Promise.all(result.rows.map(async (row: any) => ({
         id: Number(row.ID),
         categoria: String(row.CATEGORIA || ''),
         chave: String(row.CHAVE || ''),
         valor: await processarValor(row),
-        tipo: String(row.TIPO || ''),
+        tipo: String(row.TIPO || 'string') as 'string' | 'number' | 'boolean' | 'json' | 'date',
         descricao: String(row.DESCRICAO || ''),
         obrigatoria: row.OBRIGATORIA === 'S' || row.OBRIGATORIA === 1,
         editavel: row.EDITAVEL === 'S' || row.EDITAVEL === 1,
         ordemExibicao: Number(row.ORDEM_EXIBICAO || 0),
         usuarioCriacaoId: row.USUARIO_CRIACAO_ID ? Number(row.USUARIO_CRIACAO_ID) : null,
         usuarioAlteracaoId: row.USUARIO_ALTERACAO_ID ? Number(row.USUARIO_ALTERACAO_ID) : null,
-        dataCriacao: row.DATA_CRIACAO ? new Date(row.DATA_CRIACAO).toISOString() : null,
-        dataAlteracao: row.DATA_ATUALIZACAO ? new Date(row.DATA_ATUALIZACAO).toISOString() : null,
+        dataCriacao: row.DATA_CRIACAO ? new Date(row.DATA_CRIACAO) : null,
+        dataAlteracao: row.DATA_ATUALIZACAO ? new Date(row.DATA_ATUALIZACAO) : null,
         ativo: row.ATIVO === 'S' || row.ATIVO === 1
-      }))) || [];
+      }))) : [];
 
       res.json({
         success: true,
@@ -325,7 +331,7 @@ export class ConfiguracaoController {
       const sql = `
         SELECT VALOR, TIPO
         FROM CONFIGURACOES
-        WHERE CATEGORIA = :1 AND CHAVE = :2 AND ATIVO = 'S'
+        WHERE UPPER(CATEGORIA) = UPPER(:1) AND CHAVE = :2 AND ATIVO = 'S'
       `;
 
       const result = await DatabaseService.executeQuery(sql, [categoria, chave]);
@@ -383,9 +389,9 @@ export class ConfiguracaoController {
         FROM CONFIGURACOES
         WHERE CATEGORIA = :1 AND CHAVE = :2
       `;
-      
+
       const existeResult = await DatabaseService.executeQuery(sqlExiste, [dados.categoria, dados.chave]);
-      
+
       if (existeResult.rows?.[0]?.TOTAL > 0) {
         res.status(409).json({
           success: false,
@@ -467,9 +473,9 @@ export class ConfiguracaoController {
         FROM CONFIGURACOES
         WHERE ID = :1 AND ATIVO = 'S'
       `;
-      
+
       const verificaResult = await DatabaseService.executeQuery(sqlVerifica, [configId]);
-      
+
       if (!verificaResult.rows || verificaResult.rows.length === 0) {
         res.status(404).json({
           success: false,
@@ -595,9 +601,9 @@ export class ConfiguracaoController {
         FROM CONFIGURACOES
         WHERE ID = :1 AND ATIVO = 'S'
       `;
-      
+
       const verificaResult = await DatabaseService.executeQuery(sqlVerifica, [configId]);
-      
+
       if (!verificaResult.rows || verificaResult.rows.length === 0) {
         res.status(404).json({
           success: false,
@@ -709,9 +715,9 @@ export class ConfiguracaoController {
             FROM CONFIGURACOES
             WHERE CATEGORIA = :1 AND CHAVE = :2 AND ATIVO = 'S'
           `;
-          
+
           const verificaResult = await DatabaseService.executeQuery(sqlVerifica, [categoria, chave]);
-          
+
           if (!verificaResult.rows || verificaResult.rows.length === 0) {
             // Criar nova configuração se não existir
             const sqlCriar = `
@@ -723,7 +729,7 @@ export class ConfiguracaoController {
                 :1, :2, :3, :4, :5, :6, :7, :8, :9, SYSDATE, 'S'
               )
             `;
-            
+
             await DatabaseService.executeQuery(sqlCriar, [
               categoria,
               chave,
@@ -735,7 +741,7 @@ export class ConfiguracaoController {
               999, // ORDEM_EXIBICAO
               usuarioId
             ]);
-            
+
             resultados.push({
               categoria,
               chave,
@@ -754,7 +760,7 @@ export class ConfiguracaoController {
               // Caso indecifrável, assumir 'S' para permitir atualização
               return 'S';
             })();
-            
+
             if (configExistente.EDITAVEL === 'N') {
               erros.push({
                 categoria,
@@ -783,14 +789,14 @@ export class ConfiguracaoController {
                   DATA_ATUALIZACAO = SYSDATE
               WHERE ID = :4
             `;
-            
+
             await DatabaseService.executeQuery(sqlAtualizar, [
               ConfiguracaoUtils.stringifyValue(valor, tipoExistente as any),
               editavelSN,
               usuarioId,
               configExistente.ID
             ]);
-            
+
             resultados.push({
               categoria,
               chave,
@@ -810,14 +816,14 @@ export class ConfiguracaoController {
 
       res.json({
         success: erros.length === 0,
-        message: erros.length === 0 
+        message: erros.length === 0
           ? 'Todas as configurações foram processadas com sucesso'
           : `${resultados.length} configurações processadas, ${erros.length} com erro`,
         data: {
           processadas: resultados.length,
-          erros: erros.length,
+          totalErros: erros.length,
           resultados,
-          erros
+          detalhesErros: erros
         }
       });
 

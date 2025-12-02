@@ -208,7 +208,7 @@ const Header = () => {
   }, [showConfirmAllModal, batchIndex, notifications]);
 
   return (
-    <header className="header-govto">
+    <header className="header-govto fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b border-border/40 shadow-md">
       <div className="w-full px-6">
         <div className="flex items-center justify-between h-16">
           {/* Menu Mobile */}

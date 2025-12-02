@@ -116,22 +116,26 @@ const MapController: React.FC<{ encomendas: EncomendaComCoordenadas[] }> = ({ en
   const map = useMap();
 
   useEffect(() => {
-    if (encomendas.length > 0) {
-      const coordenadas: Coordenadas[] = [];
-      
-      encomendas.forEach(e => {
-        if (e.coordOrigem) coordenadas.push(e.coordOrigem);
-        if (e.coordDestino) coordenadas.push(e.coordDestino);
-      });
+    try {
+      if (encomendas.length > 0) {
+        const coordenadas: Coordenadas[] = [];
+        encomendas.forEach(e => {
+          if (e.coordOrigem) coordenadas.push(e.coordOrigem);
+          if (e.coordDestino) coordenadas.push(e.coordDestino);
+        });
 
-      if (coordenadas.length > 0) {
-        const bounds = L.latLngBounds(coordenadas.map(c => [c.lat, c.lng]));
-        map.fitBounds(bounds, { padding: [20, 20] });
+        if (coordenadas.length > 0) {
+          const bounds = L.latLngBounds(coordenadas.map(c => [c.lat, c.lng]));
+          if ((map as any)?._mapPane) {
+            map.fitBounds(bounds, { padding: [20, 20] });
+          }
+        }
+      } else {
+        if ((map as any)?._mapPane) {
+          map.setView([COORDENADAS_TOCANTINS.lat, COORDENADAS_TOCANTINS.lng], ZOOM_TOCANTINS);
+        }
       }
-    } else {
-      // Centralizar no Tocantins se não há encomendas
-      map.setView([COORDENADAS_TOCANTINS.lat, COORDENADAS_TOCANTINS.lng], ZOOM_TOCANTINS);
-    }
+    } catch {}
   }, [map, encomendas]);
 
   return null;
@@ -179,12 +183,23 @@ const MapaRastreamento: React.FC<MapaRastreamentoProps> = ({
     }
   }, [isOpen]);
 
-  // Atualizar código inicial quando prop mudar
+  // Atualizar filtros e buscar automaticamente quando abrir com código inicial
   useEffect(() => {
-    if (codigoInicial) {
-      setFiltros(prev => ({ ...prev, numeroEncomenda: codigoInicial }));
+    if (isOpen && codigoInicial) {
+      const f: FiltrosRastreamento = {
+        numeroEncomenda: codigoInicial,
+        remetente: '',
+        destinatario: '',
+        setorOrigem: 'todos',
+        setorDestino: 'todos',
+        status: 'todos',
+        dataInicio: '',
+        dataFim: ''
+      };
+      setFiltros(f);
+      buscar(f);
     }
-  }, [codigoInicial]);
+  }, [isOpen, codigoInicial]);
 
   // Removido: não aplicar filtros automaticamente ao abrir
 
@@ -381,7 +396,7 @@ const MapaRastreamento: React.FC<MapaRastreamentoProps> = ({
   };
 
   // Ação explícita de busca: garante dados base e aplica filtros atuais
-  const buscar = async () => {
+  const buscar = async (filtrosParam?: FiltrosRastreamento) => {
     try {
       // Garantir setores carregados
       if (setores.length === 0) {
@@ -416,8 +431,8 @@ const MapaRastreamento: React.FC<MapaRastreamentoProps> = ({
         }
       }
 
-      // Aplicar filtros com base explícita
-      await aplicarFiltros(baseEncomendas, filtros);
+      const filtrosParaUsar = filtrosParam ?? filtros;
+      await aplicarFiltros(baseEncomendas, filtrosParaUsar);
     } catch (error) {
       console.error('Erro na busca:', error);
     }
@@ -943,6 +958,25 @@ const MapaRastreamento: React.FC<MapaRastreamentoProps> = ({
     aplicarFiltros();
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      setEncomendas([]);
+      setEncomendasFiltradas([]);
+      setEncomendaSelecionada(null);
+      setShowDetalhes(false);
+      setFiltros({
+        numeroEncomenda: '',
+        remetente: '',
+        destinatario: '',
+        setorOrigem: 'todos',
+        setorDestino: 'todos',
+        status: 'todos',
+        dataInicio: '',
+        dataFim: ''
+      });
+    }
+  }, [isOpen]);
+
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "pendente": return "Pendente";
@@ -1279,6 +1313,7 @@ const MapaRastreamento: React.FC<MapaRastreamentoProps> = ({
                     center={[COORDENADAS_TOCANTINS.lat, COORDENADAS_TOCANTINS.lng]}
                     zoom={ZOOM_TOCANTINS}
                     scrollWheelZoom={true}
+                    zoomAnimation={false}
                     style={{ height: '100%', width: '100%' }}
                   >
                     <TileLayer

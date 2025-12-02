@@ -167,7 +167,7 @@ export class UserController extends BaseController {
       // Se ambas falharam, retornar motivo específico da falha local se disponível
       const errorMessage = localResult.error || 'Credenciais inválidas';
       this.sendError(res, errorMessage, 401);
-      
+
     } catch (error) {
       // Tratar erro conhecido de senha atual incorreta como 400 (Bad Request)
       if (error instanceof Error && error.message === 'Senha atual incorreta') {
@@ -234,7 +234,7 @@ export class UserController extends BaseController {
       }
 
       const result = await UserModel.refreshToken(refreshToken);
-      
+
       this.sendSuccess(res, result, 'Token renovado com sucesso');
     } catch (error) {
       next(error);
@@ -252,7 +252,7 @@ export class UserController extends BaseController {
       }
 
       const user = await UserModel.findById<IUser>(req.user.userId);
-      
+
       if (!user) {
         this.sendError(res, 'Usuário não encontrado', 404);
         return;
@@ -300,10 +300,10 @@ export class UserController extends BaseController {
       }
 
       const data: UpdateUserData = this.sanitizeInput(req.body);
-      
+
       // Remover campos que não podem ser alterados pelo próprio usuário
       delete (data as any).ativo;
-      
+
       const validation = await this.validateUpdateData(data, req.user.userId, req);
       if (!validation.valid) {
         this.sendError(res, validation.errors.join(', '), 400);
@@ -311,7 +311,7 @@ export class UserController extends BaseController {
       }
 
       const updatedUser = await UserModel.updateUser(req.user.userId, data);
-      
+
       if (!updatedUser) {
         this.sendError(res, 'Usuário não encontrado', 404);
         return;
@@ -320,7 +320,7 @@ export class UserController extends BaseController {
       // Log de auditoria (assíncrono, não bloqueia a resposta)
       this.logAudit('UPDATE_PROFILE', 'user', req.user.userId, req.user.userId, data)
         .catch(err => console.error('Erro ao registrar auditoria (UPDATE_PROFILE):', err));
-      
+
       this.sendSuccess(res, updatedUser, 'Perfil atualizado com sucesso');
     } catch (error) {
       next(error);
@@ -356,7 +356,7 @@ export class UserController extends BaseController {
       }
 
       const success = await UserModel.changePassword(req.user.userId, senhaAtual, novaSenha);
-      
+
       if (!success) {
         this.sendError(res, 'Falha ao alterar senha', 500);
         return;
@@ -364,7 +364,7 @@ export class UserController extends BaseController {
 
       // Log de auditoria
       await this.logAudit('CHANGE_PASSWORD', 'user', req.user.userId, req.user.userId);
-      
+
       this.sendSuccess(res, null, 'Senha alterada com sucesso');
     } catch (error) {
       // Tratar erro específico de senha atual incorreta
@@ -402,7 +402,7 @@ export class UserController extends BaseController {
   override async store(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data: CreateUserData = this.sanitizeInput(req.body);
-      
+
       // Validação básica para registro público
       const validation = await this.validatePublicStoreData(data);
       if (!validation.valid) {
@@ -411,12 +411,12 @@ export class UserController extends BaseController {
       }
 
       const newUser = await UserModel.createUser(data);
-      
+
       // Log de auditoria para registro público
       await this.logAudit('PUBLIC_REGISTER', 'user', newUser.id!, newUser.id!, {
         createdUser: { id: newUser.id, email: newUser.email, nome: newUser.nome }
       });
-      
+
       this.sendSuccess(res, newUser, 'Usuário criado com sucesso', {}, 201);
     } catch (error) {
       next(error);
@@ -440,7 +440,7 @@ export class UserController extends BaseController {
       }
 
       const data: CreateUserData = this.sanitizeInput(req.body);
-      
+
       const validation = await this.validateStoreData(data, req);
       if (!validation.valid) {
         this.sendError(res, validation.errors.join(', '), 400);
@@ -448,12 +448,12 @@ export class UserController extends BaseController {
       }
 
       const newUser = await UserModel.createUser(data);
-      
+
       // Log de auditoria
       await this.logAudit('CREATE_USER', 'user', newUser.id!, req.user.userId, {
         createdUser: { id: newUser.id, email: newUser.email, nome: newUser.nome }
       });
-      
+
       this.sendSuccess(res, newUser, 'Usuário criado com sucesso', {}, 201);
     } catch (error) {
       next(error);
@@ -466,7 +466,7 @@ export class UserController extends BaseController {
   override async update(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       console.log('🔍 [UPDATE USER] Iniciando atualização de usuário');
-      
+
       if (!req.user) {
         this.sendError(res, 'Usuário não autenticado', 401);
         return;
@@ -474,9 +474,9 @@ export class UserController extends BaseController {
 
       const { id } = req.params;
       const userId = Number(id);
-      
+
       console.log('🔍 [UPDATE USER] ID do usuário:', userId);
-      
+
       if (!id || isNaN(userId)) {
         this.sendError(res, 'ID inválido', 400);
         return;
@@ -485,9 +485,9 @@ export class UserController extends BaseController {
       // Verificar se é o próprio usuário ou se tem permissão de administrador
       const isOwnProfile = userId === req.user.userId;
       const hasAdminPermission = this.hasPermission(req.user, 'update_user');
-      
+
       console.log('🔍 [UPDATE USER] Permissões - Próprio perfil:', isOwnProfile, 'Admin:', hasAdminPermission);
-      
+
       if (!isOwnProfile && !hasAdminPermission) {
         this.sendError(res, 'Sem permissão para atualizar este usuário', 403);
         return;
@@ -495,7 +495,7 @@ export class UserController extends BaseController {
 
       const data: UpdateUserData = this.sanitizeInput(req.body);
       console.log('🔍 [UPDATE USER] Dados sanitizados:', Object.keys(data));
-      
+
       // Se não é administrador, remover campos que só admin pode alterar
       if (!hasAdminPermission) {
         delete (data as any).ativo;
@@ -507,7 +507,7 @@ export class UserController extends BaseController {
       console.log('🔍 [UPDATE USER] Iniciando validação dos dados');
       const validation = await this.validateUpdateData(data, userId, req);
       console.log('🔍 [UPDATE USER] Validação concluída:', validation.valid);
-      
+
       if (!validation.valid) {
         this.sendError(res, validation.errors.join(', '), 400);
         return;
@@ -541,7 +541,7 @@ export class UserController extends BaseController {
       console.log('🔍 [UPDATE USER] Iniciando atualização no banco de dados');
       const updatedUser = await UserModel.updateUser(userId, data);
       console.log('🔍 [UPDATE USER] Atualização no banco concluída');
-      
+
       if (!updatedUser) {
         this.sendError(res, 'Usuário não encontrado', 404);
         return;
@@ -552,7 +552,7 @@ export class UserController extends BaseController {
       this.logAudit('UPDATE_USER', 'user', userId, req.user.userId, data)
         .then(() => console.log('✅ [UPDATE USER] Log de auditoria concluído com sucesso'))
         .catch(err => console.error('❌ [UPDATE USER] Erro ao registrar auditoria:', err));
-      
+
       console.log('🔍 [UPDATE USER] Enviando resposta de sucesso');
       this.sendSuccess(res, updatedUser, 'Usuário atualizado com sucesso');
       console.log('🔍 [UPDATE USER] Resposta enviada com sucesso');
@@ -579,7 +579,7 @@ export class UserController extends BaseController {
 
       const { id } = req.params;
       const { ativo } = req.body;
-      
+
       if (!id || isNaN(Number(id))) {
         this.sendError(res, 'ID inválido', 400);
         return;
@@ -597,7 +597,7 @@ export class UserController extends BaseController {
       }
 
       const updatedUser = await UserModel.toggleUserStatus(Number(id), ativo);
-      
+
       if (!updatedUser) {
         this.sendError(res, 'Usuário não encontrado', 404);
         return;
@@ -610,7 +610,7 @@ export class UserController extends BaseController {
         Number(id),
         req.user.userId
       );
-      
+
       this.sendSuccess(res, updatedUser, `Usuário ${ativo ? 'ativado' : 'desativado'} com sucesso`);
     } catch (error) {
       next(error);
@@ -634,7 +634,7 @@ export class UserController extends BaseController {
 
       const { id } = req.params;
       const { novaSenha } = req.body;
-      
+
       if (!id || isNaN(Number(id))) {
         this.sendError(res, 'ID inválido', 400);
         return;
@@ -646,7 +646,7 @@ export class UserController extends BaseController {
       }
 
       const success = await UserModel.resetPassword(Number(id), novaSenha);
-      
+
       if (!success) {
         this.sendError(res, 'Usuário não encontrado ou falha ao resetar senha', 404);
         return;
@@ -654,7 +654,7 @@ export class UserController extends BaseController {
 
       // Log de auditoria
       await this.logAudit('RESET_PASSWORD', 'user', Number(id), req.user.userId);
-      
+
       this.sendSuccess(res, null, 'Senha resetada com sucesso');
     } catch (error) {
       next(error);
@@ -668,14 +668,14 @@ export class UserController extends BaseController {
     try {
       const { departamento } = req.params;
       const pagination = this.extractPagination(req.query as QueryParams);
-      
+
       if (!departamento) {
         this.sendError(res, 'Departamento é obrigatório', 400);
         return;
       }
 
       const result = await UserModel.findByDepartment(departamento, pagination);
-      
+
       this.sendSuccess(res, result.data, 'Usuários recuperados com sucesso', {
         pagination: result.pagination
       });
@@ -691,14 +691,14 @@ export class UserController extends BaseController {
     try {
       const { cargo } = req.params;
       const pagination = this.extractPagination(req.query as QueryParams);
-      
+
       if (!cargo) {
         this.sendError(res, 'Cargo é obrigatório', 400);
         return;
       }
 
       const result = await UserModel.findByRole(cargo, pagination);
-      
+
       this.sendSuccess(res, result.data, 'Usuários recuperados com sucesso', {
         pagination: result.pagination
       });
@@ -713,7 +713,7 @@ export class UserController extends BaseController {
   async searchByName(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { q } = req.query;
-      
+
       if (!q || typeof q !== 'string') {
         res.status(400).json({
           success: false,
@@ -747,7 +747,11 @@ export class UserController extends BaseController {
   async searchUsersAndSectors(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { q } = req.query;
-      
+
+      console.log('🔍 [BACKEND] ========================================');
+      console.log('🔍 [BACKEND] searchUsersAndSectors chamado com q:', q);
+      console.log('🔍 [BACKEND] ========================================');
+
       if (!q || typeof q !== 'string') {
         res.status(400).json({
           success: false,
@@ -759,7 +763,7 @@ export class UserController extends BaseController {
       // Aumentar o limite padrão para 20 para mostrar todas as delegacias
       const limit = parseInt(req.query.limit as string) || 20;
       const searchTerm = `%${q.toLowerCase()}%`;
-      
+
       // Função para remover acentos usando TRANSLATE do Oracle
       const removeAccents = (field: string) => `
         TRANSLATE(LOWER(${field}), 
@@ -830,14 +834,31 @@ export class UserController extends BaseController {
       ]);
 
       // Processar setores encontrados
-      const sectors = (sectorsResult.rows || []).map((row: any) => ({
-        id: row.ID,
-        NOME_SETOR: row.NOME_SETOR,
-        CODIGO_SETOR: row.CODIGO_SETOR,
-        ORGAO: row.ORGAO,
-        tipo: 'sector',
-        usuarios: []
-      }));
+      console.log('🔍 [BACKEND] Rows do sectorsResult:', sectorsResult.rows?.length);
+      if (sectorsResult.rows && sectorsResult.rows.length > 0) {
+        const firstRow = sectorsResult.rows[0];
+        console.log('🔍 [BACKEND] Primeira row completa:', firstRow);
+        console.log('🔍 [BACKEND] Keys da primeira row:', Object.keys(firstRow));
+        console.log('🔍 [BACKEND] NOME_SETOR:', firstRow.NOME_SETOR);
+        console.log('🔍 [BACKEND] Nome_Setor:', firstRow.Nome_Setor);
+        console.log('🔍 [BACKEND] nome_setor:', firstRow.nome_setor);
+      }
+      
+      const sectors = (sectorsResult.rows || []).map((row: any) => {
+        // Tentar diferentes variações de case para o nome da coluna
+        const nomeSetor = row.NOME_SETOR || row.Nome_Setor || row.nome_setor || row['NOME_SETOR'];
+        return {
+          id: row.ID || row.Id || row.id,
+          NOME_SETOR: nomeSetor,
+          CODIGO_SETOR: row.CODIGO_SETOR || row.Codigo_Setor || row.codigo_setor,
+          ORGAO: row.ORGAO || row.Orgao || row.orgao,
+          tipo: 'sector',
+          usuarios: []
+        };
+      });
+
+      console.log('🔍 [BACKEND] Setores encontrados:', sectors.length);
+      console.log('🔍 [BACKEND] Primeiro setor processado:', JSON.stringify(sectors[0], null, 2));
 
       // Processar usuários dos setores encontrados
       const usersFromSectors = (usersFromSectorsResult.rows || []).map((row: any) => ({
@@ -851,6 +872,9 @@ export class UserController extends BaseController {
         orgao: row.ORGAO,
         tipo: 'user'
       }));
+
+      console.log('🔍 [BACKEND] Usuários dos setores encontrados:', usersFromSectors.length);
+      console.log('🔍 [BACKEND] Primeiro usuário:', usersFromSectors[0]);
 
       // Processar usuários encontrados por nome
       const users = (usersResult.rows || []).map((row: any) => ({
@@ -867,10 +891,10 @@ export class UserController extends BaseController {
 
       // Detectar se a pesquisa é por setor (quando encontra setores)
       const isSearchBySector = sectors.length > 0;
-      
+
       // Agrupar usuários por setor
       const setorMap = new Map();
-      
+
       // Adicionar setores encontrados
       sectors.forEach(setor => {
         setorMap.set(setor.id, {
@@ -912,13 +936,22 @@ export class UserController extends BaseController {
       // Agora todos os setores encontrados serão exibidos, independente de terem usuários vinculados
 
       // Verificar se há setores sem usuários para mostrar mensagem
-      const sectorsWithoutUsers = isSearchBySector ? 
+      const sectorsWithoutUsers = isSearchBySector ?
         sectors.filter(setor => !setorMap.has(setor.id)) : [];
 
       // Converter para array e criar estrutura hierárquica
       const groupedResults: any[] = [];
-      
+
+      console.log('🔍 [BACKEND] SetorMap size:', setorMap.size);
+      console.log('🔍 [BACKEND] SetorMap keys:', Array.from(setorMap.keys()));
+
       Array.from(setorMap.values()).forEach((setor: any) => {
+        console.log('🔍 [BACKEND] Processando setor:', {
+          id: setor.id,
+          NOME_SETOR: setor.NOME_SETOR,
+          usuarios: setor.usuarios.length
+        });
+
         // Adicionar o setor
         groupedResults.push({
           id: setor.id,
@@ -928,7 +961,7 @@ export class UserController extends BaseController {
           tipo: 'sector',
           isGroup: true
         });
-        
+
         // Adicionar os usuários do setor
         setor.usuarios.forEach((user: any) => {
           groupedResults.push({
@@ -939,12 +972,15 @@ export class UserController extends BaseController {
         });
       });
 
+      console.log('🔍 [BACKEND] Resultados agrupados:', groupedResults.length);
+      console.log('🔍 [BACKEND] Primeiros 5 resultados:', groupedResults.slice(0, 5));
+
       // Limitar resultados
       const combinedResults = groupedResults.slice(0, limit * 2); // Aumentar limite para acomodar estrutura hierárquica
 
       // Preparar mensagem de resposta
       let message = `Encontrados ${combinedResults.length} resultados para "${q}"`;
-      
+
       // Adicionar informação sobre setores sem usuários
       if (sectorsWithoutUsers.length > 0) {
         const sectorsNames = sectorsWithoutUsers.map(s => s.NOME_SETOR).join(', ');
@@ -982,7 +1018,7 @@ export class UserController extends BaseController {
   async findBySetor(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { setor } = req.params;
-      
+
       const pagination = {
         page: parseInt(req.query.page as string) || 1,
         limit: parseInt(req.query.limit as string) || 10
@@ -1006,7 +1042,7 @@ export class UserController extends BaseController {
   async findByOrgao(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { orgao } = req.params;
-      
+
       const pagination = {
         page: parseInt(req.query.page as string) || 1,
         limit: parseInt(req.query.limit as string) || 10
@@ -1076,8 +1112,8 @@ export class UserController extends BaseController {
         limit: hasLimitParam ? pagination.limit : 0
       };
 
-      const result = await UserModel.findUsersWithSetor(filters, effectivePagination);
-      
+      const result = await UserModel.findUsersWithSetor(filters, effectivePagination as any);
+
       // Retornar apenas o array de usuários em data, com paginação separada
       this.sendSuccess(
         res,
@@ -1106,7 +1142,7 @@ export class UserController extends BaseController {
       }
 
       const stats = await UserModel.getUserStats();
-      
+
       this.sendSuccess(res, stats, 'Estatísticas recuperadas com sucesso');
     } catch (error) {
       next(error);
@@ -1282,7 +1318,7 @@ export class UserController extends BaseController {
         'SELECT COUNT(*) as count FROM processos WHERE usuario_criador = :userId OR usuario_responsavel = :userId',
         { userId: id }
       );
-      
+
       if ((processCount[0] as any).COUNT > 0) {
         return { allowed: false, reason: 'Usuário possui processos associados' };
       }
@@ -1307,7 +1343,7 @@ export class UserController extends BaseController {
   async destroyMultiple(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const { ids } = req.body;
-      
+
       if (!Array.isArray(ids) || ids.length === 0) {
         this.sendError(res, 'IDs não fornecidos ou inválidos', 400);
         return;
@@ -1319,11 +1355,11 @@ export class UserController extends BaseController {
       for (const id of ids) {
         try {
           // Verificar se pode excluir
-           const canDelete = await this.canDelete(id, req);
-           if (!canDelete.allowed) {
-             errors.push({ id, error: canDelete.reason });
-             continue;
-           }
+          const canDelete = await this.canDelete(id, req);
+          if (!canDelete.allowed) {
+            errors.push({ id, error: canDelete.reason });
+            continue;
+          }
 
           // Excluir usuário
           const deleted = await UserModel.delete(id);
@@ -1354,12 +1390,12 @@ export class UserController extends BaseController {
    */
   protected override hasPermission(user: any | undefined, permission: string): boolean {
     if (!user) return false;
-    
+
     // Implementação básica baseada no cargo
     // Em um sistema real, isso seria mais complexo com tabelas de permissões
     const adminRoles = ['ADMINISTRADOR', 'ADMIN', 'GERENTE'];
     const isAdmin = adminRoles.includes(user.role?.toUpperCase() || '');
-    
+
     switch (permission) {
       case 'create_user':
       case 'update_user':

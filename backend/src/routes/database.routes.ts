@@ -30,25 +30,26 @@ router.post('/execute-script', async (req, res) => {
   try {
     await DatabaseService.ensureInitialized();
     const connection = await DatabaseService.getConnection();
-    
+
     const { script } = req.body;
-    
+
     if (!script) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Script SQL é obrigatório'
       });
+      return;
     }
-    
+
     // Dividir o script em comandos individuais
     const scriptStr = typeof script === 'string' ? script : String(script);
     const commands = scriptStr
       .split(';')
       .map((cmd: string) => cmd.trim())
       .filter((cmd: string) => cmd.length > 0 && !cmd.startsWith('--'));
-    
+
     const results = [];
-    
+
     for (const command of commands) {
       try {
         console.log(`Executando: ${command.substring(0, 100)}...`);
@@ -67,13 +68,13 @@ router.post('/execute-script', async (req, res) => {
         });
       }
     }
-    
+
     await connection.commit();
     await connection.close();
-    
+
     const successCount = results.filter(r => r.success).length;
     const errorCount = results.filter(r => !r.success).length;
-    
+
     res.json({
       success: errorCount === 0,
       summary: {
@@ -83,7 +84,7 @@ router.post('/execute-script', async (req, res) => {
       },
       results
     });
-    
+
   } catch (error) {
     console.error('Erro ao executar script:', error);
     res.status(500).json({
@@ -101,18 +102,18 @@ router.get('/check-tables', async (req, res) => {
   try {
     await DatabaseService.ensureInitialized();
     const connection = await DatabaseService.getConnection();
-    
+
     const expectedTables = [
-      'users', 'processos', 'movimentacoes', 'documentos', 
+      'users', 'processos', 'movimentacoes', 'documentos',
       'tipos_processo', 'setores', 'auditoria'
     ];
-    
+
     const tableStatus = [];
-    
+
     for (const tableName of expectedTables) {
       try {
         const tableNameUpper = tableName.toUpperCase();
-        
+
         // Verificar se a tabela ou view existe
         const tableExistsResult = await connection.execute(
           `SELECT COUNT(*) as table_exists FROM (
@@ -122,16 +123,16 @@ router.get('/check-tables', async (req, res) => {
           )`,
           { tableName: tableNameUpper }
         ) as OracleResult;
-        
+
         const tableExists = (tableExistsResult.rows?.[0] as any)?.TABLE_EXISTS > 0;
-        
+
         if (tableExists) {
           // Contar colunas
           const columnsResult = await connection.execute(
             `SELECT COUNT(*) as column_count FROM user_tab_columns WHERE table_name = :tableName`,
             { tableName: tableNameUpper }
           ) as OracleResult;
-          
+
           // Contar registros
           let rowCount: number | string = 0;
           try {
@@ -142,7 +143,7 @@ router.get('/check-tables', async (req, res) => {
           } catch (error) {
             rowCount = 'N/A';
           }
-          
+
           tableStatus.push({
             table: tableName,
             exists: true,
@@ -157,7 +158,7 @@ router.get('/check-tables', async (req, res) => {
             rowCount: 0
           });
         }
-        
+
       } catch (error) {
         tableStatus.push({
           table: tableName,
@@ -168,23 +169,23 @@ router.get('/check-tables', async (req, res) => {
         });
       }
     }
-    
+
     await connection.close();
-    
+
     const summary = {
       totalTables: expectedTables.length,
       existingTables: tableStatus.filter(t => t.exists).length,
       missingTables: tableStatus.filter(t => !t.exists).map(t => t.table),
       allTablesExist: tableStatus.every(t => t.exists)
     };
-    
+
     res.json({
       success: true,
       summary,
       details: tableStatus,
       timestamp: new Date().toISOString()
     });
-    
+
   } catch (error) {
     console.error('Erro ao verificar tabelas:', error);
     res.status(500).json({
@@ -202,18 +203,18 @@ router.get('/table-structure/:tableName', async (req, res): Promise<void> => {
   try {
     await DatabaseService.ensureInitialized();
     const connection = await DatabaseService.getConnection();
-    
+
     const { tableName } = req.params;
     const tableNameUpper = tableName.toUpperCase();
-    
+
     // Verificar se a tabela existe
     const tableExistsResult = await connection.execute(
       `SELECT COUNT(*) as table_exists FROM user_tables WHERE table_name = :tableName`,
       { tableName: tableNameUpper }
     ) as OracleResult;
-    
+
     const tableExists = (tableExistsResult.rows?.[0] as any)?.TABLE_EXISTS > 0;
-    
+
     if (!tableExists) {
       await connection.close();
       res.json({
@@ -221,8 +222,9 @@ router.get('/table-structure/:tableName', async (req, res): Promise<void> => {
         error: `Tabela ${tableNameUpper} não encontrada`,
         tableExists: false
       });
+      return;
     }
-    
+
     // Obter estrutura da tabela
     const structureResult = await connection.execute(
       `SELECT 
@@ -239,7 +241,7 @@ router.get('/table-structure/:tableName', async (req, res): Promise<void> => {
       ORDER BY COLUMN_ID`,
       { tableName: tableNameUpper }
     ) as { rows?: TableStructureRow[] };
-    
+
     // Verificar se tem dados na tabela
     let rowCount: number | string = 0;
     try {
@@ -250,9 +252,9 @@ router.get('/table-structure/:tableName', async (req, res): Promise<void> => {
     } catch (error) {
       rowCount = 'N/A';
     }
-    
+
     await connection.close();
-    
+
     const columns = structureResult.rows?.map(row => ({
       name: row.COLUMN_NAME,
       type: row.DATA_TYPE,
@@ -263,7 +265,7 @@ router.get('/table-structure/:tableName', async (req, res): Promise<void> => {
       defaultValue: row.DATA_DEFAULT,
       position: row.COLUMN_ID
     })) || [];
-    
+
     res.json({
       success: true,
       tableExists: true,
@@ -272,7 +274,7 @@ router.get('/table-structure/:tableName', async (req, res): Promise<void> => {
       totalColumns: columns.length,
       columns: columns
     });
-    
+
   } catch (error) {
     console.error('Erro ao verificar estrutura da tabela:', error);
     res.status(500).json({
@@ -290,9 +292,9 @@ router.post('/execute-sql', async (req: Request, res: Response, next: NextFuncti
   try {
     await DatabaseService.ensureInitialized();
     const connection = await DatabaseService.getConnection();
-    
+
     const { sql } = req.body;
-    
+
     if (!sql) {
       res.status(400).json({
         success: false,
@@ -300,11 +302,11 @@ router.post('/execute-sql', async (req: Request, res: Response, next: NextFuncti
       });
       return;
     }
-    
+
     const result = await connection.execute(sql) as OracleResult;
-    
+
     await connection.close();
-    
+
     res.json({
       success: true,
       data: result.rows || [],
@@ -325,11 +327,11 @@ router.post('/execute-sql', async (req: Request, res: Response, next: NextFuncti
  */
 router.post('/migrate-missing-tables', async (req: Request, res: Response): Promise<void> => {
   let connection;
-  
+
   try {
     await DatabaseService.ensureInitialized();
     connection = await DatabaseService.getConnection();
-    
+
     const migrations = [
       {
         name: 'CREATE_ENCOMENDAS_TABLE',
@@ -421,9 +423,9 @@ router.post('/migrate-missing-tables', async (req: Request, res: Response): Prom
         `
       }
     ];
-    
+
     const results = [];
-    
+
     for (const migration of migrations) {
       try {
         console.log(`Executando migração: ${migration.name}`);
@@ -443,9 +445,9 @@ router.post('/migrate-missing-tables', async (req: Request, res: Response): Prom
         // Continue com as próximas migrações mesmo se uma falhar
       }
     }
-    
+
     await connection.close();
-    
+
     res.json({
       success: true,
       message: 'Migrações executadas',
@@ -467,11 +469,11 @@ router.post('/migrate-missing-tables', async (req: Request, res: Response): Prom
 // Endpoint para executar alterações na tabela users
 router.post('/alter-users', async (req: Request, res: Response) => {
   let connection;
-  
+
   try {
     await DatabaseService.ensureInitialized();
     connection = await DatabaseService.getConnection();
-    
+
     const alterations = [
       // Verificar e remover colunas se existirem
       {
@@ -539,9 +541,9 @@ router.post('/alter-users', async (req: Request, res: Response) => {
         `
       }
     ];
-    
+
     const results = [];
-    
+
     for (const alteration of alterations) {
       try {
         await connection.execute(alteration.sql);
@@ -558,7 +560,7 @@ router.post('/alter-users', async (req: Request, res: Response) => {
         });
       }
     }
-    
+
     // Verificar estrutura final
     const checkResult = await connection.execute(`
       SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, NULLABLE
@@ -567,19 +569,19 @@ router.post('/alter-users', async (req: Request, res: Response) => {
       AND (COLUMN_NAME LIKE '%FUNCIONAL%' OR COLUMN_NAME LIKE '%VINCULO%' OR COLUMN_NAME IN ('PIS_PASEP', 'NOME_PAI', 'NOME_MAE'))
       ORDER BY COLUMN_NAME
     `) as OracleResult;
-    
+
     await connection.commit();
-    
+
     res.json({
       success: true,
       message: 'Alterações na tabela USERS executadas',
       results,
       finalStructure: checkResult.rows
     });
-    
+
   } catch (error: any) {
     console.error('Erro ao alterar tabela users:', error);
-    
+
     if (connection) {
       try {
         await connection.rollback();
@@ -587,7 +589,7 @@ router.post('/alter-users', async (req: Request, res: Response) => {
         console.error('Erro no rollback:', rollbackError);
       }
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Erro ao executar alterações na tabela users',
@@ -619,7 +621,7 @@ router.post('/rename-tables-to-portuguese', async (req: Request, res: Response):
         sql: 'DROP TABLE DOCUMENTS'
       },
       {
-        name: 'DROP_SYSTEM_SETTINGS_TABLE', 
+        name: 'DROP_SYSTEM_SETTINGS_TABLE',
         description: 'Remover tabela SYSTEM_SETTINGS duplicada (já existe CONFIGURACOES)',
         sql: 'DROP TABLE SYSTEM_SETTINGS'
       },
@@ -647,22 +649,22 @@ router.post('/rename-tables-to-portuguese', async (req: Request, res: Response):
     for (const operation of renameOperations) {
       try {
         console.log(`Executando: ${operation.name} - ${operation.description}`);
-        
+
         const result = await DatabaseService.executeQuery(operation.sql);
-        
+
         results.push({
           operation: operation.name,
           description: operation.description,
           status: 'SUCCESS',
           sql: operation.sql
         });
-        
+
         successCount++;
         console.log(`✓ ${operation.name} executado com sucesso`);
-        
+
       } catch (error: any) {
         console.error(`✗ Erro em ${operation.name}:`, error.message);
-        
+
         results.push({
           operation: operation.name,
           description: operation.description,
@@ -670,7 +672,7 @@ router.post('/rename-tables-to-portuguese', async (req: Request, res: Response):
           error: error.message,
           sql: operation.sql
         });
-        
+
         errorCount++;
       }
     }
@@ -801,7 +803,7 @@ router.post('/fix-table-relationships', async (req: Request, res: Response): Pro
     for (const operation of allOperations) {
       try {
         console.log(`Executando: ${operation.name}`);
-        
+
         // Verificar se a constraint já existe antes de criar
         if (operation.name.includes('_FK')) {
           const constraintName = operation.sql.match(/CONSTRAINT\s+(\w+)/i)?.[1];
@@ -810,7 +812,7 @@ router.post('/fix-table-relationships', async (req: Request, res: Response): Pro
               `SELECT COUNT(*) as count FROM user_constraints WHERE constraint_name = :constraintName`,
               { constraintName }
             ) as OracleResult;
-            
+
             if ((checkResult.rows?.[0] as any)?.COUNT > 0) {
               operations.push({
                 operation: operation.name,
@@ -821,7 +823,7 @@ router.post('/fix-table-relationships', async (req: Request, res: Response): Pro
             }
           }
         }
-        
+
         // Verificar se a coluna já existe antes de criar
         if (operation.name.includes('_COL')) {
           const columnMatch = operation.sql.match(/ADD\s+(\w+)/i);
@@ -832,7 +834,7 @@ router.post('/fix-table-relationships', async (req: Request, res: Response): Pro
               `SELECT COUNT(*) as count FROM user_tab_columns WHERE table_name = :tableName AND column_name = :columnName`,
               { tableName: tableName.toUpperCase(), columnName: columnName.toUpperCase() }
             ) as OracleResult;
-            
+
             if ((checkResult.rows?.[0] as any)?.COUNT > 0) {
               operations.push({
                 operation: operation.name,
@@ -850,11 +852,11 @@ router.post('/fix-table-relationships', async (req: Request, res: Response): Pro
           status: 'SUCCESS',
           message: operation.description
         });
-        
+
       } catch (error) {
         const errorMessage = (error as Error).message;
         console.error(`Erro em ${operation.name}:`, errorMessage);
-        
+
         // Se o erro for que a constraint já existe, não é um erro crítico
         if (errorMessage.includes('ORA-02275') || errorMessage.includes('já existe')) {
           operations.push({
@@ -888,8 +890,8 @@ router.post('/fix-table-relationships', async (req: Request, res: Response): Pro
 
     res.json({
       success: errors.length === 0,
-      message: errors.length === 0 
-        ? 'Relacionamentos das tabelas corrigidos com sucesso!' 
+      message: errors.length === 0
+        ? 'Relacionamentos das tabelas corrigidos com sucesso!'
         : 'Alguns relacionamentos não puderam ser criados',
       summary,
       operations,
@@ -907,7 +909,7 @@ router.post('/fix-table-relationships', async (req: Request, res: Response): Pro
         console.error('Erro ao fechar conexão:', closeError);
       }
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Erro ao corrigir relacionamentos das tabelas',
@@ -999,13 +1001,13 @@ router.post('/create-setores-table', async (req: Request, res: Response): Promis
     for (const operation of allOperations) {
       try {
         console.log(`Executando: ${operation.name}`);
-        
+
         // Verificar se a tabela SETORES já existe
         if (operation.name === 'CREATE_SETORES_TABLE') {
           const checkResult = await connection.execute(
             `SELECT COUNT(*) as count FROM user_tables WHERE table_name = 'SETORES'`
           ) as OracleResult;
-          
+
           if ((checkResult.rows?.[0] as any)?.COUNT > 0) {
             operations.push({
               operation: operation.name,
@@ -1015,7 +1017,7 @@ router.post('/create-setores-table', async (req: Request, res: Response): Promis
             continue;
           }
         }
-        
+
         // Verificar se a constraint já existe
         if (operation.name.includes('_FK')) {
           const constraintName = operation.sql.match(/CONSTRAINT\s+(\w+)/i)?.[1];
@@ -1024,7 +1026,7 @@ router.post('/create-setores-table', async (req: Request, res: Response): Promis
               `SELECT COUNT(*) as count FROM user_constraints WHERE constraint_name = :constraintName`,
               { constraintName }
             ) as OracleResult;
-            
+
             if ((checkResult.rows?.[0] as any)?.COUNT > 0) {
               operations.push({
                 operation: operation.name,
@@ -1042,11 +1044,11 @@ router.post('/create-setores-table', async (req: Request, res: Response): Promis
           status: 'SUCCESS',
           message: operation.description
         });
-        
+
       } catch (error) {
         const errorMessage = (error as Error).message;
         console.error(`Erro em ${operation.name}:`, errorMessage);
-        
+
         // Se o erro for que já existe, não é um erro crítico
         if (errorMessage.includes('ORA-00955') || errorMessage.includes('já existe')) {
           operations.push({
@@ -1080,8 +1082,8 @@ router.post('/create-setores-table', async (req: Request, res: Response): Promis
 
     res.json({
       success: errors.length === 0,
-      message: errors.length === 0 
-        ? 'Tabela SETORES criada e relacionamentos corrigidos com sucesso!' 
+      message: errors.length === 0
+        ? 'Tabela SETORES criada e relacionamentos corrigidos com sucesso!'
         : 'Alguns relacionamentos não puderam ser criados',
       summary,
       operations,
@@ -1099,7 +1101,7 @@ router.post('/create-setores-table', async (req: Request, res: Response): Promis
         console.error('Erro ao fechar conexão:', closeError);
       }
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Erro ao criar tabela SETORES e relacionamentos',
@@ -1114,7 +1116,7 @@ router.post('/add-endereco-fields-setores', async (req: Request, res: Response):
   try {
     await DatabaseService.ensureInitialized();
     const connection = await DatabaseService.getConnection();
-    
+
     const operations = [
       {
         name: 'ADD_LOGRADOURO',
@@ -1176,7 +1178,7 @@ router.post('/add-endereco-fields-setores', async (req: Request, res: Response):
           WHERE table_name = 'SETORES' 
           AND column_name = '${operation.name.replace('ADD_', '')}'
         `;
-        
+
         const checkResult = await connection.execute(checkColumnSql) as OracleResult;
         const columnExists = checkResult.rows?.[0]?.COLUMN_EXISTS > 0;
 

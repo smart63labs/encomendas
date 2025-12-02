@@ -320,7 +320,11 @@ const MapUpdater: React.FC<{ center: [number, number]; zoom: number }> = ({ cent
   const map = useMap();
 
   useEffect(() => {
-    map.setView(center, zoom);
+    try {
+      if ((map as any)?._mapPane) {
+        map.setView(center, zoom);
+      }
+    } catch {}
   }, [map, center, zoom]);
 
   return null;
@@ -673,6 +677,7 @@ const MapaGeralSetores: React.FC<MapaGeralSetoresProps> = React.memo(({ setores,
                   <MapContainer
                     center={center}
                     zoom={zoom}
+                    zoomAnimation={false}
                     style={{ height: '100%', width: '100%' }}
                     className="rounded-lg"
                   >
