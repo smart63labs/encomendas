@@ -25,12 +25,14 @@ const Login: React.FC = () => {
   const location = useLocation();
 
   // Notificação via modal (sem toast)
-  const { notification, isOpen, showSuccess, hideNotification } = useNotification();
+  const { notification, isOpen, showSuccess, showError, hideNotification } = useNotification();
 
   const handleNotificationClose = () => {
     hideNotification();
-    const from = (location.state as any)?.from?.pathname || '/';
-    navigate(from, { replace: true });
+    if (notification?.variant === 'success') {
+      const from = (location.state as any)?.from?.pathname || '/';
+      navigate(from, { replace: true });
+    }
   };
 
   // Função para formatar CPF
@@ -117,7 +119,17 @@ const Login: React.FC = () => {
       // quando isAuthenticated mudar para true
     } catch (error: any) {
       console.error('Erro no login:', error);
-      setError(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
+
+      // Verificar se é erro de usuário inativo
+      if (error.message && (error.message.includes('Usuário inativo') || error.message.includes('Usuario inativo'))) {
+        showError(
+          'Acesso Negado',
+          'Este usuário está inativo no sistema. Por favor, entre em contato com o administrador.'
+        );
+        setError(''); // Limpar erro inline se houver
+      } else {
+        setError(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -200,10 +212,10 @@ const Login: React.FC = () => {
           <div className="text-center mb-8">
             {/* Logo do Governo (Mobile Only) */}
             <div className="flex md:hidden justify-center mb-6">
-              <img 
-                src={logoGoverno} 
-                alt="Logo Governo" 
-                className="h-16 object-contain drop-shadow-md" 
+              <img
+                src={logoGoverno}
+                alt="Logo Governo"
+                className="h-16 object-contain drop-shadow-md"
               />
             </div>
 
