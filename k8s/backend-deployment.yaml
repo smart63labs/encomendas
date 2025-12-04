@@ -104,18 +104,19 @@ spec:
       volumes:
       - name: backend-logs
         emptyDir: {}
-      initContainers:
-      - name: wait-for-oracle
-        image: busybox:1.35
-        command: ['sh', '-c']
-        args:
-        - |
-          echo "Waiting for Oracle database to be ready..."
-          until nc -z oracle-service 1521; do
-            echo "Oracle is not ready yet. Waiting..."
-            sleep 5
-          done
-          echo "Oracle is ready!"
+      # initContainers removido pois o banco está na nuvem
+      # initContainers:
+      # - name: wait-for-oracle
+      #   image: busybox:1.35
+      #   command: ['sh', '-c']
+      #   args:
+      #   - |
+      #     echo "Waiting for Oracle database to be ready..."
+      #     until nc -z cdbsfz-vip 1521; do
+      #       echo "Oracle is not ready yet. Waiting..."
+      #       sleep 5
+      #     done
+      #     echo "Oracle is ready!"
 
 ---
 apiVersion: v1

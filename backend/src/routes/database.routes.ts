@@ -104,7 +104,7 @@ router.get('/check-tables', async (req, res) => {
     const connection = await DatabaseService.getConnection();
 
     const expectedTables = [
-      'users', 'processos', 'movimentacoes', 'documentos',
+      'usuarios', 'processos', 'movimentacoes', 'documentos',
       'tipos_processo', 'setores', 'auditoria'
     ];
 

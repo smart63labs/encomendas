@@ -32,19 +32,29 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3001
-      - DB_USER=protocolo_user
-      - DB_PASSWORD=Anderline49
-      - DB_CONNECT_STRING=oracle-db:1521/FREEPDB1
-      - DB_HOST=oracle-db
+      # Configuração para banco em nuvem
+      - DB_USER=protocolo
+      - DB_PASSWORD=P56$$etrw&
+      - DB_CONNECT_STRING=cdbsfz-vip:1521/prothm.sefaz.to.gov.br
+      - DB_HOST=cdbsfz-vip
       - DB_PORT=1521
-      - DB_SERVICE_NAME=FREEPDB1
-      - DB_SID=FREEPDB1
+      - DB_SERVICE_NAME=prothm.sefaz.to.gov.br
+      - DB_SID=
+      # Configuração para banco localhost (comentado)
+      # - DB_USER=protocolo_user
+      # - DB_PASSWORD=Anderline49
+      # - DB_CONNECT_STRING=oracle-db:1521/FREEPDB1
+      # - DB_HOST=oracle-db
+      # - DB_PORT=1521
+      # - DB_SERVICE_NAME=FREEPDB1
+      # - DB_SID=FREEPDB1
       - BYPASS_RATE_LIMIT=true
     ports:
       - "3001:3001"
-    depends_on:
-      oracle-db:
-        condition: service_healthy
+    # depends_on removido pois o banco está na nuvem
+    # depends_on:
+    #   oracle-db:
+    #     condition: service_healthy
     networks:
       - novoprotocolo-network
     volumes:

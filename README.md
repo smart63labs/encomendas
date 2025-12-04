@@ -96,6 +96,130 @@ O sistema possui **9 módulos principais** acessíveis pela sidebar, sendo que *
 - ✅ **Criptografia bcrypt** de senhas
 - ❌ **LDAP não implementado** (planejado para versão futura)
 
+---
+
+## 🌐 Configuração do Banco de Dados
+
+### 📡 Conexão com Banco de Dados em Nuvem
+
+O sistema está configurado para conectar ao **Oracle Database 23c** hospedado na infraestrutura da SEFAZ-TO.
+
+#### **Credenciais de Produção (Nuvem)**
+
+```env
+# Configurações do Banco de Dados - Nuvem
+DB_USER=protocolo
+DB_PASSWORD=P56$etrw&
+DB_HOST=cdbsfz-vip
+DB_PORT=1521
+DB_SERVICE_NAME=prothm.sefaz.to.gov.br
+DB_CONNECT_STRING=cdbsfz-vip:1521/prothm.sefaz.to.gov.br
+```
+
+**String de Conexão TNS:**
+```
+(DESCRIPTION =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = cdbsfz-vip)(PORT = 1521))
+  (CONNECT_DATA =
+    (SERVER = DEDICATED)
+    (SERVICE_NAME = prothm.sefaz.to.gov.br)
+  )
+)
+```
+
+#### **Credenciais de Desenvolvimento (Localhost)**
+
+Para desenvolvimento local com Oracle Free, as configurações estão comentadas nos arquivos:
+
+```env
+# Configurações do Banco de Dados - Localhost (comentado)
+# DB_USER=protocolo_user
+# DB_PASSWORD=Anderline49
+# DB_HOST=localhost
+# DB_PORT=1521
+# DB_SERVICE_NAME=FREEPDB1
+# DB_CONNECT_STRING=localhost:1521/FREEPDB1
+```
+
+#### **Arquivos de Configuração**
+
+As credenciais do banco estão configuradas nos seguintes arquivos:
+
+| Arquivo | Descrição | Ambiente |
+|---------|-----------|----------|
+| `backend/.env` | Variáveis de ambiente do backend | Desenvolvimento |
+| `docker-compose.yml` | Configuração Docker para produção | Produção |
+| `docker-compose.dev.yml` | Configuração Docker para desenvolvimento | Desenvolvimento |
+| `k8s/configmap.yaml` | ConfigMap do Kubernetes | Kubernetes |
+| `k8s/secrets.yaml` | Secrets do Kubernetes (base64) | Kubernetes |
+
+#### **Alternando entre Localhost e Nuvem**
+
+Para alternar entre as configurações:
+
+**1. Backend Local (`backend/.env`):**
+```bash
+# Comente as linhas da nuvem e descomente as do localhost
+# Ou vice-versa
+```
+
+**2. Docker Compose:**
+```bash
+# Edite docker-compose.yml ou docker-compose.dev.yml
+# Comente/descomente as variáveis de ambiente do serviço backend
+```
+
+**3. Kubernetes:**
+```bash
+# Edite k8s/configmap.yaml e k8s/secrets.yaml
+# Aplique as mudanças:
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/secrets.yaml
+kubectl rollout restart deployment/backend-deployment -n novoprotocolo
+```
+
+#### **Testando a Conexão**
+
+Para verificar se a conexão com o banco está funcionando:
+
+```bash
+# Via script de teste
+cd backend
+npm run test:db
+
+# Via API (com servidor rodando)
+curl http://localhost:3001/api/health
+curl http://localhost:3001/api/database/check-tables
+```
+
+**Resposta esperada:**
+```json
+{
+  "success": true,
+  "summary": {
+    "totalTables": 7,
+    "existingTables": 7,
+    "missingTables": [],
+    "allTablesExist": true
+  }
+}
+```
+
+#### **Observações Importantes**
+
+> [!IMPORTANT]
+> - A senha contém caracteres especiais (`$`). No Docker Compose, use `$$` para escapar o `$`
+> - No Kubernetes, as credenciais devem estar em base64 no arquivo `secrets.yaml`
+> - O campo `DB_SID` deve estar vazio quando usar `SERVICE_NAME`
+> - O banco em nuvem não requer o container `oracle-db` do Docker Compose
+
+> [!WARNING]
+> - **Nunca commite** o arquivo `.env` com credenciais reais
+> - Em produção, use **secrets management** (Kubernetes Secrets, Vault, etc.)
+> - Mantenha as credenciais de desenvolvimento separadas das de produção
+
+---
+
 ## 🗄️ Documentação do Banco de Dados Oracle 23ai
 
 ### 📊 Informações Gerais

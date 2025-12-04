@@ -11,11 +11,17 @@ data:
   PORT: "3001"
   BYPASS_RATE_LIMIT: "false"
   
-  # Configurações do Banco de Dados
-  DB_HOST: "oracle-service"
+  # Configurações do Banco de Dados - Nuvem
+  DB_HOST: "cdbsfz-vip"
   DB_PORT: "1521"
-  DB_SERVICE_NAME: "FREEPDB1"
-  DB_SID: "FREEPDB1"
+  DB_SERVICE_NAME: "prothm.sefaz.to.gov.br"
+  DB_SID: ""
+  
+  # Configurações do Banco de Dados - Localhost (comentado)
+  # DB_HOST: "oracle-service"
+  # DB_PORT: "1521"
+  # DB_SERVICE_NAME: "FREEPDB1"
+  # DB_SID: "FREEPDB1"
   
   # Configurações do Frontend
   VITE_API_URL: "http://backend-service:3001"
